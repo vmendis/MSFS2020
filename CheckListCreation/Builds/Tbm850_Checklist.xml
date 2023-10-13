@@ -1,1 +1,3809 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<SimBase.Document Type="Checklist" version="1,0">
+	<Checklist.Checklist>
+		<IncludeCheckpointLibrary FileName="CheckpointsLibrary\\Asobo_DefaultCheckpointLibrary.xml"/>
 
+		<Step ChecklistStepId="PREFLIGHT_GATE">
+
+			<Page SubjectTT="Preflight (CockpitsXXXXC)">				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever ding dong" ExpectationTT="Up"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="Off"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="Off"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Auto or Off"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exterior Lights" ExpectationTT="All Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Instruments" ExpectationTT="All Off"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Lights" ExpectationTT="Test"/>
+					<Instrument Id="EmergencyLightsKnob"/>
+					<ForceCamera name="Ceiling"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Circuit Breakers" ExpectationTT="All In"/>
+					<Instrument Id="LandingGear_Breaker"/>
+					<Instrument Id="Flaps_Breaker"/>
+					<Instrument Id="PitchTrim_Breaker"/>
+					<Instrument Id="AileronTrim_Breaker"/>
+					<Instrument Id="RudderTrim_Breaker"/>
+					<Instrument Id="Autopilot_Breaker"/>
+					<Instrument Id="EssentialBus1_Breaker"/>
+					<Instrument Id="EssentialBus2_Breaker"/>
+					<Instrument Id="FlapIndicator_Breaker"/>
+					<Instrument Id="LandingGearController_Breaker"/>
+					<Instrument Id="GearIndicator_Breaker"/>
+					<Instrument Id="CabinAudio_Breaker"/>
+					<Instrument Id="PitotHeat1_Breaker"/>
+					<Instrument Id="PitotHeat2_Breaker"/>
+					<Instrument Id="InertialSeparator_Breaker"/>
+					<Instrument Id="Advisory1_Breaker"/>
+					<Instrument Id="Advisory2_Breaker"/>
+					<Instrument Id="AudioWarning_Breaker"/>
+					<Instrument Id="AutopilotDisconnect_Breaker"/>
+					<Instrument Id="AutopilotAlert_Breaker"/>
+					<Instrument Id="AltitudeSelector_Breaker"/>
+					<Instrument Id="LeftWindshieldHeat_Breaker"/>
+					<Instrument Id="RightWindshieldHeat_Breaker"/>
+					<Instrument Id="PropDeice_Breaker"/>
+					<Instrument Id="AirframeDeice_Breaker"/>
+					<Instrument Id="EngineIndicators1_Breaker"/>
+					<Instrument Id="EngineIndicators2_Breaker"/>
+					<Instrument Id="Ignition_Breaker"/>
+					<Instrument Id="PulseLight_Breaker"/>
+					<Instrument Id="IceLight_Breaker"/>
+					<Instrument Id="StrobeLight_Breaker"/>
+					<Instrument Id="LeftLandingLight_Breaker"/>
+					<Instrument Id="TaxiLight_Breaker"/>
+					<Instrument Id="RightLandingLight_Breaker"/>
+					<Instrument Id="NavigationLight_Breaker"/>
+					<Instrument Id="BleedAirController_Breaker"/>
+					<Instrument Id="AirConditioner_Breaker"/>
+					<Instrument Id="FuelGauge1_Breaker"/>
+					<Instrument Id="FuelGauge2_Breaker"/>
+					<Instrument Id="FuelSelector_Breaker"/>
+					<Instrument Id="FuelBoostPump_Breaker"/>
+					<Instrument Id="InstrumentLighting_Breaker"/>
+					<Instrument Id="PanelLights_Breaker"/>
+					<Instrument Id="EmergencyPanelLights_Breaker"/>
+					<Instrument Id="Cabin_Breaker"/>
+					<Instrument Id="ELT_Breaker"/>
+					<Instrument Id="EHSI_Breaker"/>
+					<Instrument Id="EADI_Breaker"/>
+					<Instrument Id="RemoteCompass_Breaker"/>
+					<Instrument Id="RMI_Breaker"/>
+					<Instrument Id="ADI2_Breaker"/>
+					<Instrument Id="HSI2_Breaker"/>
+					<Instrument Id="RadarAltimeter2_Breaker"/>
+					<Instrument Id="AccessLighting_Breaker"/>
+					<Instrument Id="Chronometer_Breaker"/>
+					<Instrument Id="RadarAltimeter1_Breaker"/>
+					<Instrument Id="Usb_Breaker"/>
+					<Instrument Id="MarkerBeacon_Breaker"/>
+					<Instrument Id="Com1_Breaker"/>
+					<Instrument Id="GroundClearance_Breaker"/>
+					<Instrument Id="Com2_Breaker"/>
+					<Instrument Id="AltitudeEncoder_Breaker"/>
+					<Instrument Id="Transponder_Breaker"/>
+					<Instrument Id="Nav1_Breaker"/>
+					<Instrument Id="Nav2_Breaker"/>
+					<Instrument Id="Rnav_Breaker"/>
+					<Instrument Id="ADF_Breaker"/>
+					<Instrument Id="DME_Breaker"/>
+					<Instrument Id="TerrainWarningSystem_Breaker"/>
+					<Instrument Id="WeatherRadarController_Breaker"/>
+					<Instrument Id="WeatherRadarAntenna_Breaker"/>
+					<Instrument Id="AvionicsCoolingFan_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Switches" ExpectationTT="All Off"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Control" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="Off"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Radio Master" ExpectationTT="Off"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Dump Switch" ExpectationTT="Guarded"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ram Air Handle" ExpectationTT="Pushed In"/>
+					<Instrument Id="RamAir_Handle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Manual"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Off"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="L or R"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ELT" ExpectationTT="Armed"/>
+					<Instrument Id="EltSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Set"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Manual Override Lever" ExpectationTT="Off"/>
+					<Instrument Id="ENGINE_Lever_Emeregency"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Flight Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flap Control" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Battery Bus Power" ExpectationTT="Check Supply"/>
+					<Instrument Id="AccessLightPanelButton"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="BAT or GPU"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="Above 25V"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exterior Lights Panel" ExpectationTT="Light Test"/>
+					<Instrument Id="OverheadLightTestButton"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Gauges" ExpectationTT="Check Quantity"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Advisory Panel" ExpectationTT="Check 1 &amp; 2"/>
+					<Instrument Id="AnnunciatorTestSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="OXYGEN Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Interior Lights" ExpectationTT="As Required"/>
+					<Instrument Id="InstrumentLightingKnob"/>
+					<Instrument Id="PanelLightingKnob"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AccessLightPanelButton"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Environmental Panel" ExpectationTT="Light Test"/>
+					<Instrument Id="EnvironmentalLightTestButton"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Down"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Panel" ExpectationTT="Light Test"/>
+					<Instrument Id="GearLightTest1"/>
+					<Instrument Id="GearLightTest2"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pitot Heat 1" ExpectationTT="On"/>
+					<Instrument Id="PitotHeatSwitch_1"/>					
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PITOT 1 Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pitot &amp; Stall Heat 2" ExpectationTT="On"/>
+					<Instrument Id="PitotHeatSwitch_2"/>					
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PITOT 2 &amp; STALL HTR Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pitot Heat" ExpectationTT="Off"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Panel" ExpectationTT="Light Test"/>
+					<Instrument Id="SwitchesLightTest"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="Off"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+
+			<Page SubjectTT="Before Starting Engine">
+
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Auto"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				    <Test>
+						<TestValue>
+							<Val Code="(L:var_AutoFuelSelectorSwitch)" Units="Boolean"/>
+						</TestValue>						
+					</Test>
+				
+				
+				
+				</Checkpoint>
+				
+				
+				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Preflight Inspection" ExpectationTT="Complete"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Nose Baggage Door" ExpectationTT="Closed"/>
+					<Instrument Id="BaggageKeyClosed"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Compartment" ExpectationTT="Closed"/>
+					<Instrument Id="RudderPedalAdjustment_L"/>
+					<Instrument Id="RudderPedalAdjustment_R"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Access Door" ExpectationTT="Latched"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pilot Door" ExpectationTT="Latched"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Set"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Seats &amp; Seatbelts" ExpectationTT="Fastened"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oxygen Pressure" ExpectationTT="Check"/>
+					<Instrument Id="OxygenPressureNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oxygen Supply" ExpectationTT="On"/>
+					<Instrument Id="CrewOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Passenger Oxygen" ExpectationTT="Off"/>
+					<Instrument Id="PassengerOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Microphone Selector" ExpectationTT="Normal"/>
+					<Instrument Id="MaskMicCover"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="Off"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Auto or Off"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Control" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Radio Master" ExpectationTT="On if Clearance Req."/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="BAT or GPU"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Horn Test" ExpectationTT="Hold"/>
+					<Instrument Id="WarningHornTestButton"/>
+					<ForceCamera name="Ceiling"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="DOOR Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Gauges" ExpectationTT="Check Quantity"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Auto"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				
+				
+				
+				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUTO SEL Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Shift"/>
+					<Instrument Id="FuelSelectorShiftSwitch"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Instruments" ExpectationTT="Check"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="OilTemperatureNeedle"/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT Test" ExpectationTT="Hold"/>
+					<Instrument Id="TurbineTempTestButton"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT Needle" ExpectationTT="Functioning"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exterior Lights" ExpectationTT="As Required"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+
+			<Page SubjectTT="Starting Engine (BATT)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Manual Override Lever" ExpectationTT="Off"/>
+					<Instrument Id="ENGINE_Lever_Emeregency"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Flight Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="BAT"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Pressure" ExpectationTT="Green"/>
+					<Instrument Id="FuelPressureNeedle"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Auto"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="On"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>f
+					<CheckpointDesc SubjectTT="STARTER Annun." ExpectationTT="Flashing"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="IGNITION Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gas Generator" ExpectationTT="13% or Maximum"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Low Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT" ExpectationTT="Below 870 in 20s &amp; 1090 Max."/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="Off at 50% Ng"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="OIL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="High Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Instruments" ExpectationTT="Check"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="OilTemperatureNeedle"/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Auto"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="MAIN GEN Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="~28V"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ammeter" ExpectationTT="Charging (+)"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Starting Engine (GPU)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Manual Override Lever" ExpectationTT="Off"/>
+					<Instrument Id="ENGINE_Lever_Emeregency"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Flight Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="GPU"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="GPU Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="BAT OFF Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="~28V"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Pressure" ExpectationTT="Green"/>
+					<Instrument Id="FuelPressureNeedle"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Auto"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="On"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>f
+					<CheckpointDesc SubjectTT="STARTER Annun." ExpectationTT="Flashing"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="IGNITION Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gas Generator" ExpectationTT="13% or Maximum"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Low Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT" ExpectationTT="Below 870 in 20s &amp; 1090 Max."/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="Off at 50% Ng"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="OIL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="BAT"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="BAT OFF Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="GPU" ExpectationTT="Have Disconnected"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="GPU Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="High Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Instruments" ExpectationTT="Check"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="OilTemperatureNeedle"/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Auto"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="MAIN GEN Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="~28V"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ammeter" ExpectationTT="Charging (+)"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="PREFLIGHT_TAXI_OUT">
+
+			<Page SubjectTT="After Starting Engine">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Instruments" ExpectationTT="All On"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Suction" ExpectationTT="Green"/>
+					<Instrument Id="SuctionPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Slaving" ExpectationTT="Slave"/>
+					<Instrument Id="GyroSlaveModeSwitch_L"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop Deice" ExpectationTT="On - Check Green"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop Deice" ExpectationTT="Off"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="L Windshield Heat" ExpectationTT="On - Check Green"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="R Windshield Heat" ExpectationTT="On - Check Green"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Windshield Heat" ExpectationTT="Off"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airframe Deice" ExpectationTT="On - Green Cycles"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airframe Deice" ExpectationTT="Off"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ammeter" ExpectationTT="Below +50A"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Standby"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="~28V"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ammeter" ExpectationTT="Zero or Charging"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Auto"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fan Flow" ExpectationTT="As Required"/>
+					<Instrument Id="FanSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="On"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Temperature" ExpectationTT="Set"/>
+					<Instrument Id="CabinTemperatureKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Flow Distributor" ExpectationTT="As Required"/>
+					<Instrument Id="AirFlowSelectorKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Altitude" ExpectationTT="Field Elevation -500 FT"/>
+					<Instrument Id="CabinAltitudeGoalKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Climb Rate" ExpectationTT="Arrow Up"/>
+					<Instrument Id="CabinAltitudeRateKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Weather Radar" ExpectationTT="Off/Standby"/>
+					<Instrument Id="RadarMode"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Radio Master" ExpectationTT="On"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="EFIS Master" ExpectationTT="On"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="On"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="EFIS AHRS Source" ExpectationTT="Left"/>
+					<Instrument Id="EfisSourceSwitch"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Electric Trim" ExpectationTT="Test &amp; Set"/>
+					<Instrument Id="HANDLING_Yoke_Switch_ElevatorTrim_1"/>
+					<Instrument Id="RudderTrimSwitch_L"/>
+					<Instrument Id="AileronTrimSwitch"/>
+					<Instrument Id="HANDLING_Wheel_ElevatorTrim_Indicator"/>
+					<Instrument Id="HANDLING_Switch_RudderTrim_Indicator"/>
+					<Instrument Id="HANDLING_Switch_AileronTrim_Indicator_L"/>
+					<Instrument Id="HANDLING_Switch_AileronTrim_Indicator_R"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Taxi Light" ExpectationTT="On"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="INERT SEP Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Release"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PARK BRAKE Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Toe Brakes" ExpectationTT="Check"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="FLIGHT_RUNWAY">
+
+			<Page SubjectTT="Before Takeoff">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Set"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PARK BRAKE Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Terrain Test" ExpectationTT="Push"/>
+					<Instrument Id="TerrainTestButton"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Terrain Warning Lights" ExpectationTT="Test"/>
+					<Instrument Id="PanelLightTestButton"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="1900 RPM"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exercise Propeller" ExpectationTT="To Feather"/>
+					<Instrument Id="PropellerHandle_Turbine_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop Governor" ExpectationTT="Hold to Test"/>
+					<Instrument Id="PropOverspeedTest"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop RPM" ExpectationTT="~1800 RPM"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop Governor" ExpectationTT="Release"/>
+					<Instrument Id="PropOverspeedTest"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Prop RPM" ExpectationTT="1900 RPM"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Flight Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Imbalance" ExpectationTT="Less Than 15 Gal."/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Auto"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Auto"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Shift to Fullest"/>
+					<Instrument Id="FuelSelectorShiftSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="As Required"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pitot Heat" ExpectationTT="On"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="As Required"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="As Required"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Advisory Panel" ExpectationTT="All Off Ex. BRAKE &amp; INERT"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Instruments" ExpectationTT="Check"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="OilTemperatureNeedle"/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flight Controls" ExpectationTT="Free &amp; Correct"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ammeter" ExpectationTT="Below +50A"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Release"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PARK BRAKE Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Strobe Lights" ExpectationTT="On"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="FLIGHT_TAKEOFF">
+
+			<Page SubjectTT="Takeoff">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="HSI Compass" ExpectationTT="Check"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Attitude" ExpectationTT="Check"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Altimeter" ExpectationTT="Set"/>
+					<Instrument Id="AltimeterAdjustKnob"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Altitude Selector" ExpectationTT="Set"/>
+					<Instrument Id="AltitudeSelector_OuterKnob"/>
+					<Instrument Id="AltitudeSelector_InnerKnob"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Weather Radar" ExpectationTT="On"/>
+					<Instrument Id="RadarMode"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Lights" ExpectationTT="On"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="On if Heavy Precip."/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Interior Lights" ExpectationTT="Dim for Takeoff"/>
+					<Instrument Id="InstrumentLightingKnob"/>
+					<Instrument Id="PanelLightingKnob"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Lights" ExpectationTT="Off"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Release"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PARK BRAKE Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Taxi..." ExpectationTT="Onto Runway"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Advisory Panel" ExpectationTT="All Off Ex. IGNITION &amp; INERT"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="100% Torque"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Up" ExpectationTT="Positive Rate"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Retract"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps Confirmed Up..." ExpectationTT="850 Mode"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="121.4% Torque"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Autopilot" ExpectationTT="Engage"/>
+					<Instrument Id="Autopilot_MasterButton"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Taxi Lights" ExpectationTT="Off"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Lights" ExpectationTT="As Required"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="FLIGHT_CRUISE">
+
+			<Page SubjectTT="Climb">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Observe Limits"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Altitude" ExpectationTT="Cruise Alt. + 1000 FT"/>
+					<Instrument Id="CabinAltitudeGoalKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Climb Rate" ExpectationTT="500-700 FPM"/>
+					<Instrument Id="CabinAltitudeRateKnob"/>
+					<Instrument Id="CabinVerticalSpeedNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Differential" ExpectationTT="Monitor"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>					
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Temperature" ExpectationTT="As Desired"/>
+					<Instrument Id="CabinTemperatureKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Qty. &amp; Balance" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="As Required"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="As Required"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Transition Altitude">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Altimeters" ExpectationTT="Standard"/>
+					<Instrument Id="AltimeterStandardButton"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Pressurization" ExpectationTT="Monitor"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>					
+					<Instrument Id="CabinAltitudeNeedle"/>	
+					<Instrument Id="CabinVerticalSpeedNeedle"/>	
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pulse Lights" ExpectationTT="Off"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="As Required"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="As Required"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+			</Page>	
+
+			<Page SubjectTT="Cruise">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Adjust for Performance"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="Etm_EnterTest"/>
+					<Instrument Id="Etm_IncDec"/>
+					<Instrument Id="Etm_Record"/>
+					<Instrument Id="Etm_PageUpDown"/>
+					<Instrument Id="Etm_Knob"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Qty. &amp; Balance" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Pressurization" ExpectationTT="Monitor"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>					
+					<Instrument Id="CabinAltitudeNeedle"/>	
+					<Instrument Id="CabinVerticalSpeedNeedle"/>	
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="As Required"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="As Required"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="On if Heavy Precip."/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="FLIGHT_DESCENT">
+
+			<Page SubjectTT="Descent">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Altimeters" ExpectationTT="Local"/>
+					<Instrument Id="AltimeterAdjustKnob"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Altitude" ExpectationTT="Field Elev. +500 FT"/>
+					<Instrument Id="CabinAltitudeGoalKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pulse Lights" ExpectationTT="On"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="As Required"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="As Required"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Flow Distributor" ExpectationTT="As Required"/>
+					<Instrument Id="AirFlowSelectorKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="On if Heavy Precip."/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Qty. &amp; Balance" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Shift to Fullest"/>
+					<Instrument Id="FuelSelectorShiftSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="LANDING_APPROACH">
+
+			<Page SubjectTT="Before Landing">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Lights" ExpectationTT="Off"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Altimeters" ExpectationTT="Check"/>
+					<Instrument Id="AltimeterAdjustKnob"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Decision Height" ExpectationTT="Set"/>
+					<Instrument Id="EFIS_DecisionHeightModeSwitch"/>
+					<Instrument Id="EFIS_DecisionHeightSetKnob"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Qty. &amp; Balance" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On Under 200 kts"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Down Under 178 kts"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Approach Under 178 kts"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Lights" ExpectationTT="As Required"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Autopilot Disconnect" ExpectationTT="Press Once"/>
+					<Instrument Id="HANDLING_Yoke_Push_AP_Disconect_1"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Full Under 122 kts"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="LANDING_TOUCHDOWN">
+
+			<Page SubjectTT="Landing">	
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Reverse Thrust" ExpectationTT="As Required"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Braking" ExpectationTT="As Required"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Go Around">	
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="100% Torque"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Approach"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Up" ExpectationTT="Positive Rate"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Retract"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Touch &amp; Go">	
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Approach"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Elevator Trim" ExpectationTT="Green"/>
+					<Instrument Id="HANDLING_Yoke_Switch_ElevatorTrim_1"/>
+					<Instrument Id="HANDLING_Wheel_ElevatorTrim_Indicator"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="100% Torque"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="LANDING_TAXI_IN">
+
+			<Page SubjectTT="After Landing">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="Off"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="As Required"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Weather Radar" ExpectationTT="Off"/>
+					<Instrument Id="RadarMode"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Lights" ExpectationTT="Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Taxi Light" ExpectationTT="On"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Strobe Lights" ExpectationTT="Off"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pulse Lights" ExpectationTT="Off"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oxygen Supply" ExpectationTT="Off"/>
+					<Instrument Id="CrewOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+		</Step>
+
+		<Step ChecklistStepId="LANDING_GATE">
+
+			<Page SubjectTT="Shutdown">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Parking Brake" ExpectationTT="Set"/>
+					<Instrument Id="ParkingBrakeKnob"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="PARK BRAKE Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Taxi Light" ExpectationTT="Off"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Differential" ExpectationTT="Depressurized"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fan Flow" ExpectationTT="As Required"/>
+					<Instrument Id="FanSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle for 1min."/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>					
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Instruments" ExpectationTT="All Off"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="EFIS Master" ExpectationTT="Off"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="Off"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Radio Master" ExpectationTT="Off"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather for 15s"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Off"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Manual"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="Off"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exterior Lights" ExpectationTT="All Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Interior Lights" ExpectationTT="All Off"/>
+					<Instrument Id="InstrumentLightingKnob"/>
+					<Instrument Id="PanelLightingKnob"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AccessLightPanelButton"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Off"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="Off"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<Page SubjectTT="Rejected Takeoff">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Reverse Thrust" ExpectationTT="Maximum"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Braking" ExpectationTT="Maximum"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="If No Runway" ExpectationTT="Remaining..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Failure After Rotation">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="If Landing" ExpectationTT="Possible..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="As Required"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Above 85kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Before" ExpectationTT="Touchdown..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Evacuation" ExpectationTT="Begin"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Failure During Flight">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Remaining Fuel" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Switch Tanks"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airstart" ExpectationTT="Attempt"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Airstart">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Normal"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Electrical Load" ExpectationTT="Reduce"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Check"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Auto or On"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="On"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gas Generator" ExpectationTT="13% or Maximum"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Low Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="Off at 50% Ng"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="high Idle"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Increase"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Auto"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="As Required"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Motoring">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Manual Override Lever" ExpectationTT="Off"/>
+					<Instrument Id="ENGINE_Lever_Emeregency"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="L or R"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Off"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="IGNITION Annun." ExpectationTT="Extinguished"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Starter" ExpectationTT="On for 15s"/>
+					<Instrument Id="StarterSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Off"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Fire (Ground)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Evacuation" ExpectationTT="Begin"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Cabin Fire (Ground)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Evacuation" ExpectationTT="Begin"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Fire (Flight)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Off"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="Begin"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine" ExpectationTT="Do Not Restart"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Electrical Fire or Smoke">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oxygen Supply" ExpectationTT="On"/>
+					<Instrument Id="CrewOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Passenger Oxygen" ExpectationTT="As Required"/>
+					<Instrument Id="PassengerOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crew Oxygen Masks" ExpectationTT="As Required"/>
+					<Instrument Id="PilotOxygenSwitch_1"/>
+					<Instrument Id="PilotOxygenSwitch_2"/>
+					<Instrument Id="CoPilotOxygenSwitch_1"/>
+					<Instrument Id="CoPilotOxygenSwitch_2"/>
+					<ForceCamera name="Ceiling"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="Begin"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Differential Pressure" ExpectationTT="Minimal"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ram Air Handle" ExpectationTT="Pull Open"/>
+					<Instrument Id="RamAir_Handle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Nonessential Equipment" ExpectationTT="Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Possible"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Observe" ExpectationTT="If Fire Persists..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="Off"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Off"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Circuit Breakers" ExpectationTT="Pull Off"/>
+					<Instrument Id="LandingGear_Breaker"/>
+					<Instrument Id="Flaps_Breaker"/>
+					<Instrument Id="PitchTrim_Breaker"/>
+					<Instrument Id="AileronTrim_Breaker"/>
+					<Instrument Id="RudderTrim_Breaker"/>
+					<Instrument Id="Autopilot_Breaker"/>
+					<Instrument Id="PitotHeat2_Breaker"/>
+					<Instrument Id="PropDeice_Breaker"/>
+					<Instrument Id="AirConditioner_Breaker"/>
+					<Instrument Id="EHSI_Breaker"/>
+					<Instrument Id="EADI_Breaker"/>
+					<Instrument Id="RemoteCompass_Breaker"/>
+					<Instrument Id="AccessLighting_Breaker"/>
+					<Instrument Id="WeatherRadarAntenna_Breaker"/>
+					<Instrument Id="Usb_Breaker"/>
+					<Instrument Id="AvionicsCoolingFan_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Source Selector" ExpectationTT="BAT"/>
+					<Instrument Id="BatterySwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Restore Power" ExpectationTT="Circuit by Circuit"/>
+					<Instrument Id="LandingGear_Breaker"/>
+					<Instrument Id="Flaps_Breaker"/>
+					<Instrument Id="PitchTrim_Breaker"/>
+					<Instrument Id="AileronTrim_Breaker"/>
+					<Instrument Id="RudderTrim_Breaker"/>
+					<Instrument Id="Autopilot_Breaker"/>
+					<Instrument Id="PitotHeat2_Breaker"/>
+					<Instrument Id="PropDeice_Breaker"/>
+					<Instrument Id="AirConditioner_Breaker"/>
+					<Instrument Id="EHSI_Breaker"/>
+					<Instrument Id="EADI_Breaker"/>
+					<Instrument Id="RemoteCompass_Breaker"/>
+					<Instrument Id="AccessLighting_Breaker"/>
+					<Instrument Id="WeatherRadarAntenna_Breaker"/>
+					<Instrument Id="Usb_Breaker"/>
+					<Instrument Id="AvionicsCoolingFan_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Possible"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Oil Pressure Drop">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="OIL PRESS Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oil Pressure" ExpectationTT="If Above 60 PSI..."/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oil Pressure" ExpectationTT="If Below 60 PSI..."/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller RPM" ExpectationTT="Monitor"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Torque" ExpectationTT="If Dropping..."/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Forced Landing" ExpectationTT="Begin"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Loss of Power Regulation">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Engine Instruments" ExpectationTT="Check"/>
+					<Instrument Id="TorqueNeedle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<Instrument Id="OilTemperatureNeedle"/>
+					<Instrument Id="OilPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Switch"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Manual Override" ExpectationTT="Advance"/>
+					<Instrument Id="ENGINE_Lever_Emeregency"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Reverse Thrust" ExpectationTT="Do Not Use"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Minimum Obtainable Power" ExpectationTT="If Excessive..."/>
+					<Instrument Id="TorqueNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Pitch up to 178 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="ITT" ExpectationTT="If Above 840C..."/>
+					<Instrument Id="TurbineTempNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="Off"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Approach"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="When Runway" ExpectationTT="Is Assured..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Full Down"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Loss of Propeller Control">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller RPM" ExpectationTT="If Below 2000 RPM..."/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Go Around" ExpectationTT="Do Not Attempt"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Propeller Overspeed">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Reduce to Limit RPM"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<Instrument Id="PropRpmNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Go Around" ExpectationTT="Do Not Attempt"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Maximum Rate Descent">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Max. RPM"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Conditions" ExpectationTT="If Smooth Air..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Up"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Maintain 266 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Conditions" ExpectationTT="If Rough Air..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Below 178 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Maintain 178 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Maximum Range Descent">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Up"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Up"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Maintain 120 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Differential Pressure" ExpectationTT="Minimal"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ram Air Handle" ExpectationTT="Pull Open"/>
+					<Instrument Id="RamAir_Handle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Sky Conditions" ExpectationTT="If No Icing..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Emergency"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<Instrument Id="EssentialBusTieSwitch"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Sky Conditions" ExpectationTT="If Icing..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Normal"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<Instrument Id="EssentialBusTieSwitch"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Nonessential Equipment" ExpectationTT="Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="Check On"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Circuit Breakers" ExpectationTT="Pull Off"/>
+					<Instrument Id="AirConditioner_Breaker"/>
+					<Instrument Id="Usb_Breaker"/>
+					<Instrument Id="AvionicsCoolingFan_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Out Landing">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Maintain 120 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Normal"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<Instrument Id="EssentialBusTieSwitch"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Lights" ExpectationTT="As Required"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Gear Up Landing">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Approach" ExpectationTT="Standard"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Full Down"/>
+					<Instrument Id="HANDLING_Lever_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="Off"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="When Runway" ExpectationTT="Is Assured..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Idle"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down after Landing"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Evacuation" ExpectationTT="Begin"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Engine Does Not Shutdown">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="Off"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Auto Fuel Selector" ExpectationTT="Manual"/>
+					<Instrument Id="AutoFuelSelectorSwitch"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Wait for" ExpectationTT="Engine to Stop..."/>
+					<Instrument Id="GasGeneratorNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Exterior Lights" ExpectationTT="All Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Interior Lights" ExpectationTT="All Off"/>
+					<Instrument Id="InstrumentLightingKnob"/>
+					<Instrument Id="PanelLightingKnob"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AccessLightPanelButton"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+
+
+
+
+
+
+
+
+
+			<Page SubjectTT="Low Fuel Pressure">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Remaining Fuel" ExpectationTT="Check"/>
+					<Instrument Id="FuelQuantityNeedle_L"/>
+					<Instrument Id="FuelQuantityNeedle_R"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Switch Tanks"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Pressure" ExpectationTT="Check"/>
+					<Instrument Id="FuelPressureNeedle"/>
+					<ForceCamera name="FuelPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="Auto"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="FUEL PRESS Annun." ExpectationTT="If Persists..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Aux Boost Pump" ExpectationTT="On"/>
+					<Instrument Id="BoostPumpSwitch"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AUX BP ON Annun." ExpectationTT="Illuminated"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Fuel Pressure" ExpectationTT="If Still Low..."/>
+					<Instrument Id="FuelPressureNeedle"/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Descend" ExpectationTT="Below 18000 FT"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Possible"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Main Generator Failure">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="MAIN GEN Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Main Generator" ExpectationTT="Reset"/>
+					<Instrument Id="MainGeneratorResetButton"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="MAIN GEN Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Electrical Load" ExpectationTT="Reduce"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Standby"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltage &amp; Charge" ExpectationTT="Monitor"/>
+					<Instrument Id="AmpsNeedle"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Low Volts (On Main Gen.)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="LO VOLT Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="If Below 26V..."/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Electrical Load" ExpectationTT="Reduce"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Standby"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltage &amp; Charge" ExpectationTT="Monitor"/>
+					<Instrument Id="AmpsNeedle"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Low Volts (On Stby. Gen.)">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="MAIN GEN Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="LO VOLT Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="If Below 26V..."/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Electrical Load" ExpectationTT="Reduce"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<Instrument Id="AmpsNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Main"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Main Generator" ExpectationTT="Reset"/>
+					<Instrument Id="MainGeneratorResetButton"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Standby"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Standby Generator" ExpectationTT="Reset"/>
+					<Instrument Id="StandbyGeneratorResetButton"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="LO VOLT Annun." ExpectationTT="If Dual Failure..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Generator Selector" ExpectationTT="Off"/>
+					<Instrument Id="GeneratorSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Lights" ExpectationTT="As Desired"/>
+					<Instrument Id="EmergencyLightsKnob"/>
+					<ForceCamera name="Ceiling"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Sky Conditions" ExpectationTT="If No Icing..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Emergency"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<Instrument Id="EssentialBusTieSwitch"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Sky Conditions" ExpectationTT="If Icing..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Essential Bus Tie" ExpectationTT="Normal"/>
+					<Instrument Id="EssentialBusTieCover"/>
+					<Instrument Id="EssentialBusTieSwitch"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Nonessential Equipment" ExpectationTT="Off"/>
+					<Instrument Id="LandingLightSwitch_L"/>
+					<Instrument Id="TaxiLightSwitch"/>
+					<Instrument Id="LandingLightSwitch_R"/>
+					<Instrument Id="NavLightSwitch"/>
+					<Instrument Id="StobeLightSwitch"/>
+					<Instrument Id="PulseLightSwitch"/>
+					<Instrument Id="GyroSwitch"/>
+					<Instrument Id="RmiSwitch"/>
+					<Instrument Id="Adi2Switch"/>
+					<Instrument Id="Hsi2Switch"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="IceLightSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<Instrument Id="EFIS_PowerSwitch"/>
+					<Instrument Id="RadioMasterSwitch"/>
+					<Instrument Id="CabinLightSwitch"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="Check On"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Circuit Breakers" ExpectationTT="Pull Off"/>
+					<Instrument Id="AirConditioner_Breaker"/>
+					<Instrument Id="Usb_Breaker"/>
+					<Instrument Id="AvionicsCoolingFan_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="CABIN PRESS Illuminated">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Differential Pressure" ExpectationTT="If Above 6.2 PSI..."/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>					
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="Begin"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Altitude" ExpectationTT="If Above 10000 FT..."/>
+					<Instrument Id="CabinAltitudeNeedle"/>	
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Oxygen Supply" ExpectationTT="On"/>
+					<Instrument Id="CrewOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Passenger Oxygen" ExpectationTT="On"/>
+					<Instrument Id="PassengerOxygenSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crew Oxygen Masks" ExpectationTT="Don"/>
+					<Instrument Id="PilotOxygenSwitch_1"/>
+					<Instrument Id="PilotOxygenSwitch_2"/>
+					<Instrument Id="CoPilotOxygenSwitch_1"/>
+					<Instrument Id="CoPilotOxygenSwitch_2"/>
+					<ForceCamera name="Ceiling"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Auto"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Cond" ExpectationTT="On"/>
+					<Instrument Id="AirconditioningSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Dump Switch" ExpectationTT="Guarded"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ram Air Handle" ExpectationTT="Pushed In"/>
+					<Instrument Id="RamAir_Handle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="If Necessary"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Limit Altitude" ExpectationTT="Less Than 12000 FT"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="BLEED OFF Illuminated">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off, then Auto"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="BLEED OFF Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="If Necessary"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Limit Altitude" ExpectationTT="Less Than 12000 FT"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="BLEED TEMP Illuminated">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Flow Distributor" ExpectationTT="Normal"/>
+					<Instrument Id="AirFlowSelectorKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Temperature" ExpectationTT="Lowest Setting"/>
+					<Instrument Id="CabinTemperatureKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="BLEED TEMP Annun." ExpectationTT="When Extinguished..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Auto"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="BLEED TEMP Annun." ExpectationTT="If Illuminated..."/>
+					<ForceCamera name="Glareshield"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="If Necessary"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Limit Altitude" ExpectationTT="Less Than 12000 FT"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="DOOR Illuminated In Flight">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Slow Descent" ExpectationTT="Begin"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Reduce Cabin Differential" ExpectationTT="Select Higher Alt."/>
+					<Instrument Id="CabinAltitudeGoalKnob"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Access Door" ExpectationTT="Inspect"/>
+					<Instrument Id="AftDoorHandle"/>
+					<ForceCamera name="RightRearFacingPassenger"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pilot Door" ExpectationTT="Inspect"/>
+					<Instrument Id="PilotDoorHandle"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Door Integrity" ExpectationTT="If Compromised..."/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Emergency Descent" ExpectationTT="Choose Rough Air"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Cabin Pressurized After Landing">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Differential Pressure" ExpectationTT="If Above 0 PSI..."/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>					
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="Off"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pressurization" ExpectationTT="Dump"/>
+					<Instrument Id="PressurizationDumpCover"/>
+					<Instrument Id="PressurizationDumpSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Differential Pressure" ExpectationTT="Minimal"/>
+					<Instrument Id="CabinDifferentialPressureNeedle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ram Air Handle" ExpectationTT="Pull Open"/>
+					<Instrument Id="RamAir_Handle"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Vacuum Suction Low">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gyro Suction" ExpectationTT="If Low..."/>
+					<Instrument Id="SuctionPressureNeedle"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="DC Instruments" ExpectationTT="Check &amp; Reference"/>
+					<ForceCamera name="CoPilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Starter Does Not Disengage">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Condition Lever" ExpectationTT="Cutoff"/>
+					<Instrument Id="FUEL_Lever_Mixture_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Propeller Lever" ExpectationTT="Feather"/>
+					<Instrument Id="ENGINE_Lever_Propeller"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Tank Selector" ExpectationTT="Pull for Off"/>
+					<Instrument Id="FUEL_Knob_Selector_1"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Crash Lever" ExpectationTT="Down"/>
+					<Instrument Id="GangBarHandle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="CHIP Illuminated">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Possible Engine Failure" ExpectationTT="Anticipate"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Power Lever" ExpectationTT="Reduce"/>
+					<Instrument Id="ENGINE_Lever_Throttle"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Land" ExpectationTT="As Soon as Practical"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Remote Compass Misalignment">
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Remote Compass Circuit Breaker" ExpectationTT="Pull &amp; Reset"/>
+					<Instrument Id="RemoteCompass_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Remote Compass Alignment" ExpectationTT="If Misaligned..."/>
+					<Instrument Id="GyroSyncIndicator_L"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Remote Compass" ExpectationTT="Free"/>
+					<Instrument Id="GyroSlaveModeSwitch_L"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Compass Position" ExpectationTT="Align to Magnetic"/>
+					<Instrument Id="GyroRotationSwitch_L"/>
+					<ForceCamera name="LeftPanel"/>
+				</Checkpoint>
+			</Page>
+
+			<Page SubjectTT="Flap Failure">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flap Breaker" ExpectationTT="Check On"/>
+					<Instrument Id="Flaps_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Voltmeter" ExpectationTT="23V Minimum"/>
+					<Instrument Id="VoltsNeedle"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="As Required"/>
+					<Instrument Id="HANDLING_LEVER_FLAPS"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flap Indicators" ExpectationTT="Check"/>
+					<Instrument Id="HANDLING_Indicator_Flaps"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Flaps" ExpectationTT="Visually Check"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Autopilot Failure or Trim Runaway">
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Autopilot" ExpectationTT="Disconnect"/>
+					<Instrument Id="HANDLING_Yoke_Push_AP_Disconect_1"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="Off"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Trim Circuit Breakers" ExpectationTT="Pull Off"/>
+					<Instrument Id="PitchTrim_Breaker"/>
+					<Instrument Id="AileronTrim_Breaker"/>
+					<Instrument Id="RudderTrim_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="AP Off"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Determine Defective Trim" ExpectationTT="Circuit by Circuit"/>
+					<Instrument Id="PitchTrim_Breaker"/>
+					<Instrument Id="AileronTrim_Breaker"/>
+					<Instrument Id="RudderTrim_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="AP/Trim Master" ExpectationTT="On"/>
+					<Instrument Id="AutopilotServoMasterSwitch"/>
+					<ForceCamera name="ThrottleQuadrant"/>
+				</Checkpoint>
+			</Page>
+
+			<Page SubjectTT="Airspeed Failure">
+				
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pitot Heat" ExpectationTT="Check On"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Alternate Static" ExpectationTT="Pull Firmly"/>
+					<Instrument Id="AlternateAir"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed &amp; Altimeter" ExpectationTT="Apply Corrections"/>
+					<Instrument Id="AltimeterNeedle"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+			</Page>
+
+			<Page SubjectTT="Severe Icing Encounter">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Autopilot" ExpectationTT="Disconnect"/>
+					<Instrument Id="HANDLING_Yoke_Push_AP_Disconect_1"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Deicing Systems" ExpectationTT="All On"/>
+					<Instrument Id="AirframeDeiceSwitch"/>
+					<Instrument Id="PropellerDeiceSwitch"/>
+					<Instrument Id="WindshieldHeatSwitch_L"/>
+					<Instrument Id="WindshieldHeatSwitch_R"/>
+					<Instrument Id="PitotHeatSwitch_1"/>
+					<Instrument Id="PitotHeatSwitch_2"/>
+					<Instrument Id="IceLightSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On If Below 200 kts"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bleed Air" ExpectationTT="High"/>
+					<Instrument Id="BleedAirSwitch"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Air Flow Distributor" ExpectationTT="Defog"/>
+					<Instrument Id="AirFlowSelectorKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Cabin Temperature" ExpectationTT="Highest Setting"/>
+					<Instrument Id="CabinTemperatureKnob"/>
+					<ForceCamera name="EnvironmentalPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Severe Precip. Encounter">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Ignition" ExpectationTT="On"/>
+					<Instrument Id="IgnitionSwitch"/>
+					<ForceCamera name="Overhead"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Inertial Separator" ExpectationTT="On If Below 200 kts"/>
+					<Instrument Id="InertialSeparatorSwitch"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+
+			<Page SubjectTT="Landing Gear Manual Extension">
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Below 178 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Breaker" ExpectationTT="Pull Off"/>
+					<Instrument Id="LandingGear_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Control" ExpectationTT="Down"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Floor Panel" ExpectationTT="Open"/>
+					<Instrument Id="EmergencyGearDoorHandle"/>
+					<ForceCamera name="EmergencyGear"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bypass Selector" ExpectationTT="Pull On"/>
+					<Instrument Id="EmergencyGearBypass_Handle"/>
+					<ForceCamera name="EmergencyGear"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Pump Handle" ExpectationTT="65 Cycles"/>
+					<Instrument Id="EmergencyGearHandle"/>
+					<ForceCamera name="EmergencyGear"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gear Indicators" ExpectationTT="Three Green"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Gear Down Test" ExpectationTT="Hold"/>
+					<Instrument Id="GearDownTest"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+
+			</Page>
+
+			<Page SubjectTT="Landing Gear Up after Man Ext">
+
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Airspeed" ExpectationTT="Below 128 kts"/>
+					<Instrument Id="AirspeedNeedle_L"/>
+					<ForceCamera name="Pilot"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Bypass Selector" ExpectationTT="Push Off"/>
+					<Instrument Id="EmergencyGearBypass_Handle"/>
+					<ForceCamera name="EmergencyGear"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Breaker" ExpectationTT="Push On"/>
+					<Instrument Id="LandingGear_Breaker"/>
+					<ForceCamera name="CircuitBreakers"/>
+				</Checkpoint>
+				<Checkpoint>
+					<CheckpointDesc SubjectTT="Landing Gear Control" ExpectationTT="Up"/>
+					<Instrument Id="LANDING_GEAR_Lever_Gear"/>
+					<ForceCamera name="LowerLeftPanel"/>
+				</Checkpoint>
+				
+			</Page>
+
+		</Step>
+
+	</Checklist.Checklist>
+</SimBase.Document>
