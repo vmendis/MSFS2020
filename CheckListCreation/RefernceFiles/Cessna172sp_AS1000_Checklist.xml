@@ -97,8 +97,7 @@
 					<ForceCamera name="Light Switches"/>
 					<Instrument Id="ELECTRICAL_Panel_Breakers"/>
 				</Checkpoint>
-				<Checkpoint ReferenceId="C172SP_AS1000_ALL_ELECTRICAL_EQUIPMENT_OFF">
-		</Checkpoint>
+				<Checkpoint ReferenceId="C172SP_AS1000_ALL_ELECTRICAL_EQUIPMENT_OFF"> </Checkpoint>
 				<Checkpoint ReferenceId="Avionics_Switch_Bus_1_And_Bus_2_Off">
 					<SetTemplateValue Id="Circuit Avionics 1">
 						<Val Code="(B:ELECTRICAL_Avionics_Bus_1)"/>
