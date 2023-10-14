@@ -1,0 +1,588 @@
+<ModelBehaviors>
+
+<!-- A2A SIMULATIONS AIRCRAFT COMMON FILE -->
+
+<Include Path="Asobo\Common.xml"/>
+
+
+
+<!-- Basic animation template -->	
+
+<Template Name="A2A_Anim_Code_Base">
+	<DefaultTemplateParameters>
+		<ANIM_GUID/>
+		<ANIM_LAG>0</ANIM_LAG>
+		<ANIM_NAME/>
+		<ANIM_LENGTH>100</ANIM_LENGTH>
+		<ANIM_WRAP>FALSE</ANIM_WRAP>
+		<ANIM_DELTA>FALSE</ANIM_DELTA>
+		<ANIM_BLENDWEIGHT>1.0</ANIM_BLENDWEIGHT>
+		<ANIM_CODE/>
+		<TOOLTIP_NODE_ID/>
+		<TOOLTIPID/>
+	</DefaultTemplateParameters>
+	
+	<Animation Name = "#ANIM_NAME#" Guid = "#ANIM_GUID#" Length = "#ANIM_LENGTH#" Type = "Sim" TypeParam = "AutoPlay">
+		<Parameter>
+			<Code>#ANIM_CODE#</Code>
+			<Lag>#ANIM_LAG#</Lag>
+			<Wrap>#ANIM_WRAP#</Wrap>
+			<Delta>#ANIM_DELTA#</Delta>
+			<BlendWeight>#ANIM_BLENDWEIGHT#</BlendWeight>
+		</Parameter>
+	</Animation>
+</Template>
+
+<!-- Switch with a code -->
+
+<Template Name = "A2A_Switch_Code">
+	<DefaultTemplateParameters>
+		<PART_ID/>
+		<ANIM_CODE/>
+		<CLICK_CODE/>
+		<TOOLTIPID/>
+	</DefaultTemplateParameters>
+	<Component ID="#PART_ID#" Node="#PART_ID#">
+		<UseTemplate Name="ASOBO_GT_Switch_Code">
+			<PART_ID>#PART_ID#</PART_ID>
+			<ANIM_NAME>#PART_ID#</ANIM_NAME>
+			<LAG>400</LAG>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>#ANIM_CODE#</ANIM_CODE>
+			<LEFT_SINGLE_CODE>#CLICK_CODE#</LEFT_SINGLE_CODE>
+			<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>
+       		</UseTemplate>
+	</Component>
+</Template>
+
+<!-- Switch with a LVAR -->
+
+<Template Name = "A2A_Switch">
+	<DefaultTemplateParameters>
+		<PART_ID/>
+		<LVARNAME/>
+		<TOOLTIPTEXT/>
+		<TOOLTIPIF>On</TOOLTIPIF>
+		<TOOLTIPELSE>Off</TOOLTIPELSE>
+	</DefaultTemplateParameters>
+	<Component ID="#PART_ID#" Node="#PART_ID#">
+		<UseTemplate Name="ASOBO_GT_Switch_Code">
+			<PART_ID>#PART_ID#</PART_ID>
+			<ANIM_NAME>#PART_ID#</ANIM_NAME>
+			<LAG>400</LAG>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(L:#LVARNAME#,bool) 50 *</ANIM_CODE>
+			<LEFT_SINGLE_CODE>(L:#LVARNAME#,bool) ! (&gt;L:#LVARNAME#,bool)</LEFT_SINGLE_CODE>
+			<TOOLTIPID>#TOOLTIPTEXT# (%((L:#LVARNAME#,bool))%{if}#TOOLTIPIF#%{else}#TOOLTIPELSE#%{end})</TOOLTIPID>
+       		</UseTemplate>
+	</Component>
+</Template>
+
+<!-- Switch with an AVAR and EVENT -->
+
+<Template Name = "A2A_Switch_A">
+	<DefaultTemplateParameters>
+		<PART_ID/>
+		<SIMVAR/>
+		<EVENTID/>
+		<TOOLTIPTEXT/>
+	</DefaultTemplateParameters>
+	<Component ID="#PART_ID#" Node="#PART_ID#">
+		<UseTemplate Name="ASOBO_GT_Switch_Code">
+			<PART_ID>#PART_ID#</PART_ID>
+			<ANIM_NAME>#PART_ID#</ANIM_NAME>
+			<LAG>400</LAG>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(A:#SIMVAR#,bool) 50 *</ANIM_CODE>
+			<LEFT_SINGLE_CODE>(&gt;K:#EVENTID#)</LEFT_SINGLE_CODE>
+			<TOOLTIPID>#TOOLTIPTEXT# (%((A:#SIMVAR#,bool))%{if}On%{else}Off%{end})</TOOLTIPID>
+       		</UseTemplate>
+	</Component>
+</Template>
+
+
+<!-- Switch with 3 positions (**** RATHER WIP ******)
+
+	Requires Container with Node=""
+
+	<MOMENTARY_SWITCH/> makes it spring loaded to neutral
+	<REPEAT/> executes the code as long the switch is held
+-->
+
+
+<Template Name = "A2A_Switch_3States">
+	<DefaultTemplateParameters>
+		<PartID/>
+		<ANIM_NAME/>
+		<INI_STATE>0</INI_STATE>
+		<SWITCH_POSITION_TYPE>L</SWITCH_POSITION_TYPE>
+		<CODE_POS_0/>
+		<CODE_POS_1/>
+		<CODE_POS_2/>
+	</DefaultTemplateParameters>
+	<UseTemplate Name="ASOBO_GT_Update"> <!-- Sets switch initial state -->
+		<UPDATE_ONCE>True</UPDATE_ONCE>
+		<UPDATE_CODE>#INI_STATE# (&gt;#SWITCH_POSITION_TYPE#:#SWITCH_POSITION_VAR#)</UPDATE_CODE>
+	</UseTemplate>
+	<UseTemplate Name = "ASOBO_GT_Switch_XStates">
+		<NUM_STATES>3</NUM_STATES>
+		<ANIM_LAG>800</ANIM_LAG>
+		<Condition Check="MOMENTARY_SWITCH">
+			<STATE0_TIMER>1</STATE0_TIMER>
+			<STATE_MAX_TIMER>1</STATE_MAX_TIMER>
+			<MOMENTARY_REPEAT_DELAY>0.1</MOMENTARY_REPEAT_DELAY>
+		</Condition>
+	</UseTemplate>
+	<Condition Check="REPEAT">
+		<True>
+			<UseTemplate Name="ASOBO_GT_Update">
+				<FREQUENCY>18</FREQUENCY>
+				<UPDATE_CODE>
+					(#SWITCH_POSITION_TYPE#:#SWITCH_POSITION_VAR#) 0 == if{ #CODE_POS_0# }			
+					(#SWITCH_POSITION_TYPE#:#SWITCH_POSITION_VAR#) 2 == if{ #CODE_POS_2# }			
+				</UPDATE_CODE>
+			</UseTemplate>
+		</True>
+	</Condition>
+</Template>
+
+<!-- Lever with a LVAR -->
+
+<Template Name = "A2A_Lever">
+	<DefaultTemplateParameters>
+		<NODE_ID/>
+		<AXIS/>
+		<LVARNAME/>
+		<TOOLTIPTEXT/>
+	</DefaultTemplateParameters>
+
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_ID#</NODE_ID>
+			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+			<ANIM_CODE>(L:#LVARNAME#,percent)</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Interaction_WheelLeftDrag_Axis">
+			<USE_TRAJECTORY_DRAG_MODE>True</USE_TRAJECTORY_DRAG_MODE>
+			<NO_ARROWS/>
+			<CURSOR>Grab</CURSOR>
+			<AXIS>#AXIS#</AXIS>
+			<DRAG_CODE>100 (M:DragPercent) * 0 max 100 min (&gt;L:#LVARNAME#,percent)</DRAG_CODE>
+			<POSITIVE_AXIS_CODE>(L:#LVARNAME#,percent) ++ 100 min (&gt;L:#LVARNAME#,percent)</POSITIVE_AXIS_CODE>
+			<NEGATIVE_AXIS_CODE>(L:#LVARNAME#,percent) -- 0 max (&gt;L:#LVARNAME#,percent)</NEGATIVE_AXIS_CODE>
+			<TOOLTIPID>#TOOLTIPTEXT# (%((L:#LVARNAME#,percent))%!d!%%)</TOOLTIPID>
+		</UseTemplate>
+	</Component>
+</Template>
+
+<Template Name = "A2A_Lever_NoPercentTooltip">
+	<DefaultTemplateParameters>
+		<NODE_ID/>
+		<AXIS/>
+		<LVARNAME/>
+		<TOOLTIPTEXT/>
+	</DefaultTemplateParameters>
+
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_ID#</NODE_ID>
+			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+			<ANIM_CODE>(L:#LVARNAME#,percent)</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Interaction_WheelLeftDrag_Axis">
+			<USE_TRAJECTORY_DRAG_MODE>True</USE_TRAJECTORY_DRAG_MODE>
+			<NO_ARROWS/>
+			<CURSOR>Grab</CURSOR>
+			<AXIS>#AXIS#</AXIS>
+			<DRAG_CODE>100 (M:DragPercent) * 0 max 100 min (&gt;L:#LVARNAME#,percent)</DRAG_CODE>
+			<POSITIVE_AXIS_CODE>(L:#LVARNAME#,percent) ++ 100 min (&gt;L:#LVARNAME#,percent)</POSITIVE_AXIS_CODE>
+			<NEGATIVE_AXIS_CODE>(L:#LVARNAME#,percent) -- 0 max (&gt;L:#LVARNAME#,percent)</NEGATIVE_AXIS_CODE>
+			<TOOLTIPID>#TOOLTIPTEXT#</TOOLTIPID>
+		</UseTemplate>
+	</Component>
+</Template>
+
+<!-- Knob with a code -->
+
+<Template Name="A2A_Knob_Code">
+	<DefaultTemplateParameters>
+		<NODE_ID/>
+		<TOOLTIPID/>
+		<CLOCKWISE_CODE/>                        
+		<ANTICLOCKWISE_CODE/>
+		<ANIM_CODE/>
+		<ANIM_LENGTH>100</ANIM_LENGTH>
+		<ID>1</ID>
+	</DefaultTemplateParameters>
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_ID#</NODE_ID>
+			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+			<ANIM_CODE>#ANIM_CODE#</ANIM_CODE>
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Knob_Infinite">
+			<CLOCKWISE_CONDITION> 1 </CLOCKWISE_CONDITION>
+			<ANTICLOCKWISE_CONDITION> 1 </ANTICLOCKWISE_CONDITION>
+		</UseTemplate>
+	</Component>
+</Template>
+
+<!-- Tooltip -->
+
+<Template Name = "A2A_Tooltip">
+	<DefaultTemplateParameters>
+		<TOOLTIP_NODE_ID/>
+		<TOOLTIPID/>
+	</DefaultTemplateParameters>
+	<Component ID="#TOOLTIP_NODE_ID#" Node="#TOOLTIP_NODE_ID#">
+		<UseTemplate Name="ASOBO_GT_MouseRect">
+			<CURSOR>Hand</CURSOR>
+			<CALLBACKCODE>0</CALLBACKCODE>
+			<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>
+       	</UseTemplate>
+	</Component>
+</Template>
+
+<!-- Gauge -->
+
+<Template Name="A2A_Gauge_Code_Base">
+	<DefaultTemplateParameters>
+		<TOOLTIP_NODE_ID/>
+		<TOOLTIPID/>
+	</DefaultTemplateParameters>
+		
+	<UseTemplate Name="A2A_Anim_Code_Base">
+	</UseTemplate>
+		
+	<UseTemplate Name="A2A_Tooltip">
+		<NODE_ID>#TOOLTIP_NODE_ID#</NODE_ID>
+		<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>
+        </UseTemplate>
+</Template>
+
+<!-- ################## MORE SPECIALIZED ################## -->
+<Template Name = "A2A_Knob_Magnetos_ORLB">
+	<DefaultTemplateParameters>
+		<NODE_ID/>
+		<ID>1</ID>
+	</DefaultTemplateParameters>
+	<!-- Animation keys: 0=off, 25=right, 50=left, 75=both. -->
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<PartID>#NODE_ID#</PartID>
+		<UseTemplate Name="ASOBO_ELECTRICAL_Switch_Magneto_Template">
+			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+			<NODE_ID>#NODE_ID#</NODE_ID>
+			<ID>#ID#</ID>
+			<SWITCH_DIRECTION>Horizontal</SWITCH_DIRECTION>
+			<NORMALIZED_TIME>0.75</NORMALIZED_TIME>
+			<DIRECTION>Forward</DIRECTION>
+			<INDEX_OFF>0</INDEX_OFF>
+			<INDEX_RIGHT>1</INDEX_RIGHT>
+			<INDEX_LEFT>2</INDEX_LEFT>
+			<INDEX_BOTH>3</INDEX_BOTH>
+			<ARROW_TYPE>Curved</ARROW_TYPE>
+			<ANIMREF_ID>0</ANIMREF_ID>
+			<ANIMCURSOR_DIR>1</ANIMCURSOR_DIR>
+			<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_OFF</ANIMTIP_0>
+			<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_R</ANIMTIP_1>
+			<ANIMTIP_2>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_L</ANIMTIP_2>
+			<ANIMTIP_3>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_BOTH</ANIMTIP_3>		
+		</UseTemplate>
+	</Component>
+</Template>
+
+
+<Template Name = "A2A_Knob_Magnetos_ORLBS">
+	<DefaultTemplateParameters>
+		<NODE_ID/>
+		<ID/>
+	</DefaultTemplateParameters>
+	<!-- Animation keys: 0=off, 25=right, 50=left, 75=both, 100=start -->
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<PartID>#NODE_ID#</PartID>
+		<UseTemplate Name="ASOBO_ELECTRICAL_Switch_Magneto_Template">
+			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+			<NODE_ID>#NODE_ID#</NODE_ID>
+			<ID>#ID#</ID>
+			<SWITCH_DIRECTION>Horizontal</SWITCH_DIRECTION>
+			<NORMALIZED_TIME>0.75</NORMALIZED_TIME>
+			<DIRECTION>Forward</DIRECTION>
+			<INDEX_OFF>0</INDEX_OFF>
+			<INDEX_RIGHT>1</INDEX_RIGHT>
+			<INDEX_LEFT>2</INDEX_LEFT>
+			<INDEX_BOTH>3</INDEX_BOTH>
+			<ARROW_TYPE>Curved</ARROW_TYPE>
+			<USE_STARTER/>
+			<ANIMREF_ID>0</ANIMREF_ID>
+			<ANIMCURSOR_DIR>1</ANIMCURSOR_DIR>
+			<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_OFF</ANIMTIP_0>
+			<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_R</ANIMTIP_1>
+			<ANIMTIP_2>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_L</ANIMTIP_2>
+			<ANIMTIP_3>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_BOTH</ANIMTIP_3>
+			<ANIMTIP_4>TT:COCKPIT.TOOLTIPS.MAGNETO_START_SWITCH_START</ANIMTIP_4>			
+		</UseTemplate>
+	</Component>
+</Template>
+
+<Template Name="A2A_Knob_ElevatorTrim_Template">
+	<DefaultTemplateParameters>
+		<ID>1</ID>
+		<NODE_ID/>
+		<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+		<PART_ID>#NODE_ID#</PART_ID>
+		<OTHER_PART_ID>#NODE_ID#</OTHER_PART_ID>
+		<WWISE_EVENT>elevator_switch</WWISE_EVENT>
+		<COUNT>3</COUNT>
+		<ANIMREF_ID>1</ANIMREF_ID>
+		<ANIMTIP_0_ON_CURSOR>UpArrow</ANIMTIP_0_ON_CURSOR>
+		<ANIMTIP_1_ON_CURSOR>Grab</ANIMTIP_1_ON_CURSOR>
+		<ANIMTIP_2_ON_CURSOR>DownArrow</ANIMTIP_2_ON_CURSOR>
+		<ANIMTIP_0>Elevator trim (Down)</ANIMTIP_0>
+		<ANIMTIP_1>Elevator trim (Off)</ANIMTIP_1>
+		<ANIMTIP_2>Elevator trim (Up)</ANIMTIP_2>
+		<TRIM_LIMIT>20</TRIM_LIMIT><!-- elevator_trim_limit in flight_model.cfg -->
+	</DefaultTemplateParameters>
+	<UseTemplate Name="ASOBO_HANDLING_Trim_Variable_Speed_Base_Template">
+		<SWITCH_DIRECTION>Vertical</SWITCH_DIRECTION>
+		<!-- Trim_Base configuration -->
+		<TRIM_NAME>ElevatorTrim</TRIM_NAME>
+		<GET_TRIM>(A:ELEVATOR TRIM PCT, percent)</GET_TRIM>
+		<SET_TRIM>(&gt;K:ELEVATOR_TRIM_SET)</SET_TRIM>
+	</UseTemplate>
+</Template>
+
+<Template Name="A2A_Knob_RudderTrim_Templatex">
+	<DefaultTemplateParameters>
+		<INCREMENT>5</INCREMENT>
+		<DRAG_INCREMENT>1</DRAG_INCREMENT>
+		<NODE_ID/>
+		<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+		<RESET_PUSH_NODE_ID>HANDLING_Push_RudderTrim_Reset</RESET_PUSH_NODE_ID>
+		<RESET_PUSH_ANIM_NAME>HANDLING_Push_RudderTrim_Reset</RESET_PUSH_ANIM_NAME>
+		<PART_ID>HANDLING_Knob_RudderTrim</PART_ID>
+		<CURSOR>Grab</CURSOR>
+		<ANIM_SIMVAR_MIN>-100</ANIM_SIMVAR_MIN>
+		<ANIM_SIMVAR_MAX>100</ANIM_SIMVAR_MAX>
+		<ANIM_SIMVAR_SCALE>-1</ANIM_SIMVAR_SCALE>
+		<TOOLTIP_PCT/>
+		<TOOLTIP_DEGREES/>
+		<Condition Check="TOOLTIP_PCT">
+			<TOOLTIPID>Rudder trim (%((A:RUDDER TRIM PCT, Percent))%!d!%%)</TOOLTIPID>
+		</Condition>
+		<Condition Check="TOOLTIP_DEGREES">
+			<TOOLTIPID>Rudder trim (%((A:RUDDER TRIM, Degrees))%!d!%°)</TOOLTIPID>
+		</Condition>
+		<ARROW_TYPE/>
+		<USE_DEFAULT_VARIABLE_SPEED_TRIM>True</USE_DEFAULT_VARIABLE_SPEED_TRIM>
+		<WWISE_EVENT>rudder_trim_knob</WWISE_EVENT>
+		<WWISE_EVENT_1>rudder_trim_knob_01</WWISE_EVENT_1>
+		<WWISE_EVENT_2>rudder_trim_knob_02</WWISE_EVENT_2>
+
+	</DefaultTemplateParameters>
+	<Switch>
+		<Case Valid="USE_DEFAULT_VARIABLE_SPEED_TRIM">
+			<UseTemplate Name="ASOBO_HANDLING_Trim_Variable_Speed_Base_Template">
+				<!-- Trim_Base configuration -->
+				<!-- <ARROW_TYPE>Curved</ARROW_TYPE> -->
+				<TRIM_NAME>RudderTrim</TRIM_NAME>
+				<GET_TRIM>(A:RUDDER TRIM PCT, Percent)</GET_TRIM>
+				<SET_TRIM>(&gt;K:RUDDER_TRIM_SET_EX1)</SET_TRIM>
+				<ADDITIONAL_TESTS>(A:AUTOPILOT MASTER, Bool) ! and</ADDITIONAL_TESTS>
+			</UseTemplate>
+		</Case>
+		<Case Check="AIRBUS_TYPE">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name = "ASOBO_GT_Switch_3States">
+					<SWITCH_POSITION_TYPE>L</SWITCH_POSITION_TYPE>
+					<SWITCH_POSITION_VAR>XMLVAR_RudderTrim</SWITCH_POSITION_VAR>
+					<MOMENTARY_REPEAT_FREQUENCY>15</MOMENTARY_REPEAT_FREQUENCY>
+					<CODE_POS_0>
+						(A:AUTOPILOT MASTER, Bool) ! if{
+							(&gt;K:RUDDER_TRIM_LEFT)
+						}
+					</CODE_POS_0>
+					<CODE_POS_2>
+						(A:AUTOPILOT MASTER, Bool) ! if{
+							(&gt;K:RUDDER_TRIM_RIGHT)
+						}
+					</CODE_POS_2>
+					<MOMENTARY_SWITCH/>
+					<STATE_MAX_TIMER>0.1</STATE_MAX_TIMER>
+					<STATE0_TIMER>0.1</STATE0_TIMER>
+					<SWITCH_DIRECTION>Horizontal</SWITCH_DIRECTION>
+					<ARROW_TYPE>Curved</ARROW_TYPE>
+				</UseTemplate>
+			</Component>
+			<Condition Check="NO_RESET_PUSH">
+				<False>
+					<Component ID="#RESET_PUSH_NODE_ID#" Node="#RESET_PUSH_NODE_ID#">
+						<UseTemplate Name = "ASOBO_GT_Push_Button">
+							<ANIM_NAME>#RESET_PUSH_ANIM_NAME#</ANIM_NAME>
+							<LEFT_SINGLE_CODE>0 (&gt;K:RUDDER_TRIM_SET)</LEFT_SINGLE_CODE>
+							<WWISE_EVENT_1>rudder_trim_rest_push_button_on</WWISE_EVENT_1>
+							<WWISE_EVENT_2>rudder_trim_rest_push_button_on</WWISE_EVENT_2>
+							<TOOLTIPID>TT:COCKPIT.TOOLTIPS.RUDDER_TRIM_RESET</TOOLTIPID>
+						</UseTemplate>
+					</Component>
+				</False>
+			</Condition>
+		</Case>
+		<Default>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name = "ASOBO_GT_Lever_DraggingWheelLeftDrag_Axis">
+					<ANIM_SIMVAR>RUDDER TRIM PCT</ANIM_SIMVAR>
+					<ANIM_SIMVAR_UNITS>percent</ANIM_SIMVAR_UNITS>
+					<ANIM_SIMVAR_SCALE>0.5</ANIM_SIMVAR_SCALE>
+					<ANIM_SIMVAR_BIAS>50</ANIM_SIMVAR_BIAS>
+					<AXIS>X</AXIS>
+					<POSITIVE_AXIS_CODE>
+						(A:RUDDER TRIM PCT, Percent) #INCREMENT# + #ANIM_SIMVAR_MAX# min (&gt;K:RUDDER_TRIM_SET)
+					</POSITIVE_AXIS_CODE>
+					<NEGATIVE_AXIS_CODE>
+						(A:RUDDER TRIM PCT, Percent) #INCREMENT# - #ANIM_SIMVAR_MIN# max (&gt;K:RUDDER_TRIM_SET)
+					</NEGATIVE_AXIS_CODE>
+					<Condition Check="USE_TRAJECTORY_DRAG_MODE">
+						<True>
+							<DRAG_CODE>
+								(M:DragPercent) #ANIM_SIMVAR_MAX# #ANIM_SIMVAR_MIN# - * #ANIM_SIMVAR_MIN# + sp0
+								l0 #ANIM_SIMVAR_MAX# min #ANIM_SIMVAR_MIN# max (&gt;K:RUDDER_TRIM_SET)
+							</DRAG_CODE>
+						</True>
+						<False>
+							<DRAG_CODE>
+								(O:_LastPos) (O:StartPos) - abs 0.001 &gt; if{
+									(A:RUDDER TRIM PCT, Percent) #DRAG_INCREMENT# (O:DragScale) * + #ANIM_SIMVAR_MAX# min #ANIM_SIMVAR_MIN# max (&gt;K:RUDDER_TRIM_SET)
+								}
+								</DRAG_CODE>
+						</False>
+					</Condition>
+					<DOWN_CODE>
+						(O:_LastPos) (&gt;O:StartPos)
+					</DOWN_CODE>
+					<RELEASE_CODE>
+						(O:_LastPos) (O:StartPos) - abs 0.001 &lt; if{
+						(O:StartPos) 0 &gt; if{
+							g1
+						} els{
+							g2
+						}
+						}
+					</RELEASE_CODE>
+				</UseTemplate>
+			</Component>
+		</Default>
+	</Switch>
+</Template>
+
+<!-- Animation keys: 0=0, 25=90, 50=180, 75=270, 100=360 degrees-->
+<Template Name="A2A_Knob_Altimeter_Template">
+	<DefaultTemplateParameters>
+		<ID>1</ID>
+		<NODE_ID/>
+		<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+		<SIMVAR>KOHLSMAN SETTING HG:#ID#</SIMVAR>
+		<UNITS>inHg</UNITS>                             
+		<MIN_VALUE>28.0</MIN_VALUE>
+		<MAX_VALUE>32.0</MAX_VALUE>
+	</DefaultTemplateParameters>
+	<Component ID="#NODE_ID#" Node="#NODE_ID#">
+		<UseTemplate Name="ASOBO_GT_Knob_Infinite">
+			<TOOLTIPID>Altimeter calibration (%((A:KOHLSMAN SETTING HG:#ID#, inHg))%!2.2f! inHg,  %((A:KOHLSMAN SETTING MB:#ID#, mbar))%!4.1f! mbar)</TOOLTIPID>
+			<CLOCKWISE_CODE>#ID# (&gt;K:KOHLSMAN_DEC)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>#ID# (&gt;K:KOHLSMAN_INC)</ANTICLOCKWISE_CODE>
+			<CLOCKWISE_CONDITION> (A:KOHLSMAN SETTING HG:#ID#, inHg) #MIN_VALUE# &gt; </CLOCKWISE_CONDITION>
+			<ANTICLOCKWISE_CONDITION> (A:KOHLSMAN SETTING HG:#ID#, inHg) #MAX_VALUE# &lt; </ANTICLOCKWISE_CONDITION>
+		</UseTemplate>
+	</Component>
+</Template>
+
+
+<!--  Illumination knob (potentiometer) ##################################################
+
+		<Component ID="LIGHTING_Glareshield_White">
+			<UseTemplate Name="A2A_Knob_Light_Potentiometer">
+				<POTENTIOMETER>2</POTENTIOMETER>
+				<LIGHT_TYPE>GLARESHIELD</LIGHT_TYPE>
+				<NODE>knob_light_instrument_inner</NODE>
+				<EMISSIVE_NODE>light_glareshield_white_emissive</EMISSIVE_NODE>
+				<TOOLTIPTEXT>Instrument panel white light</TOOLTIPTEXT>
+				<SPEED>2</SPEED>
+			</UseTemplate>
+		</Component>
+
+		<LIGHT_TYPE></LIGHT_TYPE> If FX light is involved, enter SimVar name of light (CABIN, PANEL, GLARESHIELD...) to tie potentiometer up 
+		<EMISSIVE_VIS\> emissive code controls visiblity
+-->
+
+<Template Name="A2A_Knob_Light_Potentiometer">
+	<DefaultTemplateParameters>
+		<POTENTIOMETER/>
+		<NODE/>
+		<SPEED>5</SPEED>
+		<EMISSIVE_NODE/>
+		<TOOLTIPTEXT/>
+	</DefaultTemplateParameters>
+
+	<Component ID="KNOB" Name="#NODE#">
+		<UseTemplate Name="A2A_Knob_Code">
+			<NODE_ID>#NODE#</NODE_ID>
+			<TOOLTIPID>#TOOLTIPTEXT# (%((A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent))%!d!%%)</TOOLTIPID>
+			<CLOCKWISE_CODE>(A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) #SPEED# + 100 min #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) #SPEED# - 0 max #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)</ANTICLOCKWISE_CODE>
+			<ANIM_CODE>(A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent)</ANIM_CODE>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<ID>1</ID>
+		</UseTemplate>
+		<Condition Check="LIGHT_TYPE">
+				<Update Once="True">
+					(A:LIGHT #LIGHT_TYPE#,bool) 100 * #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+				</Update>
+
+				<Update Frequency="2">
+					(A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) 0 &gt; (A:LIGHT #LIGHT_TYPE#,bool) 0 == and if{ (&gt;K:#LIGHT_TYPE#_LIGHTS_ON) }
+				</Update>
+		</Condition>
+	</Component>
+	<Component ID="EMISSIVE">
+		<UseTemplate Name="ASOBO_LIGHTING_Emissive_SubTemplate">
+			<NODE_ID>#EMISSIVE_NODE#</NODE_ID>
+			<POTENTIOMETER>#POTENTIOMETER#</POTENTIOMETER>
+			<Condition Check="EMISSIVE_VIS">
+				<EMISSIVE_DRIVES_VISIBILITY>True</EMISSIVE_DRIVES_VISIBILITY>
+			</Condition>
+		</UseTemplate>
+	</Component>
+</Template>
+
+<Template Name="A2A_Switch_Light">
+	<DefaultTemplateParameters>
+		<LIGHT_TYPE>NULL</LIGHT_TYPE> <!-- If FX light is involved, enter SimVar name of light (CABIN, PANEL, GLARESHIELD...) to tie potentiometer up -->
+		<NODE/>
+		<EMISSIVE_NODE/>
+		<TOOLTIPTEXT/>
+	</DefaultTemplateParameters>
+	<Component ID="SWITCH">
+		<UseTemplate Name="A2A_Switch_A">
+			<PART_ID>#NODE#</PART_ID>
+			<SIMVAR>LIGHT #LIGHT_TYPE#</SIMVAR>
+			<EVENTID>TOGGLE_#LIGHT_TYPE#_LIGHTS</EVENTID>
+       		</UseTemplate>
+	</Component>
+	<Component ID="EMISSIVE">
+		<UseTemplate Name="ASOBO_LIGHTING_Emissive_SubTemplate">
+			<NODE_ID>#EMISSIVE_NODE#</NODE_ID>
+			<SIMVAR_LIGHT>LIGHT #LIGHT_TYPE#</SIMVAR_LIGHT>
+			<SIMVAR_LIGHT_ON>LIGHT #LIGHT_TYPE# ON</SIMVAR_LIGHT_ON>
+			<Condition Check="EMISSIVE_VIS">
+				<EMISSIVE_DRIVES_VISIBILITY>True</EMISSIVE_DRIVES_VISIBILITY>
+			</Condition>
+			<LIGHT_SIMVAR_POWER_SETTING>LIGHT CABIN POWER SETTING</LIGHT_SIMVAR_POWER_SETTING>
+
+		</UseTemplate>
+	</Component>
+</Template>
+
+
+
+</ModelBehaviors>

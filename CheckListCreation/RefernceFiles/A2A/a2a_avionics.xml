@@ -1,0 +1,277 @@
+<ModelBehaviors>
+<!-- TEMPLATES ################################### -->
+	
+	<Template Name="NARCO_CP136_Switch">
+		<DefaultTemplateParameters>
+			<PART_ID/>
+			<NODE_ID/>
+			<ANIM_NAME/>
+			<ANIM_CODE/>
+			<LEFT_SINGLE_CODE/>
+			<EMISSIVE_CODE/>
+			<TOOLTIPTEXT/>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+		</DefaultTemplateParameters>
+		
+		<Component ID="#PART_ID#" Node="#PART_ID#"> 
+			<UseTemplate Name="ASOBO_GT_Push_Button">
+				<ANIM_NAME>#ANIM_NAME#</ANIM_NAME>
+				<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+				<ANIM_CODE>#ANIM_CODE#</ANIM_CODE>
+				<LEFT_SINGLE_CODE>>#LEFT_SINGLE_CODE#</LEFT_SINGLE_CODE>
+				<TOOLTIPID>#TOOLTIPTEXT#</TOOLTIPID>
+			</UseTemplate>
+		</Component>
+		<Component ID="#NODE_ID#" Node="#NODE_ID#"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>#EMISSIVE_CODE#</EMISSIVE_CODE>
+				<NODE_ID>#NODE_ID#</NODE_ID>
+			</UseTemplate>
+		</Component>
+	</Template>	
+	
+	<Template Name="A2A_NARCO_MK_12E_Switch_OnOff">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+		</DefaultTemplateParameters>
+		
+		<UseTemplate Name="A2A_Switch_Code">
+			<PART_ID>RADIO#ID#_Switch_OnOff</PART_ID>
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+			<ANIM_NAME>RADIO#ID#_Switch_OnOff</ANIM_NAME>
+			<CLICK_CODE>(L:Com#ID#OnOff,bool) ! (&gt;L:Com#ID#OnOff,bool)</CLICK_CODE>
+			<ANIM_CODE>(L:Com#ID#OnOff,bool) 50 *</ANIM_CODE>
+			<TOOLTIPID>Com/Nav #ID# (%((L:Com#ID#OnOff,bool))%{if}On%{else}Off%{end})</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+	
+	<Template Name = "A2A_NARCO_MK_12E_Switch_Ident">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+		</DefaultTemplateParameters>
+
+		<UseTemplate Name="ASOBO_GT_Switch_3States">
+			<SWITCH_DIRECTION>Vertical</SWITCH_DIRECTION>
+			<ANIM_NAME>RADIO#ID#_Knob_Ident</ANIM_NAME>
+			<CODE_POS_0>2 (&gt;L:Nav#ID#PullIdent,enum)</CODE_POS_0>
+			<CODE_POS_1>1 (&gt;L:Nav#ID#PullIdent,enum)</CODE_POS_1>
+			<CODE_POS_2>0 (&gt;L:Nav#ID#PullIdent,enum)</CODE_POS_2>
+			<TOOLTIPID>Nav #ID# Ident (%((L:Nav2PullIdent,enum))%{case}%{:0}On%{:1}Off%{:2}BRG%{end})</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+	
+	<Template Name = "A2A_NARCO_MK_12E_DME_Switch">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+		</DefaultTemplateParameters>
+
+		<UseTemplate Name="ASOBO_GT_Switch_6States">
+			<SWITCH_DIRECTION>Horizontal</SWITCH_DIRECTION>
+			<ANIM_NAME>RADIO#ID#_knob_dme_function</ANIM_NAME>
+			<CODE_POS_0>0 (&gt;L:DmeFunction,enum)</CODE_POS_0>
+			<CODE_POS_1>1 (&gt;L:DmeFunction,enum)</CODE_POS_1>
+			<CODE_POS_2>2 (&gt;L:DmeFunction,enum)</CODE_POS_2>
+			<CODE_POS_3>3 (&gt;L:DmeFunction,enum)</CODE_POS_3>
+			<CODE_POS_4>4 (&gt;L:DmeFunction,enum)</CODE_POS_4>
+			<CODE_POS_5>5 (&gt;L:DmeFunction,enum)</CODE_POS_5>
+			<ARROW_TYPE>Curved</ARROW_TYPE>
+			<TOOLTIPID>DME function (%((L:DmeFunction,enum))%{case}%{:0}Frequency%{:1}Distance%{:2}Groundspeed%{:3}Time To Station%{:4}Hold%{:5}Hold Frequency%{end})</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+
+	<Template Name = "A2A_NARCO_MK_12E_Active_Recall">	
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<LEFT_SINGLE_CODE>1 (&gt;L:ActiveRecallSwitch,bool)</LEFT_SINGLE_CODE>
+			<LEFT_LEAVE_CODE>0 (&gt;L:ActiveRecallSwitch,bool)</LEFT_SINGLE_CODE>
+		</DefaultTemplateParameters>
+		
+		<Component ID="RADIO#ID#_ACTIVE_RECALL" Node="RADIO#ID#_ACTIVE_RECALL"> 
+			<UseTemplate Name="ASOBO_GT_Push_Button_Held">
+				<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+				<ANIM_NAME>RADIO#ID#_Active_Recall</ANIM_NAME>
+				<LEFT_SINGLE_CODE>#LEFT_SINGLE_CODE#</LEFT_SINGLE_CODE>
+				<LEFT_LEAVE_CODE>#LEFT_LEAVE_CODE#</LEFT_LEAVE_CODE>
+				<TOOLTIPID>Active recall</TOOLTIPID>
+				<ANIM_DURATION>0.1</ANIM_DURATION>
+			</UseTemplate>
+		</Component>
+	
+	</Template>
+	
+	<Template Name="A2A_NARCO_MK_12E_Switch_OnOff">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+		</DefaultTemplateParameters>
+		
+		<UseTemplate Name="A2A_Switch">
+			<PART_ID>RADIO#ID#_Switch_OnOff</PART_ID>
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+			<ANIM_NAME>RADIO#ID#_Switch_OnOff</ANIM_NAME>
+			<CLICK_CODE>(L:Com#ID#OnOff,bool) ! (&gt;L:Com#ID#OnOff,bool)</CLICK_CODE>
+			<ANIM_CODE>(L:Com#ID#OnOff,bool) 50 *</ANIM_CODE>
+			<TOOLTIPID>Com/Nav #ID# (%((L:Com#ID#OnOff,bool))%{if}On%{else}Off%{end})</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+	
+	
+	<Template Name = "A2A_NARCO_MK_12E_Knob">
+		<DefaultTemplateParameters>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<ID>1</ID>
+			<Push>False</Push>
+			<KnobID>Com</KnobID>
+			<KnobSize>Outer</KnobSize>
+			<TOOLTIPTEXT/>
+		</DefaultTemplateParameters>
+		
+		<UseTemplate Name="ASOBO_GT_Knob_Infinite">
+			<ANIM_NAME>RADIO#ID#_Knob_#KnobID##ID##KnobSize#</ANIM_NAME>
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+			<CLOCKWISE_CODE>(L:#KnobID##ID#Freq#KnobSize#Knob,percent) ++ (&gt;L:#KnobID##ID#Freq#KnobSize#Knob,percent)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(L:#KnobID##ID#Freq#KnobSize#Knob,percent) -- (&gt;L:#KnobID##ID#Freq#KnobSize#Knob,percent)</ANTICLOCKWISE_CODE>
+			<TOOLTIPID>#KnobID# #ID# (Active: %((A:#KnobID##ID# ACTIVE FREQUENCY, MHz))%!07.3f! MHz, Standby: %((A:#KnobID##ID# STANDBY FREQUENCY, MHz))%!07.3f! MHz)</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+
+	<Template Name = "A2A_NARCO_MK_12E_Stby_Switch">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<TYPE>Com</TYPE>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<TOOLTIPTEXT>Switch to standby frequency</TOOLTIPTEXT>
+		</DefaultTemplateParameters>
+		
+		<UseTemplate Name="ASOBO_GT_Push_Button">
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+			<ANIM_NAME>RADIO#ID#_#TYPE#_Switch</ANIM_NAME>
+			<LEFT_SINGLE_CODE>1 (&gt;L:#TYPE##ID#StbySwitch,bool)</LEFT_SINGLE_CODE>
+			<LEFT_LEAVE_CODE>0 (&gt;L:#TYPE##ID#StbySwitch,bool)</LEFT_LEAVE_CODE>
+			<TOOLTIPID>#TOOLTIPTEXT#</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+
+	<!-- #### ADF #### -->
+	<Template Name = "A2A_NARCO_ADF841_Knob">
+		<DefaultTemplateParameters>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<ID>1</ID>
+			<Push>False</Push>
+			<KnobSize>Outer</KnobSize>
+		</DefaultTemplateParameters>
+		
+		<UseTemplate Name="ASOBO_GT_Knob_Infinite">
+			<ANIM_NAME>NARCO_ADF841_Knob_#KnobSize#</ANIM_NAME>
+			<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+			<CLOCKWISE_CODE>(L:AdfFreq#KnobSize#Knob,percent) ++ (&gt;L:AdfFreq#KnobSize#Knob,percent)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(L:AdfFreq#KnobSize#Knob,percent) -- (&gt;L:AdfFreq#KnobSize#Knob,percent)</ANTICLOCKWISE_CODE>
+			<TOOLTIPID>Automatic direction finder (Active - %((A:ADF ACTIVE FREQUENCY:1, KHz))%!06.2f! KHz, Standby - %((A:ADF STANDBY FREQUENCY:1, KHz))%!06.2f! KHz)</TOOLTIPID>
+		</UseTemplate>
+	</Template>	
+	
+	<Template Name = "A2A_NARCO_ADF841_switch_OnOff">
+		<DefaultTemplateParameters>
+			<NODE_ID/>
+		</DefaultTemplateParameters>
+	
+		<Component ID="#NODE_ID#" Node="#NODE_ID#"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<ANIM_NAME>NARCO_ADF841_Knob_OnOff</ANIM_NAME>
+				<ANIM_CODE>(L:AdfOnOffKnobPercent,percent)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		
+		<Component ID="#NODE_ID#_push" Node="#NODE_ID#_push"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LENGTH>50</ANIM_LENGTH>
+				<ANIM_NAME>NARCO_ADF841_Knob_OnOff_push</ANIM_NAME>
+				<ANIM_CODE>(L:AdfFrqRstButton,bool) 50 *</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		
+		<Component ID="#NODE_ID#_interaction" Node="#NODE_ID#_interaction"> 
+			<UseTemplate Name="ASOBO_GT_Interaction_WheelAndContinuousLeft_LeftSingle">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<CLOCKWISE_CODE>
+					(L:AdfOnOffKnobPercent,percent) 5 + 100 min (&gt;L:AdfOnOffKnobPercent,percent)
+					(L:AdfOnOffKnobPercent,percent) 0 &gt; if{ 1 (&gt;L:AdfOnOffKnob,bool) }
+				</CLOCKWISE_CODE>
+				<ANTICLOCKWISE_CODE>
+					(L:AdfOnOffKnobPercent,percent) 5 - 0 max (&gt;L:AdfOnOffKnobPercent,percent)
+					(L:AdfOnOffKnobPercent,percent) 0 == if{ 1 (&gt;L:AdfOnOffKnob,bool) }
+				</ANTICLOCKWISE_CODE>
+				<LEFT_SINGLE_CODE>1 (&gt;L:FrqRstButton,bool) 1 (&gt;L:AdfFrqRstButton,bool)</LEFT_SINGLE_CODE>
+				<LEFT_LEAVE_CODE>0 (&gt;L:AdfFrqRstButton,bool)</LEFT_LEAVE_CODE>
+				<TOOLTIPID>ADF on/off</TOOLTIPID>
+			</UseTemplate>
+		</Component>
+	</Template>	
+	
+	<!-- #### MARKER INDICATORS #### -->
+	<Template Name = "A2A_MarkerIndicator">	
+		<DefaultTemplateParameters>
+			<ID>INNER</ID>
+			<NODE_ID/>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_NAME/>
+			<TOOLTIPTEXT/>
+			<LEFT_SINGLE_CODE/>
+			<LEFT_LEAVE_CODE/>
+			<EMISSIVE_CODE/>
+		</DefaultTemplateParameters>
+		
+		<Component ID="PUSHBUTTON_#ID#_MARKER" Node="PUSHBUTTON_#ID#_MARKER"> 
+			<UseTemplate Name="ASOBO_GT_Push_Button_Held">
+				<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+				<ANIM_NAME>BUTTON_#ID#_Marker</ANIM_NAME>
+				<LEFT_SINGLE_CODE>#LEFT_SINGLE_CODE#</LEFT_SINGLE_CODE>
+				<LEFT_LEAVE_CODE>#LEFT_LEAVE_CODE#</LEFT_LEAVE_CODE>
+				<TOOLTIPID>#TOOLTIPTEXT#</TOOLTIPID>
+				<ANIM_DURATION>0.1</ANIM_DURATION>
+			</UseTemplate>
+		</Component>
+		
+		<Component ID="INDICATOR_#ID#_MARKER" Node="INDICATOR_#ID#_MARKER"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>#EMISSIVE_CODE#</EMISSIVE_CODE>
+				<NODE_ID>INDICATOR_#ID#_MARKER</NODE_ID>
+			</UseTemplate>
+		</Component>
+		
+	</Template>
+	
+	
+	<!-- #### AVIONICS CONFIGURATION #### -->
+	<Template Name = "A2A_AvionicsConfiguration">
+		<!-- Avionics configuration:
+			0 - no GPS; 1 - GNS 430; 2 - GNS530; 3 - GNS530&GNS430; 4 - GTN750; 5 - GTN750XI -->
+		<DefaultTemplateParameters>
+			<VISIBILITY_CODE>1</VISIBILITY_CODE>
+			<NODE_ID/>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<ANIM_NAME/>
+			<ANIM_CODE>(L:AvionicsConfiguration,number) 10 *</ANIM_CODE>
+		</DefaultTemplateParameters>
+		
+		<Component ID="#NODE_ID#_Animation"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LENGTH>#ANIM_LENGTH#</ANIM_LENGTH>
+				<ANIM_NAME>AVIONICS_#NODE_ID#_Position</ANIM_NAME>
+				<ANIM_CODE>#ANIM_CODE#</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		
+		<Component ID="#NODE_ID#_Visibility" Node="#NODE_ID#"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>#VISIBILITY_CODE#</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</Template>	
+	
+</ModelBehaviors>

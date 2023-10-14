@@ -1,0 +1,342 @@
+<ModelBehaviors>
+
+<Include File="a2a_common.xml"/>
+
+<!-- ###################################################################
+
+Required templates:
+
+A2A_Anim_Code_Base
+A2A_Knob_Code
+A2A_Tooltip
+A2A_Knob_Altimeter_Template
+
+######################################################################## -->
+
+
+
+<!-- ######### ALTIMETER ###############################################
+
+		Usage example:
+
+		<Component ID="ALTITUDE_INDICATOR">
+			<UseTemplate Name="A2A_Altimeter_Feet_A">
+				<ID>1</ID>
+				<NODE_NEEDLE_H>?</NODE_NEEDLE_H>
+				<NODE_NEEDLE_T>?</NODE_NEEDLE_T>
+				<NODE_NEEDLE_TT>?</NODE_NEEDLE_TT>
+				<NODE_DIAL_KOLLSMAN>?</NODE_DIAL_KOLLSMAN>
+				<NODE_DIAL_KOLLSMAN_HPA>?</NODE_DIAL_KOLLSMAN_HPA>
+				<NODE_KNOB_KOLLSMAN>?</NODE_KNOB_KOLLSMAN>
+				<NODE_TOOLTIP>?</NODE_TOOLTIP>
+			</UseTemplate>
+		</Component>
+
+-->
+	<Template Name="A2A_Altimeter_Feet_A">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<NODE_NEEDLE_H/>
+			<NODE_NEEDLE_T/>
+			<NODE_NEEDLE_TT/>
+			<NODE_DIAL_KOLLSMAN/>
+			<NODE_DIAL_KOLLSMAN_HPA/>
+			<NODE_KNOB_KOLLSMAN/>
+			<NODE_TOOLTIP/>
+		</DefaultTemplateParameters>
+
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_NEEDLE_H#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_NEEDLE_H#</ANIM_NAME>
+			<ANIM_LENGTH>200</ANIM_LENGTH>
+			<ANIM_CODE>(A:INDICATED ALTITUDE:#ID#,feet) 1000 % 10 / 100 +</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_NEEDLE_T#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_NEEDLE_T#</ANIM_NAME>
+			<ANIM_LENGTH>200</ANIM_LENGTH>
+			<ANIM_CODE>(A:INDICATED ALTITUDE:#ID#,feet) 10000 % 100 / 100 +</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_NEEDLE_TT#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_NEEDLE_TT#</ANIM_NAME>
+			<ANIM_LENGTH>200</ANIM_LENGTH>
+			<ANIM_CODE>(A:INDICATED ALTITUDE:#ID#,feet) 100000 % 1000 / 100 +</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_DIAL_KOLLSMAN#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_DIAL_KOLLSMAN#</ANIM_NAME>
+			<ANIM_CODE>(A:KOHLSMAN SETTING HG:#ID#,inHg) 28 - 25 *</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_DIAL_KOLLSMAN_HPA#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_DIAL_KOLLSMAN_HPA#</ANIM_NAME>
+			<ANIM_CODE>(A:KOHLSMAN SETTING HG:#ID#,hectopascals) 950 - </ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Knob_Altimeter_Template">
+			<ID>#ID#</ID>
+			<NODE_ID>#NODE_KNOB_KOLLSMAN#</NODE_ID>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Tooltip">
+			<TOOLTIP_NODE_ID>#NODE_TOOLTIP#</TOOLTIP_NODE_ID>
+			<!-- <TOOLTIPID>TT:COCKPIT.TOOLTIPS.ALTITUDE (%((A:INDICATED ALTITUDE:#ID#,feet))%!d!% feet)</TOOLTIPID> -->
+			<TOOLTIPID>TT:COCKPIT.TOOLTIPS.ALTITUDE</TOOLTIPID>
+       	</UseTemplate>
+		<Component ID="#NODE_DIAL_KOLLSMAN#" Node="#NODE_DIAL_KOLLSMAN#"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:AltimeterPressureUnits,enum) 0 == if{ 1 } els{ 0 }</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="#NODE_DIAL_KOLLSMAN_HPA#" Node="#NODE_DIAL_KOLLSMAN_HPA#"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:AltimeterPressureUnits,enum) 0 &gt; if{ 1 } els{ 0 }</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</Template>
+
+
+
+<!-- ########## VOR GAUGE ##############################################
+
+                Usage example of VOR2 Gauge: 
+		
+		<Component ID="VOR2_INDICATOR">
+			<UseTemplate Name="A2A_Vor_Gauge_A">
+				<NAVID>2</NAVID>
+				<NODE_HEADING>?</NODE_HEADING>		
+				<NODE_CDI>?</NODE_CDI>            	
+				<NODE_GSI>?</NODE_GSI>             	
+				<NODE_FLAG_NAV>?</NODE_FLAG_NAV>  	
+				<NODE_FLAG_GS>?</NODE_FLAG_GS>		
+				<NODE_FLAG_TO>?</NODE_FLAG_TO>		
+				<NODE_FLAG_FROM>?</NODE_FLAG_FROM>	
+				<NODE_KNOB>?</NODE_KNOB>		
+				<NODE_TOOLTIP>?</NODE_TOOLTIP>
+				<TOOLTIPID>VOR 2 (%((A:NAV OBS:#NAVID#,degrees))%!d!°)</TOOLTIPID>
+			</UseTemplate>
+		</Component>
+
+-->
+	<Template Name="A2A_Vor_Gauge_A">
+		<DefaultTemplateParameters>
+			<NAVID>1</NAVID>
+			<NODE_HEADING/>		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=0, 45=90, 80=180, 135=270, 180=360  -->
+			<NODE_CDI/>             <!-- AnimNAme: INSTRUMENT_#..#; Keys: 0=-127, 50=0, 100=127 -->
+			<NODE_GSI/>             <!-- AnimNAme: INSTRUMENT_#..#; Keys: 0=-119, 50=0, 100=119 -->
+			<NODE_FLAG_NAV/> 	<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_GS/> 	<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_TO/> 	<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_FROM/> 	<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_KNOB/>		<!-- AnimName: #..#; Keys: ? -->
+			<NODE_TOOLTIP></NODE_TOOLTIP>
+			<TOOLTIPID></TOOLTIPID>
+		</DefaultTemplateParameters>
+
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_HEADING#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_HEADING#</ANIM_NAME>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+			<ANIM_CODE>(A:NAV OBS:#NAVID#,degrees) 0.5 *</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_CDI#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_CDI#</ANIM_NAME>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:NAV CDI:#NAVID#,number) 0.3937 * 50 +</ANIM_CODE> -->
+			<ANIM_CODE>(L:Cdi#NAVID#Needle,keyframe)</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_GSI#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_GSI#</ANIM_NAME>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:NAV GSI:#NAVID#,number) 0.4202 * 50 +</ANIM_CODE> -->
+			<ANIM_CODE>(L:Gsi#NAVID#Needle,keyframe)</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_NAV#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_NAV#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:NAV HAS NAV:#NAVID#,bool) abs ! 50 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:Cdi#NAVID#Flag,bool) 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_GS#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_GS#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:NAV GS FLAG:#NAVID#,bool) ! 50 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:Gsi#NAVID#Flag,enum) 0 == if{ 50 } els{ 0 }</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_TO#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_TO#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(A:NAV TOFROM:#NAVID#,enum) 1 == 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_FROM#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_FROM#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(A:NAV TOFROM:#NAVID#,enum) 2 == 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Knob_Code">
+			<NODE_ID>#NODE_KNOB#</NODE_ID>
+			<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>
+			<CLOCKWISE_CODE>(&gt;K:VOR#NAVID#_OBI_INC)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(&gt;K:VOR#NAVID#_OBI_DEC)</ANTICLOCKWISE_CODE>
+			<ANIM_CODE>(A:NAV OBS:#NAVID#,degrees) 8 * dnor 0.5 *</ANIM_CODE>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Tooltip">
+			<TOOLTIP_NODE_ID>#NODE_TOOLTIP#</TOOLTIP_NODE_ID>
+			<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>			
+		</UseTemplate>
+	</Template>
+	
+	
+<!-- ########## HSI GAUGE ##############################################
+
+                Usage example of HSI Gauge: 
+		
+		<Component ID="HSI">
+			<UseTemplate Name="A2A_Hsi_Gauge_A">
+				<NODE_HEADING>?</NODE_HEADING>	
+				<NODE_HEADING_BUG>?</NODE_HEADING_BUG>						
+				<NODE_CDI>?</NODE_CDI>            	
+				<NODE_GSI>?</NODE_GSI> 	
+				<NODE_FLAG_NAV>?</NODE_FLAG_NAV>  	
+				<NODE_FLAG_GS>?</NODE_FLAG_GS>		
+				<NODE_FLAG_TO>?</NODE_FLAG_TO>		
+				<NODE_FLAG_FROM>?</NODE_FLAG_FROM>	
+				<NODE_KNOB_COURSE>?</NODE_KNOB_COURSE>		
+				<NODE_KNOB_HEADING>?</NODE_KNOB_HEADING>		
+				<NODE_TOOLTIP>?</NODE_TOOLTIP>
+				<TOOLTIPID>HSI (Heading: %((L:HeadingGyro,degrees))%!d!, course: %((A:NAV1 OBS,degrees))%!d!, selected heading: %((L:AutopilotHeadingBug,number))%!d!)</TOOLTIPID>
+			</UseTemplate>
+		</Component>
+
+-->
+	<Template Name="A2A_Hsi_Gauge_A">
+		<DefaultTemplateParameters>
+			<NAVID>1</NAVID>
+			<NODE_HEADING/>			<!-- AnimName: INSTRUMENT_#..#; Keys: 0=0, 45=90, 80=180, 135=270, 180=360  -->
+			<NODE_HEADING_BUG/>		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=0, 45=90, 80=180, 135=270, 180=360  -->
+			<NODE_CDI/>             <!-- AnimNAme: INSTRUMENT_#..#; Keys: 0=-127, 50=0, 100=127 -->
+			<NODE_GSI/>             <!-- AnimNAme: INSTRUMENT_#..#; Keys: 0=-119, 50=0, 100=119 -->
+			<NODE_CRS/>             <!-- AnimNAme: INSTRUMENT_#..#; Keys: 0=-119, 50=0, 100=119 -->
+			<NODE_FLAG_HDG/> 		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_NAV/> 		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_GS/> 		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_TO/> 		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_FLAG_FROM/> 		<!-- AnimName: INSTRUMENT_#..#; Keys: 0=flag off, 50=flag on -->
+			<NODE_KNOB_COURSE/>			<!-- AnimName: #..#; Keys: ? -->
+			<NODE_KNOB_HEADING/>			<!-- AnimName: #..#; Keys: ? -->
+			<NODE_TOOLTIP></NODE_TOOLTIP>
+			<TOOLTIPID></TOOLTIPID>
+			<TOOLTIPID_KNOB_CRS>Course (%((A:NAV1 OBS,degrees))%!d! Degrees)</TOOLTIPID_KNOB_CRS>
+			<TOOLTIPID_KNOB_HDG>Heading selector (%((A:AUTOPILOT HEADING LOCK DIR,degrees))%!d! deg)</TOOLTIPID_KNOB_HDG>
+		</DefaultTemplateParameters>
+
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_HEADING#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_HEADING#</ANIM_NAME>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:HEADING INDICATOR:1,degrees) 0.5 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:HeadingGyro,degrees) 2 /</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_HEADING_BUG#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_HEADING_BUG#</ANIM_NAME>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:AUTOPILOT HEADING LOCK DIR,degrees) 0.5 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:AutopilotHeadingBug,number) 0.5 *</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_CDI#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_CDI#</ANIM_NAME>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<ANIM_CODE>(L:CdiNeedle,keyframe)</ANIM_CODE>
+			<!-- <ANIM_CODE>(A:HSI CDI NEEDLE ,number) 0.3937 * 50 +</ANIM_CODE> -->
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_GSI#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_GSI#</ANIM_NAME>
+			<ANIM_LENGTH>100</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:HSI GSI NEEDLE,number) 0.4202 * 50 +</ANIM_CODE> -->
+			<ANIM_CODE>(L:GsiNeedle,keyframe)</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_CRS#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_CRS#</ANIM_NAME>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+			<ANIM_CODE>(A:NAV OBS:#NAVID#,degrees) 0.5 *</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_HDG#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_HDG#</ANIM_NAME>
+			<!-- <ANIM_LENGTH>50</ANIM_LENGTH> -->
+			<!-- <ANIM_CODE>(A:HSI CDI NEEDLE VALID,bool) ! 50 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:FlagHDG) 50 *</ANIM_CODE>
+			<ANIM_LAG>0</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_NAV#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_NAV#</ANIM_NAME>
+			<!-- <ANIM_LENGTH>50</ANIM_LENGTH> -->
+			<!-- <ANIM_CODE>(A:HSI CDI NEEDLE VALID,bool) ! 50 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:FlagNAV)</ANIM_CODE>
+			<ANIM_LAG>0</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_GS#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_GS#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<!-- <ANIM_CODE>(A:HSI GSI NEEDLE VALID,bool) ! 50 *</ANIM_CODE> -->
+			<ANIM_CODE>(L:FlagGSI,bool) 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_TO#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_TO#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(L:ToFromNeedle,enum) 1 == 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<NODE_ID>#NODE_FLAG_FROM#</NODE_ID>
+			<ANIM_NAME>INSTRUMENT_#NODE_FLAG_FROM#</ANIM_NAME>
+			<ANIM_LENGTH>50</ANIM_LENGTH>
+			<ANIM_CODE>(L:ToFromNeedle,enum) 2 == 50 *</ANIM_CODE>
+			<ANIM_LAG>100</ANIM_LAG>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Knob_Code">
+			<NODE_ID>#NODE_KNOB_COURSE#</NODE_ID>
+			<TOOLTIPID>#TOOLTIPID_KNOB_CRS#</TOOLTIPID>
+			<CLOCKWISE_CODE>(&gt;K:VOR1_OBI_INC)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(&gt;K:VOR1_OBI_DEC)</ANTICLOCKWISE_CODE>
+			<ANIM_CODE>(A:NAV OBS:#NAVID#,degrees) 8 * dnor 0.5 *</ANIM_CODE>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+		</UseTemplate>
+		<UseTemplate Name="A2A_Knob_Code">
+			<NODE_ID>#NODE_KNOB_HEADING#</NODE_ID>
+			<TOOLTIPID>#TOOLTIPID_KNOB_HDG#</TOOLTIPID>
+			<CLOCKWISE_CODE>(&gt;K:HEADING_BUG_INC)</CLOCKWISE_CODE>
+			<ANTICLOCKWISE_CODE>(&gt;K:HEADING_BUG_DEC)</ANTICLOCKWISE_CODE>
+			<ANIM_CODE>(A:AUTOPILOT HEADING LOCK DIR,degrees) 0.5 *</ANIM_CODE>
+			<ANIM_LENGTH>180</ANIM_LENGTH>
+		</UseTemplate>
+
+		<UseTemplate Name="A2A_Tooltip">
+			<TOOLTIP_NODE_ID>#NODE_TOOLTIP#</TOOLTIP_NODE_ID>
+			<TOOLTIPID>#TOOLTIPID#</TOOLTIPID>			
+		</UseTemplate>
+	</Template>
+
+</ModelBehaviors>

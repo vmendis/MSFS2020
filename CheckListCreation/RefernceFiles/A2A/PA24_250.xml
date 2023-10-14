@@ -1,0 +1,1692 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ModelInfo>
+	<LODS>
+		<!-- Highest LOD -->
+		<!-- minimum display size in % (should be bounding sphere vertical screen size, sphere will often be slightly larger than you expect) -->
+		<!-- default minSize is 0 -->
+		<LOD minSize="100" 	ModelFile="PA24_250_LOD00.gltf"/>
+		<LOD minSize="60" 	ModelFile="PA24_250_LOD01.gltf"/>
+		<LOD minSize="30" 	ModelFile="PA24_250_LOD02.gltf"/>
+		<LOD minSize="5" 	ModelFile="PA24_250_LOD03.gltf"/>
+		<LOD minSize="1" 	ModelFile="PA24_250_LOD04.gltf"/>
+	</LODS>
+</ModelInfo>
+<ModelBehaviors>
+	<!-- Includes ###################################### -->
+ 	<Include File="a2a_common.xml"/> 
+ 	<Include File="a2a_exterior.xml"/> 
+	<!-- ############################################### -->
+	<Include Path="Asobo\Exterior.xml"/>
+	<Include Path="Asobo\Generic.xml"/>
+	<!-- ############################################### -->
+
+	<!-- ###########  EFFECTS  ########### -->
+	<Include ModelBehaviorFile="Asobo\Generic\FX.xml"/>
+	
+	<Component ID="Beacon_Light_Spawner">
+		<Parameters Type="Override">
+			<FX_GUID>{1602BB47-D070-4092-9092-7FFEAA07E2FA}</FX_GUID>
+			<FX_CODE>1 0 &gt;</FX_CODE>
+		</Parameters>
+		<Component ID="Beacon_Point_0" Node="Beacon_Point_0">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(A:LIGHT BEACON ON, bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Beacon_Point_1" Node="Beacon_Point_1">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(A:LIGHT BEACON ON, bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</Component>
+	
+	<Component ID="Strobe_Belly_Spawner">
+		<Parameters Type="Override">
+			<FX_GUID>{B9E11D9A-2336-4474-AA4B-FA1DCC03B15E}</FX_GUID>
+			<FX_CODE>1 0 &gt;</FX_CODE>
+			<FX_OFFSET_Y>0.04</FX_OFFSET_Y>
+		</Parameters>
+		<Component ID="LIGHT_Strobe_Belly_Emissive" Node="LIGHT_Strobe_Belly_Emissive">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+		</Component>
+	</Component>
+
+	<Component ID="Strobe_Left_Spawner">
+		<Parameters Type="Override">
+			<FX_GUID>{793401DD-202B-4302-9688-FD5D29DED04B}</FX_GUID>
+			<FX_CODE>1 0 &gt;</FX_CODE>
+		</Parameters>
+		<Component ID="LIGHT_Strobe_Left" Node="LIGHT_Strobe_Left">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+		</Component>
+	</Component>
+		
+	<Component ID="Strobe_Right_Spawner">
+		<Parameters Type="Override">
+			<FX_GUID>{A4535066-2C8A-4628-975F-77B35A56E6A1}</FX_GUID>
+			<FX_CODE>1 0 &gt;</FX_CODE>
+		</Parameters>
+		<Component ID="LIGHT_Strobe_Right" Node="LIGHT_Strobe_Right">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+		</Component>
+	</Component>
+	
+	<Component ID="Effect_PitotHeat">
+		<Parameters Type="Override">
+			<FX_GUID>{D6DB7459-4C2B-4209-95CA-571B80383719}</FX_GUID>
+			<!-- Spawn code -->
+			<FX_CODE>
+				(L:PitotHot) (L:PitotTubeCover) ! * 0 &gt;
+			</FX_CODE>
+			<FX_GRAPH_PARAM_0>HeatPower, (L:PitotTemperatureTime) 180 - 900 / 0 max 1 min</FX_GRAPH_PARAM_0>
+		</Parameters>
+		
+		<Component ID="PitotTubeHeatInstance_0" Node="PitotTube_Point">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+		</Component>
+	</Component>
+	<Component ID="TestEffectSmoke">
+		<Parameters Type="Override">
+		
+			<FX_GUID>{5F3BB365-E397-4007-8AF1-4C40B89975F8}</FX_GUID>
+			<!-- Spawn code -->
+			<FX_CODE>(L:TestSmokeEffect, number) 0 &gt;</FX_CODE>
+			<FX_GRAPH_PARAM_0>size, (L:TestSmokeEffectSize) 1 +</FX_GRAPH_PARAM_0>
+			<FX_GRAPH_PARAM_1>red, (L:TestSmokeEffectRed)</FX_GRAPH_PARAM_1>
+		</Parameters>
+		
+		<!-- Can have several instances of this effect attached in various places -->
+		<Component ID="TestEffectSmokeInstance_0" Node="Exhaust_Point">
+			<UseTemplate Name="ASOBO_GT_FX"/>
+		</Component>
+	</Component>
+
+	<!-- ###########  WINGFLEX  ########### -->
+	<Component ID="WingFlex"> 
+		<Component ID="WingL_Twist"> 
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_WingL_Twist</ANIM_NAME>
+				<ANIM_CODE>(L:WingL_Twist) 2 / 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="WingL_Bend"> 
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_WingL_Bend</ANIM_NAME>
+				<ANIM_CODE>(L:WingL_Bend) 2 / 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="WingR_Twist"> 
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_WingR_Twist</ANIM_NAME>
+				<ANIM_CODE>(L:WingR_Twist) 2 / 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="WingR_Bend"> 
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_WingR_Bend</ANIM_NAME>
+				<ANIM_CODE>(L:WingR_Bend) 2 / 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	</Component>
+	<!-- ###########  AIRFRAME SHAKES  ########### -->
+	<Component ID="SHAKES"> 
+		<Component ID="Shake_LR"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_Shake_LR</ANIM_NAME>
+				<ANIM_CODE>(L:AirframeRoll,enum) 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Shake_FA"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_Shake_FA</ANIM_NAME>
+				<ANIM_CODE>(L:AirframePitch,enum) 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Shake_Yaw"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_Shake_Yaw</ANIM_NAME>
+				<ANIM_CODE>(L:AirframeYaw,enum) 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Shake_Vertical"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_Shake_Vertical</ANIM_NAME>
+				<ANIM_CODE>(L:AirframeVertical,percent) 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Engine_Shake"> 
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_EngineShake</ANIM_NAME>
+				<ANIM_CODE>(L:Eng1_Rotation,enum) 50 * 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	</Component>
+
+	<!-- ###########  LIGHTING  ########### -->
+	<Component ID="EXTERNAL_LIGHTING"> 
+		<Component ID="LIGHT_Beacon_Emissive" Node="LIGHT_Beacon_Emissive"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT BEACON ON, bool) 25 *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Beacon_Emissive</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(A:LIGHT BEACON ON, bool)</VISIBILITY_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_LIGHT_Beacon</ANIM_NAME>
+				<ANIM_CODE>
+					(A:LIGHT BEACON ON, bool) if{ (E:ZULU TIME,Seconds) 2 % 50 * }
+				</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+				
+		<Component ID="LIGHT_LandingL" Node="LIGHT_LandingL"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT LANDING ON, bool) 50 *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_LandingL</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(A:LIGHT LANDING ON, bool)
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+				
+		<Component ID="LIGHT_Strobe_Belly_Emissive" Node="LIGHT_Strobe_Belly_Emissive"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>
+					(A:LIGHT STROBE ON, bool) 25 *
+				</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Strobe_Belly_Emissive</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(A:LIGHT STROBE ON, bool) if{
+						(E:ZULU TIME,Seconds) 1 % 0.1 &lt; if{ (L:TipTanksPresent,bool) }
+					}
+					els{ 0 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="LIGHT_Strobe_Right" Node="LIGHT_Strobe_Right"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>
+					(A:LIGHT STROBE ON, bool) 25 *
+				</EMISSIVE_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(A:LIGHT STROBE ON, bool) if{
+						(E:ZULU TIME,Seconds) 1 % 0.1 &lt; if{ (L:TipTanksPresent,bool) ! }
+					}
+					els{ 0 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="LIGHT_Strobe_Left" Node="LIGHT_Strobe_Left"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>
+					(A:LIGHT STROBE ON, bool) 25 *
+				</EMISSIVE_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(A:LIGHT STROBE ON, bool) if{
+						(E:ZULU TIME,Seconds) 1 % 0.1 &lt; if{ (L:TipTanksPresent,bool) ! }
+					}
+					els{ 0 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="BellyStrobe" Node="BellyStrobe"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(L:TipTanksPresent,bool)
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+				
+		<Component ID="LIGHT_LandingR" Node="LIGHT_LandingR"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT TAXI ON, bool) 50 *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_LandingR</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(A:LIGHT TAXI ON, bool)
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>	
+		
+		<Component ID="LIGHT_Navigation_Green" Node="LIGHT_Navigation_Green"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 * (L:TipTanksPresent,bool) ! *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_Green</NODE_ID>
+			</UseTemplate>	
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_NavLightTipsTanksPos</ANIM_NAME>
+				<ANIM_CODE>(L:TipTanksPresent,bool) ! 100 *</ANIM_CODE>
+			</UseTemplate>
+		</Component>		
+		<Component ID="LIGHT_Navigation_White_1" Node="LIGHT_Navigation_White_1"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_White_1</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(A:LIGHT NAV ON, bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>		
+		<Component ID="LIGHT_Navigation_White_2" Node="LIGHT_Navigation_White_2"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_White_2</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(A:LIGHT NAV ON, bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>		
+		<Component ID="LIGHT_Navigation_Red" Node="LIGHT_Navigation_Red"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 * (L:TipTanksPresent,bool) ! *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_Red</NODE_ID>
+			</UseTemplate>
+		</Component>		
+		<Component ID="LIGHT_Navigation_Green_TipTank" Node="LIGHT_Navigation_Green_TipTank"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 * (L:TipTanksPresent,bool) *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_Green_TipTank</NODE_ID>
+			</UseTemplate>
+		</Component>		
+		<Component ID="LIGHT_Navigation_red_TipTank" Node="LIGHT_Navigation_red_TipTank"> 
+			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+				<EMISSIVE_CODE>(A:LIGHT NAV ON, bool) 25 * (L:TipTanksPresent,bool) *</EMISSIVE_CODE>
+				<NODE_ID>LIGHT_Navigation_red_TipTank</NODE_ID>
+			</UseTemplate>
+		</Component>		
+	</Component>
+	
+	<!-- ###########  MALFUNCIONS  ########### -->
+	<Component ID="MALFUNCIONS"> 
+		<Component ID="TailAntennaBent" Node="TailAntennaBent"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaNav,bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="TailAntenna" Node="TailAntenna"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaNav,bool) !</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="BellyAntennaBent" Node="BellyAntennaBent"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaCom2,bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="BellyAntenna" Node="BellyAntenna"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaCom2,bool) !</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="TopAntennaBent" Node="TopAntennaBent"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaCom1,bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="TopAntenna" Node="TopAntenna"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_AntennaCom1,bool) !</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="LAMP_LandingLightLeft_Broken" Node="LAMP_LandingLightLeft_Broken"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>0</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="LAMP_LandingLightRight_Broken" Node="LAMP_LandingLightRight_Broken"> 
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>0</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</Component>
+
+	<!-- ###########  CUSTOMIZATION  ########### -->
+	<RootComponent ID="CUSTOMIZATION"> 
+		<Component ID="MODS"> 
+			<Component ID="MODS_Stabilizator" Node="MODS_Stabilizator"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:StabilizatorTips,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_WingFairings" Node="MODS_WingFairings"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:WingFairings,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftTipTank" Node="MODS_LeftTipTank"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="MODS_LeftWingTip" Node="WingTipL"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool) !</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightTipTank" Node="MODS_RightTipTank"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="MODS_RightWingTip" Node="WingTipR"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool) !</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftTipTank_Removed" Node="MODS_LeftTipTank_Removed"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool) !</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightTipTank_Removed" Node="MODS_RightTipTank_Removed"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TipTanksPresent,bool) !</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightMainGearLobe" Node="MODS_RightMainGearLobe"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftMainGearLobe" Node="MODS_LeftMainGearLobe"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightMainGearLobeFlap" Node="MODS_RightMainGearLobeFlap"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftMainGearLobeFlap" Node="MODS_LeftMainGearLobeFlap"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftMainGearWheelCapBlurred" Node="MODS_LeftMainGearWheelCapBlurred"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_LeftMainGearWheelCapStill" Node="MODS_LeftMainGearWheelCapStill"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightMainGearWheelCapBlurred" Node="MODS_RightMainGearWheelCapBlurred"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_RightMainGearWheelCapStill" Node="MODS_RightMainGearWheelCapStill"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:MainGearLobes,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+						
+			<Component ID="MODS_SlipperFairing" Node="MODS_SlipperFairing"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:SlipperFairing,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="MODS_FlapGapSeals_R" Node="MODS_FlapGapSeals_R"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:FlapsGapSeal,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="MODS_FlapGapSeals_L" Node="MODS_FlapGapSeals_L"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:FlapsGapSeal,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		
+		<Component ID="EMBLEMS"> 
+			<Component ID="DECAL_RegNumber_N6229P" Node="DECAL_RegNumber_N6229P"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumberA2AVisible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			
+			<Component ID="DECAL_RegNumber_1" Node="DECAL_RegNumber_1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber1Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_2a" Node="DECAL_RegNumber_2a"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber2Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_2b" Node="DECAL_RegNumber_2b"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber2Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_3" Node="DECAL_RegNumber_3"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber3Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_4" Node="DECAL_RegNumber_4"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber4Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_5a" Node="DECAL_RegNumber_5a"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber5Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="DECAL_RegNumber_5b" Node="DECAL_RegNumber_5b"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegNumber5Visible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			
+			<Component ID="DECAL_RegGermany" Node="DECAL_RegGermany"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:RegGermany) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			
+			<Component ID="EMBLEM_Left" Node="ComancheEmblemL"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:ComancheEmblemLVisible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="EMBLEM_Right" Node="ComancheEmblemR"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:ComancheEmblemRVisible) 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+	</RootComponent>
+
+	<Component ID="HANDLING">
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_AILERON_R</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:AileronR_Anim,percent) }
+				els{ (A:AILERON POSITION,percent) }
+				/-/ 0.5 * 50 +
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_AILERON_L</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:AileronL_Anim,percent) }
+				els{ (A:AILERON POSITION,percent) }
+				/-/ 0.5 * 50 +
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_Elevator</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:Elevator_Anim,percent) }
+				els{ (A:ELEVATOR POSITION,percent) }
+				/-/ 0.5 * 50 +
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_ElevatorTrim</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:ElevatorTrimTab_Anim,percent) }
+				els{ (A:ELEVATOR POSITION,percent) }
+				/-/ 0.5 * 50 +
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_Rudder</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:Rudder_Anim,percent) }
+				els{ (A:RUDDER DEFLECTION PCT,percent) }
+				/-/ 0.5 * 50 +
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_Flaps_L</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:FlapL_Anim,percent) }
+				els{ (A:TRAILING EDGE FLAPS LEFT PERCENT, percent) }
+			</ANIM_CODE>
+		</UseTemplate>
+		<UseTemplate Name="ASOBO_GT_Anim_Code">
+			<ANIM_NAME>HANDLING_Flaps_R</ANIM_NAME>
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+				if{ (L:FlapR_Anim,percent) }
+				els{ (A:TRAILING EDGE FLAPS LEFT PERCENT, percent) }
+			</ANIM_CODE>
+		</UseTemplate>
+	</Component>
+	
+	<Component ID="GEARS">
+		<UseTemplate Name="A2A_GEAR_Center_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Left_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Right_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Center_Tire_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Left_Tire_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Right_Tire_Template">
+		</UseTemplate>
+		<UseTemplate Name="A2A_GEAR_Steering_Template">
+		</UseTemplate>
+	</Component>
+	
+	<RootComponent ID="ENGINE">
+		<Component ID="ENGINE_Propeller_1" Node="ENGINE_Propeller_1">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LENGTH>200</ANIM_LENGTH>
+				<ANIM_NAME>ENGINE_Propeller_1</ANIM_NAME>
+				<ANIM_CODE>
+					(A:IS USER SIM,bool) 1 ==
+						if{
+							(L:Eng1_Crankshaft,percent) (L:Eng1_PropOffset) + (&gt;L:Eng1_PropFinal)
+							
+							(L:Eng1_PropFinal) 100 &gt; if{ (L:Eng1_PropFinal) 100 - (&gt;L:Eng1_PropFinal) }
+							(L:Eng1_PropFinal) 0 &lt; if{ (L:Eng1_PropFinal) 100 + (&gt;L:Eng1_PropFinal) }
+														
+							(L:Eng1_PropFinal) 100 +
+						}
+						els{
+							(A:PROP ROTATION ANGLE:1,radians) 15.92 * 100 +
+						}
+				</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	
+		<Component ID="PROPELLER_1"> 
+			<Component ID="ENGINE_Propeller1_Still" Node="ENGINE_Propeller1_Still"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade1" Node="ENGINE_Propeller1_Still_Blade1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade2" Node="ENGINE_Propeller1_Still_Blade2"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade3" Node="ENGINE_Propeller1_Still_Blade3"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade1_Bent" Node="ENGINE_Propeller1_Still_Blade1_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0							
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_PropellerBent</ANIM_NAME>
+					<ANIM_CODE>(L:Prop1Bent) 100 *</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade2_Bent" Node="ENGINE_Propeller1_Still_Blade2_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller1_Still_Blade3_Bent" Node="ENGINE_Propeller1_Still_Blade3_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Blurred_1_Cone" Node="ENGINE_Propeller_Blurred_1_Cone"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &gt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &gt;=
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		
+		<Component ID="PROPELLER_2"> 
+			<Component ID="ENGINE_Propeller2_Still" Node="ENGINE_Propeller2_Still"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade1" Node="ENGINE_Propeller2_Still_Blade1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade2" Node="ENGINE_Propeller2_Still_Blade2"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade3" Node="ENGINE_Propeller2_Still_Blade3"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) ! }
+								els{ 0 }
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &lt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade1_Bent" Node="ENGINE_Propeller2_Still_Blade1_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade2_Bent" Node="ENGINE_Propeller2_Still_Blade2_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0								
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller2_Still_Blade3_Bent" Node="ENGINE_Propeller2_Still_Blade3_Bent"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &lt;
+								if{ (L:Prop1Bent) }
+								els{ 0 }
+							}
+							els{
+								0								
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Blurred_2_Cone" Node="ENGINE_Propeller_Blurred_2_Cone"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &gt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &gt;=
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		
+		<Component ID="PROPELLER_SHARED"> 
+			<Component ID="ENGINE_Propeller_Slow_1" Node="ENGINE_Propeller_Slow_1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &gt;
+								(L:Eng1_Rpm,rpm) 200 &lt; and
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &gt; (A:PROP RPM:1,rpm) 200 &lt; and
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Med_1" Node="ENGINE_Propeller_Med_1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 200 &gt;
+								(L:Eng1_Rpm,rpm) 287.5 &lt; and
+							}
+							els{
+								(A:PROP RPM:1,rpm) 200 &gt; (A:PROP RPM:1,rpm) 287.5 &lt; and
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Fast_1" Node="ENGINE_Propeller_Fast_1"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 0 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 287.5 &gt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 287.5 &gt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Slow_2" Node="ENGINE_Propeller_Slow_2"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 143 &gt;
+								(L:Eng1_Rpm,rpm) 200 &lt; and
+							}
+							els{
+								(A:PROP RPM:1,rpm) 143 &gt; (A:PROP RPM:1,rpm) 200 &lt; and								
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Med_2" Node="ENGINE_Propeller_Med_2"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 200 &gt;
+								(L:Eng1_Rpm,rpm) 287.5 &lt; and
+							}
+							els{
+								(A:PROP RPM:1,rpm) 200 &gt; (A:PROP RPM:1,rpm) 287.5 &lt; and
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Fast_2" Node="ENGINE_Propeller_Fast_2"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:PropellerModel,enum) 1 == if{
+							(A:IS USER SIM,bool) 1 ==
+							if{
+								(L:Eng1_Rpm,rpm) 287.5 &gt;
+							}
+							els{
+								(A:PROP RPM:1,rpm) 287.5 &gt;
+							}
+						}
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="ENGINE_Propeller_Blurred_1_Side" Node="ENGINE_Propeller_Blurred_1_Side"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{
+							(L:Eng1_Rpm,rpm) 143 &gt;
+						}
+						els{
+							(A:PROP RPM:1,rpm) 143 &gt;=
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+
+	</RootComponent>
+	
+	<RootComponent ID="FUEL_TANKS">
+		<Component ID="FUEL_LEVEL_L">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelLevelMain_L</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTank1Anim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="FUEL_LEVEL_R">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelLevelMain_R</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTank2Anim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="FUEL_LEVEL_L_TIPTANK">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelLevelTip_L</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTank3Anim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="FUEL_LEVEL_R_TIPTANK">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelLevelTip_R</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTank4Anim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="TIPTANK_DOOR_ANIM">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelTipTankLeft</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTipTankOpeningLeftAnim)</ANIM_CODE>
+			</UseTemplate>	
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelTipTankLeftLock</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTipTankOpeningLeftLockAnim)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelTipTankRight</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTipTankOpeningRightAnim)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_FuelTipTankRightLock</ANIM_NAME>
+				<ANIM_CODE>(L:FuelTipTankOpeningRightLockAnim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		
+		
+		<Component ID="FUEL_SURFACE">
+			<Component ID="FUEL_LON">
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_FuelSurf_Lat</ANIM_NAME>
+					<ANIM_CODE>(E:ZULU TIME,Seconds) 20 % 5 *</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="FUEL_LAT">
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_FuelSurf_Lon</ANIM_NAME>
+					<ANIM_CODE>(E:ZULU TIME,Seconds) 25 % 4 *</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="FUEL_TANK_R_CAP">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_FuelTank_R_Cap</ANIM_NAME>
+				<ANIM_CODE>100</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="FUEL_TANK_L_CAP">
+			<UseTemplate Name="A2A_Anim_Code_Base">
+				<ANIM_NAME>ANIM_FuelTank_L_Cap</ANIM_NAME>
+				<ANIM_CODE>100</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	</RootComponent>
+	
+	<RootComponent ID="WALKAROUND_EXT">
+			<Component ID="GroundLevel">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_GroundStuffVertical</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_GroundVertical) 50 +</ANIM_CODE>
+				</UseTemplate>
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_GroundStuffLeftRight</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_GroundLeftRight) 5 * 50 +</ANIM_CODE>
+				</UseTemplate>
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_GroundStuffFrontAft</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_GroundFrontAft) 5 * 50 +</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+		<Component ID="Stations_Input">
+			<Component ID="WALKAROUND_EXT_FlapR" Node="FlapR">
+				<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
+					<EMISSIVE_CODE>(L:WALKAROUND_FlapR_Highlight) 1 == if{ (E:ZULU TIME,Seconds) 1 % } els{ 0 }</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="WALKAROUND_StaticPorts"> 
+			<Component ID="WALKAROUND_StaticPortL_Tape" Node="WALKAROUND_StaticPortL_Tape"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:F_StaticPort1,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="WALKAROUND_StaticPortR_Tape" Node="WALKAROUND_StaticPortR_Tape"> 
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:F_StaticPort2,bool)</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+
+		<Component ID="BaggageDoorKey" Node="BaggageDoorKey">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_BaggageDoorKey</ANIM_NAME>
+				<ANIM_CODE>(L:WALKAROUND_BaggageDoorAnim)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(L:WALKAROUND_BaggageDoorAnim) 0 &gt;
+					if{ 1 } els{ 0 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="WALKAROUND_Baggage_Door" Node="WALKAROUND_Baggage_Door">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_BaggageDoor</ANIM_NAME>
+				<ANIM_CODE>(L:WALKAROUND_BaggageDoorAnim)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="WALKAROUND_StallWarningTab"> 
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_StallWarningTab</ANIM_NAME>
+				<ANIM_CODE>(L:Action_StallWarning,bool) 100 *</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="Jacks">
+			<Component ID="Jack_Left" Node="Jack_Left">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:VisComancheJacks) }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="Jack_Right" Node="Jack_Right">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:VisComancheJacks) }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="Jack_Barrel" Node="Jack_Barrel">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:VisComancheJacks) }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="TieDowns">
+			<Component ID="vis_WingLeft_TieDown" Node="TieDownL">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:vis_WingLeft_TieDown) (L:WalkaroundAvailable,bool) * }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="vis_WingLeft_TieDown_Hook" Node="TieDownL_Hook">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TabletStation) 16 == if{ (L:vis_WingLeft_TieDown) ! (L:WalkaroundAvailable,bool) * } els{ 0 }</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="vis_WingRight_TieDown" Node="TieDownR">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:vis_WingRight_TieDown) (L:WalkaroundAvailable,bool) * }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="vis_WingRight_TieDown_Hook" Node="TieDownR_Hook">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TabletStation) 8 == if{ (L:vis_WingRight_TieDown) ! (L:WalkaroundAvailable,bool) * } els{ 0 }</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="vis_Tail_TieDown" Node="TieDownC">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:vis_Tail_TieDown) (L:WalkaroundAvailable,bool) * }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="vis_Tail_TieDown_Hook" Node="TieDownC_Hook">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:TabletStation) 24 == if{ (L:WalkaroundAvailable,bool) } els{ (L:vis_Tail_TieDown) }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="WheelChocks">
+			<Component ID="WheelChockL" Node="WheelChockL">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:vis_WheelChockLAnim) (L:WalkaroundAvailable,bool) * }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="WheelChockR" Node="WheelChockR">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(A:IS USER SIM,bool) 1 ==
+						if{ (L:vis_WheelChockRAnim) (L:WalkaroundAvailable,bool) * }
+						els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="OilInspectionPanel">
+			<Component ID="OilInspectionPanel_Animations">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_OilInspectionPanel</ANIM_NAME>
+					<ANIM_CODE>(L:OilInspectionPanelAnim) (L:Eng1_ElectricHeater,bool) 5 * +</ANIM_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_OilInspectionPanelLock</ANIM_NAME>
+					<ANIM_CODE>(L:OilInspectionPanelLockAnim)</ANIM_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_OilInspectionStick</ANIM_NAME>
+					<ANIM_CODE>(L:TabletStation) 13 == if{ (L:OilInspectionStickAnim) } els{ 0 }</ANIM_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_OilInspection_Level</ANIM_NAME>
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_CODE>
+						(L:TabletStation) 13 == if{
+							(L:Eng1_OilTankQuantityPct,percent) 0 == if{ 0 } els{ (L:OilLevelAnim) }
+						}
+					</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_001" Node="OilCheckLevel_001">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0 0.1 (L:Eng1_OilColor) rng
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_002" Node="OilCheckLevel_002">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.1 0.2 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_003" Node="OilCheckLevel_003">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.2 0.3 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_004" Node="OilCheckLevel_004">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.3 0.4 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_005" Node="OilCheckLevel_005">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.4 0.5 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_006" Node="OilCheckLevel_006">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.5 0.6 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_007" Node="OilCheckLevel_007">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.6 0.7 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_008" Node="OilCheckLevel_008">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.7 0.8 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_009" Node="OilCheckLevel_009">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						0.8 0.9 (L:Eng1_OilColor) rng
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="OilCheckLevel_010" Node="OilCheckLevel_010">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:Eng1_OilColor) 0.9 &gt;=
+							if{ 1 } els{ 0 }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="EngHeater">
+			<Component ID="EngHeatWire01" Node="EngHeatWire01">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:EzHeaterInstalled,bool) 0 ==
+						(A:SIM ON GROUND,bool) 0 == or
+						(A:GROUND VELOCITY,knots) 0.3 &gt; or
+						if{ 0 }
+						els{ (L:Eng1_ElectricHeater,bool) (L:WalkaroundAvailable,bool) * }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_EngHeatWire</ANIM_NAME>
+					<ANIM_CODE>
+						(L:EzHeaterInstalled,bool) 0 ==
+						(A:SIM ON GROUND,bool) 0 == or
+						(A:GROUND VELOCITY,knots) 0.3 &gt; or
+						if{ 0 }
+						els{ (L:Eng1_ElectricHeater,bool) 100 * }
+					</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="EngHeatWire02" Node="EngHeatWire02">
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>
+						(L:EzHeaterInstalled,bool) 0 ==
+						(A:SIM ON GROUND,bool) 0 == or
+						(A:GROUND VELOCITY,knots) 0.3 &gt; or
+						if{ 0 }
+						els{ (L:Eng1_ElectricHeater,bool) (L:WalkaroundAvailable,bool) * }
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="FuelDrains">
+			<Component ID="WALKAROUND_BottleL" Node="WALKAROUND_BottleL">
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_Position</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_Drag)</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_WaterTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_WaterTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_WaterMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_WaterMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_WaterBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_WaterBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_FuelTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_FuelTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_FuelMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_FuelMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_L_FuelBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleL_FuelBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TabletStation) 20 == if{ (L:WalkaroundAvailable,bool) } els{ 0 }</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="WALKAROUND_BottleC" Node="WALKAROUND_BottleC">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_FuelCheckPanel</ANIM_NAME>
+					<ANIM_CODE>(L:FuelCheckPanelAnim)</ANIM_CODE>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_NAME>ANIM_FuelCheckPanelLock</ANIM_NAME>
+					<ANIM_CODE>(L:FuelCheckPanelLockAnim)</ANIM_CODE>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_Position</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_Drag)</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_WaterTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_WaterTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_WaterMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_WaterMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_WaterBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_WaterBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_FuelTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_FuelTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_FuelMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_FuelMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_C_FuelBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleC_FuelBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TabletStation) 11 == if{ (L:WalkaroundAvailable,bool) } els{ 0 }</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="WALKAROUND_BottleR" Node="WALKAROUND_BottleR">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>ANIM_BOTTLE_R_Position</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_Drag)</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_WaterTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_WaterTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_WaterMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_WaterMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_WaterBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_WaterBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_FuelTop</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_FuelTop) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_FuelMid</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_FuelMid) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="A2A_Anim_Code_Base">
+					<ANIM_NAME>ANIM_BOTTLE_R_FuelBot</ANIM_NAME>
+					<ANIM_CODE>(L:WALKAROUND_BottleR_FuelBot) 100 *</ANIM_CODE>
+					<ANIM_LAG>0</ANIM_LAG>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GT_Visibility">
+					<VISIBILITY_CODE>(L:TabletStation) 5 == if{ (L:WalkaroundAvailable,bool) } els{ 0 }</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="vis_pitot_tube_cover" Node="PitotCover">
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(L:PitotTubeCover)
+				</VISIBILITY_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_RemoveBeforeFlight_LR</ANIM_NAME>
+				<ANIM_CODE>(L:RemoveBeforeFlightFlagLR,number) 50 +</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_RemoveBeforeFlight_FA</ANIM_NAME>
+				<ANIM_CODE>(L:RemoveBeforeFlightFlagFA,number) 50 +</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+		
+		
+		<Component ID="vis_PitotTube_Cold" Node="PitotTube_Cold">
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(L:PitotHot) 0 == if{ 1 } els{ 0 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+				<EMISSIVE_CODE>
+					(L:PitotHeatCheckHold) 2 min
+				</EMISSIVE_CODE>
+			</UseTemplate>
+		</Component>
+		
+		<Component ID="vis_PitotTube_Hot" Node="PitotTube_Hot">
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>
+					(L:PitotHot) 0 == if{ 0 } els{ 1 }
+				</VISIBILITY_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+				<EMISSIVE_CODE>
+					(L:PitotHeatCheckHold) 2 min
+				</EMISSIVE_CODE>
+			</UseTemplate>
+		</Component>
+		
+		
+		<Component ID="IntakeRag" Node="Rag">
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:F_RagIntake,bool)</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+		<Component ID="TowBar" Node="Towbar">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>0</ANIM_LAG>
+				<ANIM_NAME>ANIM_Towbar</ANIM_NAME>
+				<ANIM_CODE>(L:TowbarAnim)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>(L:TowbarAnim) 0 == if{ 0 } els{ 1 }</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</RootComponent>
+	<RootComponent ID="EXTERNAL_VENTS">
+		<Component ID="Vents">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_Vent1</ANIM_NAME>
+				<ANIM_CODE>(L:CabinVent1Lever)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_Vent2</ANIM_NAME>
+				<ANIM_CODE>(L:CabinVent2Lever)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_Vent3</ANIM_NAME>
+				<ANIM_CODE>(L:CabinVent3Lever)</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>ANIM_Vent4</ANIM_NAME>
+				<ANIM_CODE>(L:CabinVent4Lever)</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	</RootComponent>
+	<RootComponent ID="Door">
+		<Component ID="EXIT_door">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<ANIM_NAME>EXIT_door</ANIM_NAME>
+				<ANIM_LAG>200</ANIM_LAG>
+				<ANIM_CODE>
+					(A:IS USER SIM,bool) 1 ==
+					if{	(L:ExitOpen1,percent) }
+					els{ 0 }
+				</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<ANIM_NAME>LEVER_door_latch</ANIM_NAME>
+				<!-- <ANIM_CODE>(L:Door1Latch) 100 *</ANIM_CODE> -->
+				<ANIM_CODE>
+					(A:IS USER SIM,bool) 1 ==
+					if{	(L:Door1Latch) 100 * }
+					els{ 0 }
+				</ANIM_CODE>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_LAG>200</ANIM_LAG>
+				<ANIM_NAME>LEVER_door_handle_ext</ANIM_NAME>
+				<!-- <ANIM_CODE>(L:Door1Handle,bool) 100 *</ANIM_CODE> -->
+				<ANIM_CODE>
+					(A:IS USER SIM,bool) 1 ==
+					if{	(L:Door1Handle,bool) 100 * }
+					els{ 0 }
+				</ANIM_CODE>
+			</UseTemplate>
+		</Component>
+	</RootComponent>
+
+</ModelBehaviors>

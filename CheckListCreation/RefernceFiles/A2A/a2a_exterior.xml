@@ -1,0 +1,386 @@
+<ModelBehaviors>
+
+<!-- A2A SIMULATIONS AIRCRAFT EXTERIOR FILE -->
+
+<Include Path="Asobo\Common.xml"/>
+
+
+<!-- ENGINE ############################################################# -->
+	<!-- PROPELLER ###################################################### -->
+	
+	<Template Name="A2A_ENGINE_Propeller_Visibility">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<VISIBILITY_CODE>1</VISIBILITY_CODE>
+		</DefaultTemplateParameters>
+		<Component ID="ENGINE_Propeller_Vis_#ID#" Node="ENGINE_Propeller_Vis_#ID#">
+			<UseTemplate Name="ASOBO_GT_Visibility">
+				<VISIBILITY_CODE>#VISIBILITY_CODE#</VISIBILITY_CODE>
+			</UseTemplate>
+		</Component>
+	</Template>
+
+	<Template Name="A2A_ENGINE_Propeller_Template">
+		<DefaultTemplateParameters>
+			<ID>1</ID>
+			<MIN_RPM_FOR_SLOW>143</MIN_RPM_FOR_SLOW>
+			<MIN_RPM_FOR_MED>200</MIN_RPM_FOR_MED>
+			<MIN_RPM_FOR_FAST>287.5</MIN_RPM_FOR_FAST>
+			<FROSTED>True</FROSTED>
+			<SIDE_BLUR>True</SIDE_BLUR>
+			<BLADE_COUNT>0</BLADE_COUNT>
+			<USE_BLADE_ROTATION>False</USE_BLADE_ROTATION>
+			<NO_PROP_CONE_BLUR>False</NO_PROP_CONE_BLUR>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_ENGINE_Propeller_SubTemplate"></UseTemplate>
+	</Template>
+		
+	<Template Name="A2A_ENGINE_Propeller_SubTemplate">
+		<DefaultTemplateParameters>
+			<ANIM_NODE_ID>ENGINE_Propeller_#ID#</ANIM_NODE_ID>
+			<ANIM_NAME>ENGINE_Propeller_#ID#</ANIM_NAME>
+			<ANIM_LENGTH>200</ANIM_LENGTH>
+			<STILL_NODE_ID>ENGINE_Propeller_Still_#ID#</STILL_NODE_ID>
+			<SLOW_NODE_ID>ENGINE_Propeller_Slow_#ID#</SLOW_NODE_ID>
+			<MED_NODE_ID>ENGINE_Propeller_Med_#ID#</MED_NODE_ID>
+			<FAST_NODE_ID>ENGINE_Propeller_Fast_#ID#</FAST_NODE_ID>
+			<PROP_BLURRED_NODE_ID>ENGINE_Propeller_Blurred_#ID#_Blades</PROP_BLURRED_NODE_ID>
+			<CONE_BLURRED_NODE_ID>ENGINE_Propeller_Blurred_#ID#_Cone</CONE_BLURRED_NODE_ID>
+			<Condition Valid="FROSTED">
+				<FROSTED_STILL_NODE_ID>ENGINE_Propeller_Still_#ID#_Frost</FROSTED_STILL_NODE_ID>
+				<FROSTED_SLOW_NODE_ID>ENGINE_Propeller_Slow_#ID#_Frost</FROSTED_SLOW_NODE_ID>
+				<FROSTED_BLURRED_NODE_ID>ENGINE_Propeller_Blurred_#ID#_Cone_Frost</FROSTED_BLURRED_NODE_ID>
+			</Condition>
+			<Condition Valid="SIDE_BLUR">
+				<PROP_SIDE_BLURRED_NODE_ID>ENGINE_Propeller_Blurred_#ID#_Side</PROP_SIDE_BLURRED_NODE_ID>
+			</Condition>
+			<PREFIX_BLADE_NODE_ID>ENGINE_Propeller_#ID#_Blade_</PREFIX_BLADE_NODE_ID>
+			<SUFFIX_BLADE_NODE_ID_FROSTED>_Frost</SUFFIX_BLADE_NODE_ID_FROSTED>
+			<Condition Valid="USE_BLADE_ROTATION">
+				<!-- For rotation of blades around their own axis influcend by propeller lever (simvar PROP BETA) -->
+				<ROTATION_ANIM_NAME>ENGINE_Propeller_#ID#_Blades</ROTATION_ANIM_NAME>
+			</Condition>
+		</DefaultTemplateParameters>
+		<Component ID="#ANIM_NODE_ID#" Node="#ANIM_NODE_ID#">
+			<UseTemplate Name="A2A_ENGINE_Propeller_Rotation_Template"></UseTemplate>
+		</Component>
+		<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+			<STATE>Still</STATE>
+			<NODE_ID>#STILL_NODE_ID#</NODE_ID>
+			<Condition Valid="FROSTED">
+				<NODE_ID2>#FROSTED_STILL_NODE_ID#</NODE_ID2>
+			</Condition>
+		</UseTemplate>
+		<!-- Hide blades -->
+		<Condition>
+			<Test>
+				<Greater>
+					<Value>BLADE_COUNT</Value>
+					<Number>0</Number>
+				</Greater>
+			</Test>
+			<True>
+				<UseTemplate Name="ASOBO_GT_Helper_Recursive_ID">
+					<STATE>Still</STATE>
+					<!-- VV Recursive parameters VV -->
+					<EXIT_TEMPLATE>A2A_ENGINE_Propeller_Visibility_Base_Template</EXIT_TEMPLATE>
+					<PARAM1>NODE_ID</PARAM1>
+					<PARAM1_PREFIX>#PREFIX_BLADE_NODE_ID#</PARAM1_PREFIX>
+					<MAX_ID>#BLADE_COUNT#</MAX_ID>
+					<Condition Valid="FROSTED">
+						<PARAM2>NODE_ID2</PARAM2>
+						<PARAM2_PREFIX>#PREFIX_BLADE_NODE_ID#</PARAM2_PREFIX>
+						<PARAM2_SUFFIX>#SUFFIX_BLADE_NODE_ID_FROSTED#</PARAM2_SUFFIX>
+					</Condition>
+				</UseTemplate>
+			</True>
+		</Condition>
+		<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+			<STATE>Slow</STATE>
+			<NODE_ID>#SLOW_NODE_ID#</NODE_ID>
+			<Condition Valid="NO_PROP_CONE_BLUR">
+				<False>
+					<Condition Valid="FROSTED">
+						<NODE_ID2>#FROSTED_SLOW_NODE_ID#</NODE_ID2>
+					</Condition>
+				</False>
+			</Condition>
+		</UseTemplate>
+		<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+			<STATE>Med</STATE>
+			<NODE_ID>#MED_NODE_ID#</NODE_ID>
+			<Condition Valid="NO_PROP_CONE_BLUR">
+				<False>
+					<Condition Valid="FROSTED">
+						<NODE_ID2>#FROSTED_MED_NODE_ID#</NODE_ID2>
+					</Condition>
+				</False>
+			</Condition>
+		</UseTemplate>
+		<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+			<STATE>Fast</STATE>
+			<NODE_ID>#FAST_NODE_ID#</NODE_ID>
+			<Condition Valid="NO_PROP_CONE_BLUR">
+				<False>
+					<Condition Valid="FROSTED">
+						<NODE_ID2>#FROSTED_FAST_NODE_ID#</NODE_ID2>
+					</Condition>
+				</False>
+			</Condition>
+		</UseTemplate>
+		<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+			<STATE>Blurred</STATE>
+			<Condition Valid="NO_PROP_CONE_BLUR">
+				<True>
+					<NODE_ID>#PROP_BLURRED_NODE_ID#</NODE_ID>
+				</True>
+				<False>
+					<NODE_ID>#CONE_BLURRED_NODE_ID#</NODE_ID>
+					<NODE_ID2>#PROP_BLURRED_NODE_ID#</NODE_ID2>
+					<Condition Valid="FROSTED">
+						<True>
+							<NODE_ID3>#FROSTED_BLURRED_NODE_ID#</NODE_ID3>
+						</True>
+					</Condition>
+				</False>
+			</Condition>
+		</UseTemplate>
+		<Condition Valid="SIDE_BLUR">
+			<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+				<STATE>Blurred</STATE>
+				<NODE_ID>#PROP_SIDE_BLURRED_NODE_ID#</NODE_ID>
+			</UseTemplate>
+		</Condition>
+		<Condition Valid="USE_BLADE_ROTATION">
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>#ROTATION_ANIM_NAME#</ANIM_NAME>
+				<ANIM_CODE>90 (A:PROP BETA:1, degrees) - dnor</ANIM_CODE>
+				<ANIM_LENGTH>360</ANIM_LENGTH>
+				<ANIM_LAG>100</ANIM_LAG>
+			</UseTemplate>
+		</Condition>
+	</Template>
+	
+	
+	<!-- PROPELLER::Utils -->
+	<Template Name="A2A_ENGINE_Propeller_Rotation_Template">
+		<UseTemplate Name="A2A_Anim_Code_Base">
+			<ANIM_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Crank,percent) 100 +
+					}
+					els{
+						(A:PROP ROTATION ANGLE:#ID#,radians) 15.92 * 100 +
+					}
+			</ANIM_CODE>
+		</UseTemplate>
+	</Template>
+	
+	
+	<Template Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+		<DefaultTemplateParameters>
+			<RECURSIVE_ID>2</RECURSIVE_ID>
+		</DefaultTemplateParameters>
+		<Component ID="#NODE_ID#" Node="#NODE_ID#">
+			<UseTemplate Name="A2A_ENGINE_Propeller_#STATE#_Visibility_Template">
+			</UseTemplate>
+		</Component>
+		<Condition Valid="NODE_ID#RECURSIVE_ID#">
+			<UseTemplate Name="A2A_ENGINE_Propeller_Visibility_Base_Template">
+				<RECURSIVE_ID Process="Int">#RECURSIVE_ID# 1 +</RECURSIVE_ID>
+				<NODE_ID Process="Param">NODE_ID#RECURSIVE_ID#</NODE_ID>
+			</UseTemplate>
+		</Condition>
+	</Template>
+	<Template Name="A2A_ENGINE_Propeller_Still_Visibility_Template">
+		<UseTemplate Name="ASOBO_GT_Visibility_Code">
+			<VISIBILITY_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_SLOW# &lt;
+					}
+					els{
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_SLOW# &lt;
+					}
+			</VISIBILITY_CODE>
+		</UseTemplate>
+	</Template>
+	<Template Name="A2A_ENGINE_Propeller_Slow_Visibility_Template">
+		<UseTemplate Name="ASOBO_GT_Visibility_Code">
+			<VISIBILITY_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_SLOW# &gt;
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_MED# &lt; and
+					}
+					els{
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_SLOW# &gt;
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_MED# &lt; and
+					}
+			</VISIBILITY_CODE>
+		</UseTemplate>
+	</Template>
+	<Template Name="A2A_ENGINE_Propeller_Med_Visibility_Template">
+		<UseTemplate Name="ASOBO_GT_Visibility_Code">
+			<VISIBILITY_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_MED# &gt;
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_FAST# &lt; and
+					}
+					els{
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_MED# &gt;
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_FAST# &lt; and
+					}
+			</VISIBILITY_CODE>
+		</UseTemplate>
+	</Template>
+	<Template Name="A2A_ENGINE_Propeller_Fast_Visibility_Template">
+		<UseTemplate Name="ASOBO_GT_Visibility_Code">
+			<VISIBILITY_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_FAST# &gt;
+					}
+					els{
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_FAST# &gt;
+					}
+			</VISIBILITY_CODE>
+		</UseTemplate>
+	</Template>
+	<Template Name="A2A_ENGINE_Propeller_Blurred_Visibility_Template">
+		<UseTemplate Name="ASOBO_GT_Visibility_Code">
+			<VISIBILITY_CODE>
+				(A:IS USER SIM,bool) 1 ==
+					if{
+						(L:Eng#ID#_Rpm,rpm) #MIN_RPM_FOR_SLOW# &gt;
+					}
+					els{
+						(A:PROP RPM:#ID#, rpm) #MIN_RPM_FOR_SLOW# &gt;
+					}
+			</VISIBILITY_CODE>
+		</UseTemplate>
+	</Template>
+
+
+<!-- LANDING GEAR ############################################################# -->
+
+	<Template Name="A2A_GEAR_Center_Template">
+		<DefaultTemplateParameters>
+			<ANIM_NAME>LANDING_GEAR_Center</ANIM_NAME>
+			<ID>0</ID>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Base_Template">
+		</UseTemplate>
+	</Template>
+
+	<Template Name="A2A_GEAR_Left_Template">
+		<DefaultTemplateParameters>
+			<ANIM_NAME>LANDING_GEAR_Left</ANIM_NAME>
+			<ID>1</ID>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Base_Template">
+		</UseTemplate>
+	</Template>
+
+	<Template Name="A2A_GEAR_Right_Template">
+		<DefaultTemplateParameters>
+			<ANIM_NAME>LANDING_GEAR_Right</ANIM_NAME>
+			<ID>2</ID>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Base_Template">
+		</UseTemplate>
+	</Template>
+
+	<Template Name="A2A_GEAR_Center_Tire_Template">
+		<DefaultTemplateParameters>
+			<POSITION>CENTER</POSITION>
+			<ANIM_NAME>LANDING_GEAR_Center_Tire</ANIM_NAME>
+			<NODE_ID>GEAR_Center_Tire</NODE_ID>
+			<SIMVAR>CENTER WHEEL RPM</SIMVAR>
+			<ANIM_SIMVAR>CENTER WHEEL ROTATION ANGLE</ANIM_SIMVAR>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Tire_Base_Template"/>
+
+	</Template>
+
+	<Template Name="A2A_GEAR_Left_Tire_Template">
+		<DefaultTemplateParameters>
+			<POSITION>LEFT</POSITION>
+			<ANIM_NAME>LANDING_GEAR_Left_Tire</ANIM_NAME>
+			<NODE_ID>GEAR_Right_Tire</NODE_ID>
+			<SIMVAR>LEFT WHEEL RPM</SIMVAR>
+			<ANIM_SIMVAR>LEFT WHEEL ROTATION ANGLE</ANIM_SIMVAR>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Tire_Base_Template"/>
+	</Template>
+
+	<Template Name="A2A_GEAR_Right_Tire_Template">
+		<DefaultTemplateParameters>
+			<POSITION>RIGHT</POSITION>
+			<ANIM_NAME>LANDING_GEAR_Right_Tire</ANIM_NAME>
+			<NODE_ID>GEAR_Left_Tire</NODE_ID>
+			<SIMVAR>RIGHT WHEEL RPM</SIMVAR>
+			<ANIM_SIMVAR>RIGHT WHEEL ROTATION ANGLE</ANIM_SIMVAR>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="A2A_GEAR_Tire_Base_Template"/>
+	</Template>
+
+	<Template Name="A2A_GEAR_Steering_Template">
+		<DefaultTemplateParameters>
+			<ANIM_NAME>LANDING_GEAR_Steering</ANIM_NAME>
+			<ID>0</ID>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="ASOBO_GT_Anim">
+			<ANIM_CODE>(L:CenterWheelAngle, degrees) dnor</ANIM_CODE>
+			<!-- <ANIM_CODE>(A:GEAR STEER ANGLE:0, degrees) dnor</ANIM_CODE> -->
+			<ANIM_LENGTH>360</ANIM_LENGTH>
+			<ANIM_WRAP>True</ANIM_WRAP>
+		</UseTemplate>
+	</Template>
+
+	
+	<!-- Animate gears (ID is a STANDARD_GEAR enum value, default is 0(center)) -->
+	<Template Name="A2A_GEAR_Base_Template">
+		<DefaultTemplateParameters>
+			<ID>0</ID>
+		</DefaultTemplateParameters>
+		<UseTemplate Name="ASOBO_GT_Anim_Sim">
+			<ANIM_SIMVAR>GEAR ANIMATION POSITION:#ID#</ANIM_SIMVAR>
+			<ANIM_SIMVAR_UNITS>percent</ANIM_SIMVAR_UNITS>
+		</UseTemplate>
+	</Template>
+	
+	<!-- Required: ANIM_NAME, ID (ID is a STANDARD_GEAR enum value, default is 0(center)) -->
+	<Template Name="A2A_GEAR_Tire_Base_Template">
+		<DefaultTemplateParameters>
+			<MIN_RPM_FOR_BLUR>400</MIN_RPM_FOR_BLUR>
+			<NODE_ID_STILL>#NODE_ID#_Still</NODE_ID_STILL>
+			<NODE_ID_BLURRED>#NODE_ID#_Blurred</NODE_ID_BLURRED>
+			<Condition Valid="SIMVAR">
+				<False>
+					<SIMVAR>WHEEL RPM:#ID#</SIMVAR>
+				</False>
+			</Condition>		
+		</DefaultTemplateParameters>
+		<Condition Check="NO_ANIMATION">
+			<False>
+				<UseTemplate Name="ASOBO_GEAR_Tire_Animation_Template"/>
+			</False>
+		</Condition>
+		<Condition Check="NO_STILL_BLURRED_TRANSITION">
+			<False>
+				<UseTemplate Name="ASOBO_GEAR_Tire_Visibility_Base_Template">
+					<STATE>Still</STATE>
+					<NODE_ID>#NODE_ID_STILL#</NODE_ID>
+				</UseTemplate>
+				<UseTemplate Name="ASOBO_GEAR_Tire_Visibility_Base_Template">
+					<STATE>Blurred</STATE>
+					<NODE_ID>#NODE_ID_BLURRED#</NODE_ID>
+				</UseTemplate>
+			</False>
+		</Condition>
+	</Template>
+
+</ModelBehaviors>
