@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelInfo>
+	<LODS>
+		<!-- Highest LOD -->
+		<!-- minimum display size in % (should be bounding sphere vertical screen size, sphere will often be slightly larger than you expect) -->
+		<!-- default minSize is 0 -->
+		<LOD minSize="150" ModelFile="AnalogTBM_EXT.gltf"/>
+		
+		<!-- <LOD minSize="90" ModelFile="AnalogTBM_EXT_LOD1.gltf"/>
+		<LOD minSize="45" ModelFile="AnalogTBM_EXT_LOD2.gltf"/>
+		<LOD minSize="20" ModelFile="AnalogTBM_EXT_LOD3.gltf"/>
+		<LOD minSize="1" ModelFile="AnalogTBM_EXT_LOD6.gltf"/> -->
+	</LODS>
+	<Behaviors>
+		<Include ModelBehaviorFile="Asobo\Common.xml"/>
+		<Include ModelBehaviorFile="Asobo\Exterior.xml"/>
+		<Include ModelBehaviorFile="Asobo\Generic\FX.xml"/>
+
+		<UseTemplate Name="ASOBO_GT_Update">
+			<UPDATE_ONCE>TRUE</UPDATE_ONCE>
+			<UPDATE_CODE>
+				0 (&gt;L:bksq_VisualPropRpm, RPM)
+				0 (&gt;L:bksq_VisualPropRotationAngle, degrees)
+			</UPDATE_CODE>
+		</UseTemplate>
+
+		<Component ID="CONTROL_SURFACES">
+			<UseTemplate Name="ASOBO_HANDLING_Elevator_Template">
+				<ANIM_NAME>Elevator</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_HANDLING_Elevator_Template">
+				<TRIM_ONLY>True</TRIM_ONLY>
+				<ANIM_NAME_TRIM>ElevatorTrim</ANIM_NAME_TRIM>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_HANDLING_Aileron_Template">
+				<ANIM_NAME_LEFT>Aileron_L</ANIM_NAME_LEFT>
+				<ANIM_NAME_RIGHT>Aileron_R</ANIM_NAME_RIGHT>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_HANDLING_Aileron_Template">
+				<TRIM_ONLY>True</TRIM_ONLY>
+				<ANIM_NAME_TRIM>AileronTrim</ANIM_NAME_TRIM>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_HANDLING_Rudder_Template">
+				<ANIM_NAME>Rudder</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_HANDLING_Rudder_Template">
+				<TRIM_ONLY>True</TRIM_ONLY>
+				<ANIM_NAME_TRIM>RudderTrim</ANIM_NAME_TRIM>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_HANDLING_Flaps_Template">
+				<ANIM_NAME_LEFT>Flaps_L</ANIM_NAME_LEFT>
+				<ANIM_NAME_RIGHT>Flaps_R</ANIM_NAME_RIGHT>
+			</UseTemplate>
+		</Component>
+
+		<Component ID="PROPELLERS">
+			<UseTemplate Name="ASOBO_ENGINE_Propeller_Template">
+				<ID>1</ID>
+				<ANIM_NODE_ID>Dummy</ANIM_NODE_ID>
+				<ANIM_NAME>Dummy</ANIM_NAME>
+				<STILL_NODE_ID>SpinnerStill</STILL_NODE_ID>
+				<SLOW_NODE_ID>SpinnerSlow</SLOW_NODE_ID>
+				<PROP_BLURRED_NODE_ID>PropBlurred</PROP_BLURRED_NODE_ID>
+				<CONE_BLURRED_NODE_ID>SpinnerBlurred</CONE_BLURRED_NODE_ID>
+				<PROP_SIDE_BLURRED_NODE_ID>PropSide</PROP_SIDE_BLURRED_NODE_ID>
+				<FROSTED_STILL_NODE_ID>SpinnerStill_Frost</FROSTED_STILL_NODE_ID>
+				<FROSTED_SLOW_NODE_ID>SpinnerSlow_Frost</FROSTED_SLOW_NODE_ID>
+				<FROSTED_BLURRED_NODE_ID>SpinnerBlurred_Frost</FROSTED_BLURRED_NODE_ID>
+
+				<BLADE_COUNT>4</BLADE_COUNT>
+				<PREFIX_BLADE_NODE_ID>Blade</PREFIX_BLADE_NODE_ID>
+				<SUFFIX_BLADE_NODE_ID_FROSTED>_Frost</SUFFIX_BLADE_NODE_ID_FROSTED>
+
+				<USE_BLADE_ROTATION>False</USE_BLADE_ROTATION>
+			</UseTemplate>
+
+			<!-- Custom Rotation Speed -->
+			<Component ID="PropSpin">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+		    		<ANIM_NAME>PropSpin</ANIM_NAME>
+		    		<ANIM_CODE>
+		    			(A:PROP RPM:1, RPM) 143 &gt; if{
+		    				(A:PROP RPM:1, RPM) (&gt;L:bksq_VisualPropRpm, RPM)
+		    				(A:PROP ROTATION ANGLE:1, degrees) (&gt;L:bksq_VisualPropRotationAngle, degrees)
+
+		    				(A:PROP ROTATION ANGLE:1, degrees)
+		    			}
+		    			els{
+		    				(L:bksq_VisualPropRpm, RPM) (A:PROP RPM:1, RPM) &gt;    (L:bksq_VisualPropRpm, RPM) 4.0 &gt; and if{
+		    					(L:bksq_VisualPropRpm, RPM) 0.995 *
+		    					(A:PROP RPM:1, RPM) 0.005 *
+		    					+ (&gt;L:bksq_VisualPropRpm, RPM)
+		    				}
+		    				els{
+		    					(L:bksq_VisualPropRpm, RPM) 0.98 *
+		    					(A:PROP RPM:1, RPM) 0.02 *
+		    					+ (&gt;L:bksq_VisualPropRpm, RPM)
+		    				}
+
+		    				(L:bksq_VisualPropRpm, RPM) 9 /
+		    				(L:bksq_VisualPropRotationAngle, degrees) +
+		    				360 %
+
+		    				d (&gt;L:bksq_VisualPropRotationAngle, degrees)
+		    			}
+		    		</ANIM_CODE>
+		    		<ANIM_WRAP>TRUE</ANIM_WRAP>
+		    		<ANIM_LAG>0</ANIM_LAG>
+		    		<ANIM_LENGTH>360</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+
+			<!-- Custom Blade Rotation -->
+			<Component ID="BladePitch">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+		    		<ANIM_NAME>BladePitch</ANIM_NAME>
+		    		<ANIM_CODE>
+		    			60 (A:ENG OIL PRESSURE:1, psi) 40 - 0 max - 0 max 1.6667 *
+		    			d (&gt;L:BKSQ_BladeAngle, number)
+		    		</ANIM_CODE>
+		    		<ANIM_LAG>100</ANIM_LAG>
+		    		<ANIM_LENGTH>100</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+
+		</Component>
+
+		<Component ID="ACCESSORIES">
+
+			<Component ID="InertialSeparators" NODE="InertialSeparators">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>InertialSeparatorDoor</ANIM_NAME>
+					<ANIM_LAG>500</ANIM_LAG>
+					<ANIM_LENGTH>100</ANIM_LENGTH>
+
+					<ANIM_CODE>(L:var_inertSepWindup, number) 100 *</ANIM_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="StallWarningTab">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+		    		<ANIM_NAME>StallWarningTab</ANIM_NAME>
+		    		<ANIM_CODE>
+		    			(A:STALL WARNING, bool)
+		    		</ANIM_CODE>
+		    		<ANIM_LENGTH>100</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+
+		</Component>
+
+		<Component ID="DOORS">
+
+			<Component ID="PilotDoorExterior" NODE="PilotDoorExterior">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<NODE_ID>PilotDoorExterior</NODE_ID>
+					<ANIM_NAME>PilotDoorExterior</ANIM_NAME>
+					<ANIM_CODE>
+						(A:EXIT OPEN:0, Percent)
+					</ANIM_CODE>
+					<ANIM_LENGTH>100</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="AftDoorExterior" NODE="AftDoorExterior">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<NODE_ID>AftDoorExterior</NODE_ID>
+					<ANIM_NAME>AftDoorExterior</ANIM_NAME>
+					<ANIM_CODE>
+						(A:EXIT OPEN:1, Percent)
+					</ANIM_CODE>
+					<ANIM_LENGTH>100</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="BaggageDoor" NODE="BaggageDoor">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<NODE_ID>BaggageDoor</NODE_ID>
+					<ANIM_NAME>BaggageDoor</ANIM_NAME>
+					<ANIM_CODE>
+						(L:bksq_BaggageDoor, bool) 100 *
+					</ANIM_CODE>
+					<ANIM_LENGTH>100</ANIM_LENGTH>
+					<ANIM_LAG>30</ANIM_LAG>
+				</UseTemplate>
+			</Component>
+
+			<!-- Engine Compartment -->
+
+			<Component ID="Engine" Node="Engine">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						(L:var_EngineCover_L_Pos, number) 0 &gt;
+						(L:var_EngineCover_R_Pos, number) 0 &gt;
+						or 
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="EngineCompartment">
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>EngineCover_L</ANIM_NAME>
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_CODE>
+						(L:var_EngineCover_L_Pos, number)
+					</ANIM_CODE>
+				</UseTemplate>
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_NAME>EngineCover_R</ANIM_NAME>
+					<ANIM_LAG>0</ANIM_LAG>
+					<ANIM_CODE>
+						(L:var_EngineCover_R_Pos, number)
+					</ANIM_CODE>
+				</UseTemplate>
+
+
+				<UseTemplate Name="ASOBO_GT_Update">
+					<FREQUENCY>60</FREQUENCY>
+					<UPDATE_CODE>
+						(L:var_RudderPedalAdjustment_L, bool) d (L:var_var_RudderPedalAdjustment_L_last, bool) != 1 == and (L:BKSQ_PersistentIndicatedAirspeed, knots) 60 &lt; and if{
+							(L:var_EngineCover_L, number) 0 &lt;= if{ 1 (&gt;L:var_EngineCover_L, number) } els{ -1 (&gt;L:var_EngineCover_L, number) }
+						}
+
+						
+						(L:var_RudderPedalAdjustment_R, bool) d (L:var_var_RudderPedalAdjustment_R_last, bool) != 1 == and (L:BKSQ_PersistentIndicatedAirspeed, knots) 60 &lt; and if{
+							(L:var_EngineCover_R, number) 0 &lt;= if{ 1 (&gt;L:var_EngineCover_R, number) } els{ -1 (&gt;L:var_EngineCover_R, number) }
+						}
+
+						(L:var_RudderPedalAdjustment_R, bool) (&gt;L:var_var_RudderPedalAdjustment_R_last, bool)
+						(L:var_RudderPedalAdjustment_L, bool) (&gt;L:var_var_RudderPedalAdjustment_L_last, bool)
+
+						(L:var_EngineCover_L, number) 0.85 * (L:var_EngineCover_L_Pos, number) + 100 min 0 max (&gt;L:var_EngineCover_L_Pos, number)
+						(L:var_EngineCover_R, number) 0.85 * (L:var_EngineCover_R_Pos, number) + 100 min 0 max (&gt;L:var_EngineCover_R_Pos, number)
+					</UPDATE_CODE>
+				</UseTemplate>
+
+			</Component>
+
+		</Component>
+
+		<Component ID="GEAR">
+			<UseTemplate Name="ASOBO_GEAR_Center_Template">
+				<ANIM_NAME>Gear_C</ANIM_NAME>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Left_Template">
+				<ANIM_NAME>Gear_L</ANIM_NAME>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Right_Template">
+				<ANIM_NAME>Gear_R</ANIM_NAME>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Center_Tire_Template">
+				<ANIM_NAME>Wheel_C</ANIM_NAME>
+				<NODE_ID_STILL>Wheel_C_Still</NODE_ID_STILL>
+				<NODE_ID_BLURRED>Wheel_C_Still</NODE_ID_BLURRED>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Left_Tire_Template">
+				<ANIM_NAME>Wheel_L</ANIM_NAME>
+				<NODE_ID_STILL>Wheel_L_Still</NODE_ID_STILL>
+				<NODE_ID_BLURRED>Wheel_L_Still</NODE_ID_BLURRED>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Right_Tire_Template">
+				<ANIM_NAME>Wheel_R</ANIM_NAME>
+				<NODE_ID_STILL>Wheel_R_Still</NODE_ID_STILL>
+				<NODE_ID_BLURRED>Wheel_R_Still</NODE_ID_BLURRED>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GEAR_Steering_Template">
+				<ANIM_NAME>NoseGearSteering</ANIM_NAME>
+			</UseTemplate>
+		</Component>
+
+		<Component ID="LANDING_FX">
+			<UseTemplate Name="ASOBO_LANDING_FX"/>
+		</Component>
+
+	</Behaviors>
+</ModelInfo>
+

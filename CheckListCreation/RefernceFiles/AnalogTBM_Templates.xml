@@ -1,0 +1,3827 @@
+<Include Path="Asobo\Generic\Animations.xml"/>
+
+
+		 <!-- 
+			PAIR WITH a ASOBO_GT_Knob_Finite_Code or a Toggling Button for light dimming controls.
+
+			REQUIRES:
+			LIGHTING_KNOB_VAR: The L:var 0-100 of the knob that controls the lighting dimming.
+
+			USE <INPUT_MULTIPLIER>100</INPUT_MULTIPLIER> when the input device is a switch (0 to 1), instead of a potentiometer (0 to 100)
+		  -->
+
+		<Template Name="BKSQ_Voltage_Dimming_Light_Template">
+			<Parameters Type="Default">
+				<LIGHT_TYPE>PANEL</LIGHT_TYPE>
+				<SIMVAR_INDEX>1</SIMVAR_INDEX>
+				<POTENTIOMETER>1</POTENTIOMETER>
+				<BATTERY_INDEX>1</BATTERY_INDEX>
+				<VOLTAGE_SENSE_BUS>1</VOLTAGE_SENSE_BUS>
+				<VOLTAGE_DROP_MAX_AMPS>650</VOLTAGE_DROP_MAX_AMPS>
+				<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+				<CIRCUIT>1</CIRCUIT>
+				<INPUT_MULTIPLIER>1</INPUT_MULTIPLIER>
+				<MASTER_LIGHT_SWITCH_VAR>1</MASTER_LIGHT_SWITCH_VAR>
+			</Parameters>
+			<Component ID="#LIGHT_TYPE#_#SIMVAR_INDEX#_POTENTIOMETER_#POTENTIOMETER#">
+				<Update Frequency="30">
+					(L:#LIGHTING_KNOB_VAR#, number) #MASTER_LIGHT_SWITCH_VAR# * #INPUT_MULTIPLIER# *
+					(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_SENSE_BUS#, volts)
+					1 (A:ELECTRICAL BATTERY LOAD:#BATTERY_INDEX#, amps) 0 max #VOLTAGE_DROP_MAX_AMPS# / - * 
+					#SYSTEM_VOLTAGE# /
+					1 - 1.85 * exp
+					(A:CIRCUIT ON:#CIRCUIT#, bool) *
+					*
+					d (O:LastPotentiometerSetting) &gt; if{
+						0.60 * (O:LastPotentiometerSetting) 0.40 * +
+					}
+					els{
+						0.50 * (O:LastPotentiometerSetting) 0.50 * +
+					}
+					0 max 100 min d (&gt;O:LastPotentiometerSetting)
+					
+					(&gt;O:PotentiometerSetting)
+
+
+					(O:PotentiometerSetting) (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) != if{
+						(O:PotentiometerSetting) #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+						(O:PotentiometerSetting) #CIRCUIT# (&gt;K:2:ELECTRICAL_CIRCUIT_POWER_SETTING_SET)
+						(O:PotentiometerSetting) (&gt;L:LIGHTING_#LIGHT_TYPE#_#SIMVAR_INDEX#, number)
+					}
+
+					(L:#LIGHTING_KNOB_VAR#, number) #MASTER_LIGHT_SWITCH_VAR# * 0 &gt; (A:LIGHT #LIGHT_TYPE# ON:#SIMVAR_INDEX#, bool) != if{
+						(A:LIGHT #LIGHT_TYPE# ON:#SIMVAR_INDEX#, bool) if{
+							(O:PotentiometerSetting) 0.5 &lt; if{
+								0 (&gt;O:LastPotentiometerSetting)
+								0 (&gt;O:PotentiometerSetting)
+								0 (&gt;L:LIGHTING_#LIGHT_TYPE#_#SIMVAR_INDEX#, number)
+								#SIMVAR_INDEX# 0 (&gt;K:2:#LIGHT_TYPE#_LIGHTS_SET)
+							}
+						}
+						els{
+							#SIMVAR_INDEX# 1 (&gt;K:2:#LIGHT_TYPE#_LIGHTS_SET)
+						}
+					}
+				</Update>
+			</Component>
+		</Template>
+
+
+
+		<!-- This exists because the default template forces you into providing a failure circuit -->
+		<Template Name="BKSQ_LIGHTING_Ambient_Template_No_Failure">
+			<Parameters Type="Default">
+				<NODE_ID>LIGHTING_Ambient</NODE_ID>
+				<ID>1</ID>
+				<FAILURE>1</FAILURE>
+			</Parameters>
+			<Component ID="#NODE_ID#_#ID#">
+				<Update Frequency="20">
+					#BOUNCE_POTENTIOMETER_PERCENT# (&gt;O:_Bounce)
+					(O:_Bounce) (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) != if{
+						(O:_Bounce) #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+					}
+				</Update>
+			</Component>
+		</Template>
+
+
+
+		<!-- 
+		REQUIRES:
+		ELECTRIC_GYRO_CIRCUIT:  If present, the gyro will be driven by an electric circuit instead of suction
+		GYRO_SPEED_VAR:
+		PITCH_DEGREES_ANIM_NAME:
+		PITCH_DEGREES_ANIM_LENGTH:
+		BANK_DEGREES_ANIM_NAME:
+		BANK_DEGREES_ANIM_LENGTH:
+		BARS_POSITION_ANIM_NAME:
+		FLAG_ANIM_ANIM:
+		FLAG_ANIM_LENGTH:
+		GLASS_TAP_VAR:
+
+	 -->
+
+	<Template Name="BKSQ_AttitudeIndicatorWithGyroSimulation">
+		<Parameters Type="Default">
+			<PITCH_LIMIT_DEG>26.0</PITCH_LIMIT_DEG> <!-- The maximum pitch up/down limit of the animation -->
+			<TORQUE_EFFECT>1.0</TORQUE_EFFECT> <!-- Effect of torque applied to gyroscope -->
+			<HIGH_FREQ_VIBRATION>5.0</HIGH_FREQ_VIBRATION> <!-- Larger Numbers mean high frequency vibration near full gyro speed -->
+			<SETTLING_TIME>0.02</SETTLING_TIME> <!-- scales speed at which gyro settles out for less than optimal vacuum levels -->
+			<MAXIMUM_SUCTION_INHG>5.0</MAXIMUM_SUCTION_INHG>
+			<MINIMUM_VIABLE_PERCENT_GYRO_SPEED>0.2</MINIMUM_VIABLE_PERCENT_GYRO_SPEED> <!-- Below this speed, the gyro will not settle at all, and will be in a constant state of oscillations -->
+			<RESIDUAL_SUCTION_FROM_AIRSPEED> (L:BKSQ_PersistentIndicatedAirspeed, knots) 50 - 0 max 265 / 2.25 * 2.0 min </RESIDUAL_SUCTION_FROM_AIRSPEED> <!-- In inhg 2.25 = unstable below 115kts IAS.  In Gyro, 1.0 = unstable -->
+			<!-- To calculate coefficient for airspeed at instability:  Airspeed - 50 * 2.25 =   (0 max... Coefficient .../ 2.25 )   -->
+			<DEG_PER_FRAME_TORQUE_EFFECT>15</DEG_PER_FRAME_TORQUE_EFFECT> <!-- combined degrees (0.5 pitch + roll) per frame that would cause 100% destabilization, applied with inverse of gyro speed.  Ex. -->
+			<SPIN_UP_TIME_CONST>0.005</SPIN_UP_TIME_CONST> <!-- smaller numbers for smaller spin up.  0.005 = ~10 seconds -->
+			<SPIN_DOWN_TIME_CONST>0.0001</SPIN_DOWN_TIME_CONST> <!-- smaller numbers for smaller spin up.  0.0001 = ~8 minutes -->
+			<VOLTAGE_BUS>1</VOLTAGE_BUS>
+			<BATTERY_INDEX>1</BATTERY_INDEX>
+			<VOLTAGE_MAX_AMPS>1200</VOLTAGE_MAX_AMPS>
+			<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+			<MAX_AIRSPEED_SOUND>100</MAX_AIRSPEED_SOUND>
+			<GLASS_TAP_VAR>0</GLASS_TAP_VAR>
+		</Parameters>
+
+		<Component ID="#COMPONENT_NAME#" NODE="#COMPONENT_NAME#">
+
+			<!-- Gyro Sound for fading with increased airspeed -->
+			<!-- Scales to Zero with enough airspeed, and scales to 0.333 with full gas generator RPM -->
+
+			<!-- UPDATE THIS FOR USE WITH PISTON AIRCRAFT -->
+			<UseTemplate Name="ASOBO_GT_Update">
+			<FREQUENCY>60</FREQUENCY>
+				<UPDATE_CODE>
+					(L:#GYRO_SPEED_VAR#, number) 4 * 1.5 - sin 1 + 2 / 0 max
+					0.90926 (L:BKSQ_TBM_NG, number) 1.32103 * 0.535098 + ln 0.145113 * - *
+					1 (L:BKSQ_PersistentIndicatedAirspeed, knots) #MAX_AIRSPEED_SOUND# / - 0 max *
+					(&gt;L:#GYRO_SPEED_VAR#_SoundVolume, number)
+				</UPDATE_CODE>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GT_Update">
+				<UPDATE_ONCE>TRUE</UPDATE_ONCE>
+				<UPDATE_CODE>
+					pi 4 / pi 16 / rand 0.5 - * + (&gt;O:OscillatorTheta)
+					(O:OscillatorTheta) sin neg (&gt;O:OscillatorV)
+					(O:OscillatorTheta) cos neg (&gt;O:OscillatorU)
+
+					pi 4 / pi 16 / rand 0.5 - * + (&gt;O:OscillatorTheta_End)
+					(O:OscillatorTheta_End) sin neg (&gt;O:OscillatorV_End)
+					(O:OscillatorTheta_End) cos neg (&gt;O:OscillatorU_End)
+					
+					0 (&gt;O:SpinUp)
+					0 (&gt;O:SpinUp_Last)
+
+					(L:#GYRO_SPEED_VAR#, number) (&gt;O:GyroSpeed_Last)
+
+					(A:PLANE PITCH DEGREES, DEGREES) (&gt;O:Pitch_Last)
+					(A:PLANE BANK DEGREES, DEGREES) (&gt;O:Roll_Last)
+
+					1.0 (&gt;O:GyroDegradedSmooth, number)
+				</UPDATE_CODE>
+			</UseTemplate>
+
+			<!-- Gyro Speed Control -->
+			<Condition Check="ELECTRIC_GYRO_CIRCUIT">
+				<True>
+					<UseTemplate Name="ASOBO_GT_Update">
+						<FREQUENCY>60</FREQUENCY>
+						<UPDATE_CODE>
+							(A:CIRCUIT ON:#ELECTRIC_GYRO_CIRCUIT#, bool) if{
+								(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_BUS#, volts)
+								1 (A:ELECTRICAL BATTERY LOAD:#BATTERY_INDEX#, amps) 0 max #VOLTAGE_MAX_AMPS# / - * 
+								#SYSTEM_VOLTAGE# /
+								(L:#GYRO_SPEED_VAR#, number) -
+								#SPIN_UP_TIME_CONST# *
+								(L:#GYRO_SPEED_VAR#, number) + (&gt;L:#GYRO_SPEED_VAR#, number)
+							}
+							els{
+								0 (L:#GYRO_SPEED_VAR#, number) -
+								#SPIN_DOWN_TIME_CONST# (L:#GYRO_SPEED_VAR#, number) 0.05 &lt; 9 * 1 + * * 
+								(L:#GYRO_SPEED_VAR#, number) + (&gt;L:#GYRO_SPEED_VAR#, number)
+							}
+
+
+							(L:#GYRO_SPEED_VAR#, number) (O:GyroSpeed_Last) - 0 &gt;= (&gt;O:SpinUp)
+							(L:#GYRO_SPEED_VAR#, number) (&gt;O:GyroSpeed_Last)
+
+							(O:SpinUp) (O:SpinUp_Last) != if{
+								pi 4 / pi 16 / rand 0.5 - * + (&gt;O:OscillatorTheta_End)
+								(O:OscillatorTheta_End) sin neg (&gt;O:OscillatorV_End)
+								(O:OscillatorTheta_End) cos neg (&gt;O:OscillatorU_End)
+							}
+
+							(O:SpinUp) (&gt;O:SpinUp_Last)
+						</UPDATE_CODE>
+					</UseTemplate>
+				</True>
+				<False>
+					<UseTemplate Name="ASOBO_GT_Update">
+						<FREQUENCY>60</FREQUENCY>
+						<UPDATE_CODE>
+							(L:BKSQ_SUCTION_PRESSURE, inhg)  #RESIDUAL_SUCTION_FROM_AIRSPEED# max   #MAXIMUM_SUCTION_INHG# /    0.0 max 1.0 min d       (L:#GYRO_SPEED_VAR#, number) &gt; if{
+								(L:#GYRO_SPEED_VAR#, number) -
+								#SPIN_UP_TIME_CONST# *
+								(L:#GYRO_SPEED_VAR#, number) + (&gt;L:#GYRO_SPEED_VAR#, number)
+							}
+							els{
+								(L:#GYRO_SPEED_VAR#, number) -
+								#SPIN_DOWN_TIME_CONST# (L:#GYRO_SPEED_VAR#, number) 0.05 &lt; 9 * 1 + * * 
+								(L:#GYRO_SPEED_VAR#, number) + (&gt;L:#GYRO_SPEED_VAR#, number)
+							}
+
+
+							(L:#GYRO_SPEED_VAR#, number) (O:GyroSpeed_Last) - 0 &gt;= (&gt;O:SpinUp)
+							(L:#GYRO_SPEED_VAR#, number) (&gt;O:GyroSpeed_Last)
+
+							(O:SpinUp) (O:SpinUp_Last) != if{
+								pi 4 / pi 16 / rand 0.5 - * + (&gt;O:OscillatorTheta_End)
+								(O:OscillatorTheta_End) sin neg (&gt;O:OscillatorV_End)
+								(O:OscillatorTheta_End) cos neg (&gt;O:OscillatorU_End)
+							}
+
+							(O:SpinUp) (&gt;O:SpinUp_Last)
+						</UPDATE_CODE>
+					</UseTemplate>
+				</False>
+			</Condition>
+
+			<UseTemplate Name="ASOBO_GT_Update">
+				<FREQUENCY>60</FREQUENCY>
+				<UPDATE_CODE>
+
+					(L:#GYRO_SPEED_VAR#, number) #MINIMUM_VIABLE_PERCENT_GYRO_SPEED#   (A:GROUND VELOCITY, KNOTS) 10 - 10 / 0.25 max 1 min *    &gt; if{
+						1 (O:GyroDegraded, number) - #SETTLING_TIME# * (L:#GYRO_SPEED_VAR#, number) * 
+						(O:GyroDegraded, number) + 
+						(&gt;O:GyroDegraded, number)
+					}
+					els{
+						1 #SETTLING_TIME# 0.1 * - (O:GyroDegraded, number) *
+						(&gt;O:GyroDegraded, number)
+					}
+
+					1
+					(A:PLANE PITCH DEGREES, DEGREES) (O:Pitch_Last) - 0.5 *
+					(A:PLANE BANK DEGREES, DEGREES)  (O:Roll_Last) - 
+					+
+					#DEG_PER_FRAME_TORQUE_EFFECT# / abs
+					1.0 (L:#GYRO_SPEED_VAR#, number) 0.2 + 1.0 min - *
+					#TORQUE_EFFECT# *
+					-
+					0 max
+					(O:GyroDegraded, number) *
+					(&gt;O:GyroDegraded, number)
+
+
+
+
+
+					(L:#GYRO_SPEED_VAR#, number) 4 pow #HIGH_FREQ_VIBRATION# *
+					1.0 (L:#GYRO_SPEED_VAR#, number) -3.0 * exp - 0.33 *
+					+
+					2 pi * *
+					45 /
+					(&gt;O:OscillationFrequency)
+
+
+					(O:OscillationFrequency) 0.5 * tg (&gt;O:PrecessionK1)
+	    			(O:PrecessionK1) 2.0 *   (O:PrecessionK1) 2 pow 1.0 +   / (&gt;O:PrecessionK2)
+
+
+
+
+
+	    			#PITCH_LIMIT_DEG# (O:OscillatorV) *
+	    			(L:#GYRO_SPEED_VAR#, number) 1.0 - 4 pow -8.0 * exp    (A:PLANE PITCH DEGREES, DEGREES) *
+	    			+
+	    			(&gt;O:PitchDeg)
+
+	    			(O:OscillatorU) 57.29578 *
+	    			(L:#GYRO_SPEED_VAR#, number) 1.0 - 4 pow -8.0 * exp    (A:PLANE BANK DEGREES, DEGREES) *
+	    			+
+	    			(&gt;O:RollDeg)
+
+
+
+	    			(O:OscillatorU) (O:PrecessionK1) (O:OscillatorV) * - sp0
+
+	    			l0 (O:PrecessionK2) * (O:OscillatorV) +
+	    			(&gt;O:OscillatorV)
+
+	    			l0 (O:PrecessionK1) (O:OscillatorV) * -
+	    			(&gt;O:OscillatorU)
+
+
+
+	    			(O:OscillatorV) 2 pow (O:OscillatorU) 2 pow + sqrt s1 0.001 &lt; if{
+	    				0.001 sp1
+	    				0.001 (&gt;O:OscillatorV)
+	    			}
+
+
+
+
+
+    				(O:SpinUp) ! (L:#GYRO_SPEED_VAR#, number) #MINIMUM_VIABLE_PERCENT_GYRO_SPEED#   (A:GROUND VELOCITY, KNOTS) 10 - 10 / 0.25 max 1 min *   &lt; and if{
+
+    					0.995 (O:GyroDegradedSmooth, number) * 0.005 + (&gt;O:GyroDegradedSmooth, number)
+
+        				0.98 (O:OscillatorV) l1 / * (O:GyroDegradedSmooth, number) *
+        				(O:OscillatorV_End) 0.02 * #PITCH_LIMIT_DEG# /
+        				+
+        				(&gt;O:OscillatorV)
+
+        				0.98 (O:OscillatorU) l1 / * (O:GyroDegradedSmooth, number) *
+        				(O:OscillatorU_End) 0.02 * 0.01745 *
+        				+
+        				(&gt;O:OscillatorU)
+					}
+					els{
+
+						0.95 (O:GyroDegradedSmooth, number) * 0.05 1 (O:GyroDegraded, number) - * + (&gt;O:GyroDegradedSmooth, number) 
+
+						(O:GyroDegradedSmooth, number) (O:OscillatorV) l1 / * 
+        				(&gt;O:OscillatorV)
+
+        				(O:GyroDegradedSmooth, number) (O:OscillatorU) l1 / * 
+        				(&gt;O:OscillatorU)
+					}
+
+
+
+
+
+	    			(A:PLANE PITCH DEGREES, DEGREES) (&gt;O:Pitch_Last)
+					(A:PLANE BANK DEGREES, DEGREES) (&gt;O:Roll_Last)
+				</UPDATE_CODE>
+			</UseTemplate>
+
+				<!-- 
+					Has a slight jump in the output when suction is below minimum viable.
+
+					1 (O:GyroDegraded) - (O:OscillatorV) l1 / *
+	    			(&gt;O:OscillatorV)
+    				
+    				1 (O:GyroDegraded) - (O:OscillatorU) l1 / *
+    				(&gt;O:OscillatorU)
+
+					(O:SpinUp) ! (L:#GYRO_SPEED_VAR#, number) #MINIMUM_VIABLE_PERCENT_GYRO_SPEED# &lt; and if{
+
+        				(O:OscillatorV) 0.95 *
+        				(O:OscillatorV_End) 0.05 * #PITCH_LIMIT_DEG# /
+        				-
+        				(&gt;O:OscillatorV)
+
+        				(O:OscillatorU) 0.95 *
+        				(O:OscillatorU_End) 0.05 * 0.01745 *
+        				+
+        				(&gt;O:OscillatorU)
+					}
+ 				-->
+
+
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>#PITCH_DEGREES_ANIM_NAME#</ANIM_NAME>
+				<ANIM_CODE>
+					(O:PitchDeg) #PITCH_LIMIT_DEG# + #PITCH_LIMIT_DEG# 2 * / 100 *
+
+					rand 2 * 1 - 0.05 20 * * (L:#GLASS_TAP_VAR#, number) *
+					+
+				</ANIM_CODE>
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<ANIM_LAG>0</ANIM_LAG>
+			</UseTemplate>
+
+			<UseTemplate Name="ASOBO_GT_Anim_Code">
+				<ANIM_NAME>#BANK_DEGREES_ANIM_NAME#</ANIM_NAME>
+				<ANIM_CODE>
+					(O:RollDeg) 180 + 3.60 /
+
+					rand 2 * 1 - 0.05 1.5 * * (L:#GLASS_TAP_VAR#, number) *
+					+
+				</ANIM_CODE>
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<ANIM_WRAP>TRUE</ANIM_WRAP>
+				<ANIM_LAG>0</ANIM_LAG>
+			</UseTemplate>
+
+
+
+			<UseTemplate Name="ASOBO_GT_Anim_Sim">
+				<ANIM_NAME>#BARS_POSITION_ANIM_NAME#</ANIM_NAME>
+				<ANIM_LENGTH>200</ANIM_LENGTH>
+				<ANIM_SIMVAR>ATTITUDE BARS POSITION</ANIM_SIMVAR>
+				<ANIM_SIMVAR_UNITS>percent</ANIM_SIMVAR_UNITS>
+				<ANIM_SIMVAR_BIAS>100</ANIM_SIMVAR_BIAS>
+				<NODE_ID>#BARS_POSITION_ANIM_NAME#</NODE_ID>
+			</UseTemplate>
+
+			<Condition Check="FLAG_ANIM_ANIM">
+				<UseTemplate Name="ASOBO_GT_Anim">
+					<ANIM_CODE>(L:#GYRO_SPEED_VAR#, number) 0.6 &gt; 100 *</ANIM_CODE>
+					<ANIM_NAME>#FLAG_ANIM_ANIM#</ANIM_NAME>
+					<ANIM_LAG>600</ANIM_LAG>
+				</UseTemplate>
+			</Condition>
+		</Component>
+	</Template>
+
+
+
+
+		<!-- The Asobo turbocharger implementation is horribly flawed.  By this method, we can capture the input events from a controller, and vector them to our own L:Var, instead of directly setting the mixture control. -->
+
+		<Template Name="BKSQ_TurbochargedMixtureController_1">
+	        <Parameters Type="Default">
+	            <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_1</INPUT_EVENT_ID_SOURCE>
+	        </Parameters>
+	        <UseTemplate Name="ASOBO_Interaction_Base_Template">
+	            <USE_INPUT_EVENT_ID>BKSQ_TurbochargedMixtureController_1</USE_INPUT_EVENT_ID>
+	        </UseTemplate>
+		</Template>
+
+		<Template Name="BKSQ_TurbochargedMixtureController_2">
+	        <Parameters Type="Default">
+	            <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_2</INPUT_EVENT_ID_SOURCE>
+	        </Parameters>
+	        <UseTemplate Name="ASOBO_Interaction_Base_Template">
+	            <USE_INPUT_EVENT_ID>BKSQ_TurbochargedMixtureController_2</USE_INPUT_EVENT_ID>
+	        </UseTemplate>
+		</Template>
+
+	    <InputEvent ID="BKSQ_TurbochargedMixtureController_1">
+	        <Presets>
+				<Extend Target="ASOBO_GIE_Anim_Handling">
+	                <Parameters Type="Default">
+	                    <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_1</INPUT_EVENT_ID_SOURCE>
+	                </Parameters>
+	            </Extend>
+	            <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_1</INPUT_EVENT_ID_SOURCE>
+	            <Preset ID="BKSQ_TurbochargedMixtureController_1">
+	            	<Parameters Type="Default">
+	            		<Condition NotEmpty="TT_DESCRIPTION_ID">
+							<True>
+								<Condition NotEmpty="TT_DESCRIPTION_INDEX">
+									<True>
+										<TT_DESCRIPTION>#TT_DESCRIPTION_INDEX# (R:1:#TT_DESCRIPTION_ID#) @sprintf</TT_DESCRIPTION>
+										<TT_DESCRIPTION_IS_DYNAMIC>True</TT_DESCRIPTION_IS_DYNAMIC>
+									</True>
+									<False>
+										<TT_DESCRIPTION>#TT_DESCRIPTION_ID#</TT_DESCRIPTION>
+										<TT_DESCRIPTION_IS_DYNAMIC>False</TT_DESCRIPTION_IS_DYNAMIC>
+									</False>
+								</Condition>
+							</True>
+							<False>
+								<TT_DESCRIPTION>#ENGINE_ID# (R:1:@TT_Package.FUEL_MIXTURE_ACTION_SOLO) @sprintf</TT_DESCRIPTION>
+								<TT_DESCRIPTION_IS_DYNAMIC>True</TT_DESCRIPTION_IS_DYNAMIC>
+							</False>
+						</Condition>
+					</Parameters>
+	                <Tooltip>
+						<Icon>MOVE_AXIS_Y</Icon>
+						<Interaction>PRIMARY_DOWN+Y_AXIS</Interaction>
+						<InteractionLockable>Y_AXIS</InteractionLockable>
+						<TTDescription RPN="#TT_DESCRIPTION_IS_DYNAMIC#">#TT_DESCRIPTION#</TTDescription>
+						<TTValue RPN="True">
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 100 / s0 0 &gt; if{ l0 '%.1f%%' @sprintf } els{ (R:1:@TT_Package.FUEL_MIXTURE_STATE_CUT) }
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 16384 / s0 0 &gt; if{ l0 '%.1f%%' @sprintf } els{ (R:1:@TT_Package.FUEL_MIXTURE_STATE_CUT) }
+							}
+						</TTValue>
+					</Tooltip>
+	                <Value>
+						<Units>percent</Units>
+						<Code>
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 100 *
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 16384 / 100 *
+							}
+						</Code>
+						<Init>
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 0 max 100 min (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 0 max 16384 min (&gt;K:MIXTURE#ENGINE_ID#_SET)
+							}
+						</Init>
+						<WatchVars>
+							<LocalVar ID="BKSQ_MixtureLeverPosition_#ENGINE_ID#"/>
+							<!-- <Simvar ID="GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#"/> -->
+						</WatchVars>
+					</Value>
+	                <Inc>
+	                    <Code>
+	                    	(L:BKSQ_Turbocharged, bool) if{
+	                    		(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) p0  + 100 min (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+	                    	}
+	                    	els{
+	                    		(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) p0 + 16384 min (&gt;K:MIXTURE#ENGINE_ID#_SET)
+	                    	}
+	                    </Code>
+	                    <Parameters>
+	                    	<Param Type="Float" RPN="True">p0 (L:BKSQ_Turbocharged, bool) ! 255 * 1 + * </Param>
+						</Parameters>
+						<Bindings>
+							<Binding EventID="MIXTURE#ENGINE_ID#_INCR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE#ENGINE_ID#_INCR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+							<!-- Events bound to all presets instances -->
+							<Binding EventID="MIXTURE_INCR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE_INCR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+						</Bindings>
+	                </Inc>
+	                <Dec>
+	                    <Code>
+	                    	(L:BKSQ_Turbocharged, bool) if{
+	                    		(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) p0  - 0 max (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+	                    	}
+	                    	els{
+	                    		(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) p0 - 0 max (&gt;K:MIXTURE#ENGINE_ID#_SET)
+	                    	}
+	                    </Code>
+	                    <Parameters>
+	                    	<Param Type="Float" RPN="True">p0 (L:BKSQ_Turbocharged, bool) ! 255 * 1 + * </Param>
+						</Parameters>
+						<Bindings>
+							<Binding EventID="MIXTURE#ENGINE_ID#_DECR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE#ENGINE_ID#_DECR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+							<!-- Events bound to all presets instances -->
+							<Binding EventID="MIXTURE_DECR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE_DECR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+						</Bindings>
+	                </Dec>
+	                <Set>
+						<Code>
+							(L:BKSQ_Turbocharged, bool) if{
+								p0 0 max 16384 min s0 163.84 / (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+							}
+							els{
+								p0 0 max 16384 min s0 (&gt;K:MIXTURE#ENGINE_ID#_SET)
+							}
+						</Code>
+						<Parameters>
+							<Param Type="Float" RPN="True">p0 16384 *</Param>
+						</Parameters>
+						<Bindings>
+							<Binding Alias="FUEL_Mixture_#ENGINE_ID#_Rich">
+								<Param>1</Param>
+							</Binding>
+							<Binding Alias="FUEL_Mixture_#ENGINE_ID#_Cut">
+								<Param>0</Param>
+							</Binding>
+
+	                        <!-- EventIDs -->
+	                        <Binding EventID="MIXTURE_RICH">
+	                            <Param>1</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_LEAN">
+	                            <Param>0</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_RICH">
+	                            <Param>1</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_LEAN">
+	                            <Param>0</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_AXIS_SET_EX1">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="AXIS_MIXTURE#ENGINE_ID#_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_AXIS_SET_EX1">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="AXIS_MIXTURE_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                    </Bindings>
+	                </Set>
+	        	</Preset>
+	        </Presets>
+	    </InputEvent>
+
+	    <InputEvent ID="BKSQ_TurbochargedMixtureController_2">
+	        <Presets>
+				<Extend Target="ASOBO_GIE_Anim_Handling">
+	                <Parameters Type="Default">
+	                    <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_2</INPUT_EVENT_ID_SOURCE>
+	                </Parameters>
+	            </Extend>
+	            <INPUT_EVENT_ID_SOURCE>BKSQ_TurbochargedMixtureController_2</INPUT_EVENT_ID_SOURCE>
+	            <Preset ID="BKSQ_TurbochargedMixtureController_2">
+	            	<Parameters Type="Default">
+	            		<Condition NotEmpty="TT_DESCRIPTION_ID">
+							<True>
+								<Condition NotEmpty="TT_DESCRIPTION_INDEX">
+									<True>
+										<TT_DESCRIPTION>#TT_DESCRIPTION_INDEX# (R:1:#TT_DESCRIPTION_ID#) @sprintf</TT_DESCRIPTION>
+										<TT_DESCRIPTION_IS_DYNAMIC>True</TT_DESCRIPTION_IS_DYNAMIC>
+									</True>
+									<False>
+										<TT_DESCRIPTION>#TT_DESCRIPTION_ID#</TT_DESCRIPTION>
+										<TT_DESCRIPTION_IS_DYNAMIC>False</TT_DESCRIPTION_IS_DYNAMIC>
+									</False>
+								</Condition>
+							</True>
+							<False>
+								<TT_DESCRIPTION>#ENGINE_ID# (R:1:@TT_Package.FUEL_MIXTURE_ACTION_SOLO) @sprintf</TT_DESCRIPTION>
+								<TT_DESCRIPTION_IS_DYNAMIC>True</TT_DESCRIPTION_IS_DYNAMIC>
+							</False>
+						</Condition>
+					</Parameters>
+	                <Tooltip>
+						<Icon>MOVE_AXIS_Y</Icon>
+						<Interaction>PRIMARY_DOWN+Y_AXIS</Interaction>
+						<InteractionLockable>Y_AXIS</InteractionLockable>
+						<TTDescription RPN="#TT_DESCRIPTION_IS_DYNAMIC#">#TT_DESCRIPTION#</TTDescription>
+						<TTValue RPN="True">
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 100 / s0 0 &gt; if{ l0 '%.1f%%' @sprintf } els{ (R:1:@TT_Package.FUEL_MIXTURE_STATE_CUT) }
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 16384 / s0 0 &gt; if{ l0 '%.1f%%' @sprintf } els{ (R:1:@TT_Package.FUEL_MIXTURE_STATE_CUT) }
+							}
+						</TTValue>
+					</Tooltip>
+	                <Value>
+						<Units>percent</Units>
+						<Code>
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 100 *
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 16384 / 100 *
+							}
+						</Code>
+						<Init>
+							(L:BKSQ_Turbocharged, bool) if{
+								(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) 0 max 100 min (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+							}
+							els{
+								(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) 0 max 16384 min (&gt;K:MIXTURE#ENGINE_ID#_SET)
+							}
+						</Init>
+						<WatchVars>
+							<LocalVar ID="BKSQ_MixtureLeverPosition_#ENGINE_ID#"/>
+							<!-- <Simvar ID="GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#"/> -->
+						</WatchVars>
+					</Value>
+	                <Inc>
+	                    <Code>
+	                    	(L:BKSQ_Turbocharged, bool) if{
+	                    		(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) p0  + 100 min (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+	                    	}
+	                    	els{
+	                    		(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) p0 + 16384 min (&gt;K:MIXTURE#ENGINE_ID#_SET)
+	                    	}
+	                    </Code>
+	                    <Parameters>
+	                    	<Param Type="Float" RPN="True">p0 (L:BKSQ_Turbocharged, bool) ! 255 * 1 + * </Param>
+						</Parameters>
+						<Bindings>
+							<Binding EventID="MIXTURE#ENGINE_ID#_INCR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE#ENGINE_ID#_INCR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+							<!-- Events bound to all presets instances -->
+							<Binding EventID="MIXTURE_INCR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE_INCR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+						</Bindings>
+	                </Inc>
+	                <Dec>
+	                    <Code>
+	                    	(L:BKSQ_Turbocharged, bool) if{
+	                    		(L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent) p0  - 0 max (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+	                    	}
+	                    	els{
+	                    		(A:GENERAL ENG MIXTURE LEVER POSITION:#ENGINE_ID#, position 16k) p0 - 0 max (&gt;K:MIXTURE#ENGINE_ID#_SET)
+	                    	}
+	                    </Code>
+	                    <Parameters>
+	                    	<Param Type="Float" RPN="True">p0 (L:BKSQ_Turbocharged, bool) ! 255 * 1 + * </Param>
+						</Parameters>
+						<Bindings>
+							<Binding EventID="MIXTURE#ENGINE_ID#_DECR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE#ENGINE_ID#_DECR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+							<!-- Events bound to all presets instances -->
+							<Binding EventID="MIXTURE_DECR">
+								<Param>1</Param>
+							</Binding>
+							<Binding EventID="MIXTURE_DECR_SMALL">
+								<Param>0.5</Param>
+							</Binding>
+						</Bindings>
+	                </Dec>
+	                <Set>
+						<Code>
+							(L:BKSQ_Turbocharged, bool) if{
+								p0 0 max 16384 min s0 163.84 / (&gt;L:BKSQ_MixtureLeverPosition_#ENGINE_ID#, percent)
+							}
+							els{
+								p0 0 max 16384 min s0 (&gt;K:MIXTURE#ENGINE_ID#_SET)
+							}
+						</Code>
+						<Parameters>
+							<Param Type="Float" RPN="True">p0 16384 *</Param>
+						</Parameters>
+						<Bindings>
+							<Binding Alias="FUEL_Mixture_#ENGINE_ID#_Rich">
+								<Param>1</Param>
+							</Binding>
+							<Binding Alias="FUEL_Mixture_#ENGINE_ID#_Cut">
+								<Param>0</Param>
+							</Binding>
+
+	                        <!-- EventIDs -->
+	                        <Binding EventID="MIXTURE_RICH">
+	                            <Param>1</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_LEAN">
+	                            <Param>0</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_RICH">
+	                            <Param>1</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_LEAN">
+	                            <Param>0</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE#ENGINE_ID#_AXIS_SET_EX1">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="AXIS_MIXTURE#ENGINE_ID#_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="MIXTURE_AXIS_SET_EX1">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                        <Binding EventID="AXIS_MIXTURE_SET">
+	                            <Param Type="Float" RPN="True">p1 16384 / 1 + 0.5 *</Param>
+	                        </Binding>
+	                    </Bindings>
+	                </Set>
+	        	</Preset>
+	        </Presets>
+	    </InputEvent>
+
+
+
+		<!-- REQUIRES:
+			START_DEG: Needle start degrees
+			END_DEG:   Needle stop degrees
+			TOTAL_DEG: Total angular subtend of the instrument scale
+			MIN_VALUE: Min indicated value of simvar
+			MAX_VALUE: Max indicated value of simvar
+			SIMVAR_ADJUSTMENT: Multiplicitive adjustment on initial simvar value, such as to correct for bad turbine dynamics.
+			POWER_CODE: Code for when gauge indicates.
+		-->
+		<Template Name="BKSQ_NEEDLE_TEMPLATE">
+			<Parameters Type="Default">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<SIMVAR_ADJUSTMENT>1</SIMVAR_ADJUSTMENT>
+				<VAR_SCOPE>A</VAR_SCOPE>
+				<POWER_CODE>1</POWER_CODE>
+
+				<VARIABILITY_ENGINE>
+					(A:PROP RPM:1, RPM) (A:PROP RPM:2, RPM) + 4000 /
+					(E:LOCAL TIME, seconds) 250 * sin * 
+				</VARIABILITY_ENGINE>
+				<VARIABILITY_ENGINE_MULTI>1</VARIABILITY_ENGINE_MULTI>
+				<VARIABILITY_SINE>
+					1.0 (E:LOCAL TIME, seconds) 1.5 * sin *    0.5 (E:LOCAL TIME, seconds) 0.8 * cos *   + 
+				</VARIABILITY_SINE>
+				<VARIABILITY_SINE_MULTI>1</VARIABILITY_SINE_MULTI>
+				<VARIABILITY_RANDOM>
+					(A:PROP RPM:1, RPM) (A:PROP RPM:2, RPM) + 4000 /
+					rand 2 * 1 - *
+				</VARIABILITY_RANDOM>
+				<VARIABILITY_RANDOM_MULTI>1</VARIABILITY_RANDOM_MULTI>
+
+				<!-- Experimental Lowpass -->
+				<!-- <ANIM_LAG>100</ANIM_LAG> -->
+				<ANIM_LAG>0</ANIM_LAG>
+				<LOWPASSCONSTANT>0.25</LOWPASSCONSTANT>
+				<!-- Example:  y(n) = a * (x(n) - y(n-1)) + y(n-1) -->
+				<COMPLEXCONSTANTC>0.09</COMPLEXCONSTANTC>
+				<COMPLEXCONSTANTD>1.55</COMPLEXCONSTANTD>
+				<COMPLEXCONSTANTE>-0.64</COMPLEXCONSTANTE>
+				<!-- Example:  y(n) = c*Xn +d*Yn-1 +e*Yn-2 -->
+
+				<Condition NotEmpty="POWER_OFF_DEGREES">
+					<True>
+						<POWER_OFF_DEGREES>#POWER_OFF_DEGREES#</POWER_OFF_DEGREES>
+					</True>
+					<False>
+						<POWER_OFF_DEGREES>#START_DEG#</POWER_OFF_DEGREES>
+					</False>
+				</Condition>
+
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<Condition Check="USE_VARIABILITY">
+						<False>
+							<Condition Check="USE_BOUNCE">
+								<False>
+									<ANIM_CODE>
+										#POWER_CODE# if{ 
+											(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										(O:lastAnimValue, number) - #LowPassConstant# * (O:lastAnimValue, number) + 
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</False>
+								<TRUE>
+									<ANIM_CODE>
+										#POWER_CODE# if{ 
+											(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										#ComplexConstantC# * (O:lastAnimValue, number) #ComplexConstantD# * + (O:secondLastAnimValue, number) #ComplexConstantE# * +
+										(O:lastAnimValue, number) (&gt;O:secondLastAnimValue, number)
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</TRUE>
+							</Condition>
+						</False>
+						<True>
+							<Condition Check="USE_BOUNCE">
+								<False>
+									<ANIM_CODE>
+										#POWER_CODE# if{ 
+											(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+					
+											#VARIABILITY_SINE# #VARIABILITY_SINE_MULTI# *
+											#VARIABILITY_RANDOM# #VARIABILITY_RANDOM_MULTI# *
+											+ 
+											+
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										(O:lastAnimValue, number) - #LowPassConstant# * (O:lastAnimValue, number) + 
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</False>
+								<True>
+									<ANIM_CODE>
+										#POWER_CODE# if{ 
+											(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													(#VAR_SCOPE#:#SIMVAR#, #UNITS#) #SIMVAR_ADJUSTMENT# * #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+					
+											#VARIABILITY_SINE# #VARIABILITY_SINE_MULTI# *
+											#VARIABILITY_RANDOM# #VARIABILITY_RANDOM_MULTI# *
+											+ 
+											+
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										#ComplexConstantC# * (O:lastAnimValue, number) #ComplexConstantD# * + (O:secondLastAnimValue, number) #ComplexConstantE# * +
+										(O:lastAnimValue, number) (&gt;O:secondLastAnimValue, number)
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</True>
+							</Condition>
+						</True>
+					</Condition>
+					<ANIM_LAG>#ANIM_LAG#</ANIM_LAG>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+				</UseTemplate>
+			</Component>
+		</Template>
+
+
+		<!-- REQUIRES:
+			VALUE_CODE: 
+			START_DEG: Needle start degrees
+			END_DEG:   Needle stop degrees
+			TOTAL_DEG: Total angular subtend of the instrument scale
+			MIN_VALUE: Min indicated value of simvar
+			MAX_VALUE: Max indicated value of simvar
+			POWER_CODE: Code for when gauge indicates.
+		-->
+		<Template Name="BKSQ_NEEDLE_TEMPLATE_CODE">
+			<Parameters Type="Default">
+				<ANIM_LENGTH>100</ANIM_LENGTH>
+				<POWER_CODE>1</POWER_CODE>
+
+				<VARIABILITY_ENGINE>
+					(A:PROP RPM:1, RPM) 1500 /
+					(E:LOCAL TIME, seconds) 250 * sin * 
+				</VARIABILITY_ENGINE>
+				<VARIABILITY_ENGINE_MULTI>1</VARIABILITY_ENGINE_MULTI>
+				<VARIABILITY_SINE>
+					1.0 (E:LOCAL TIME, seconds) 1.5 * sin *    0.5 (E:LOCAL TIME, seconds) 0.8 * cos *   + 
+				</VARIABILITY_SINE>
+				<VARIABILITY_SINE_MULTI>1</VARIABILITY_SINE_MULTI>
+				<VARIABILITY_RANDOM>
+					(A:PROP RPM:1, RPM) 1500 /
+					rand 2 * 1 - *
+				</VARIABILITY_RANDOM>
+				<VARIABILITY_RANDOM_MULTI>1</VARIABILITY_RANDOM_MULTI>
+
+				<!-- Experimental Lowpass -->
+				<!-- <ANIM_LAG>100</ANIM_LAG> -->
+				<ANIM_LAG>0</ANIM_LAG>
+				<LOWPASSCONSTANT>0.25</LOWPASSCONSTANT>
+				<!-- Example:  y(n) = a * (x(n) - y(n-1)) + y(n-1) -->
+				<COMPLEXCONSTANTC>0.09</COMPLEXCONSTANTC>
+				<COMPLEXCONSTANTD>1.55</COMPLEXCONSTANTD>
+				<COMPLEXCONSTANTE>-0.64</COMPLEXCONSTANTE>
+				<!-- Example:  y(n) = c*Xn +d*Yn-1 +e*Yn-2 -->
+
+				<Condition NotEmpty="POWER_OFF_DEGREES">
+					<True>
+						<POWER_OFF_DEGREES>#POWER_OFF_DEGREES#</POWER_OFF_DEGREES>
+					</True>
+					<False>
+						<POWER_OFF_DEGREES>#START_DEG#</POWER_OFF_DEGREES>
+					</False>
+				</Condition>
+
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<Condition Check="USE_VARIABILITY">
+						<False>
+							<Condition Check="USE_BOUNCE">
+								<False>
+									<ANIM_CODE>
+										#VALUE_CODE# sp0
+
+										#POWER_CODE# if{ 
+											l0 #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												l0 #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													l0 #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										(O:lastAnimValue, number) - #LowPassConstant# * (O:lastAnimValue, number) + 
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</False>
+								<TRUE>
+									<ANIM_CODE>
+										#VALUE_CODE# sp0
+
+										#POWER_CODE# if{ 
+											l0 #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												l0 #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													l0 #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										#ComplexConstantC# * (O:lastAnimValue, number) #ComplexConstantD# * + (O:secondLastAnimValue, number) #ComplexConstantE# * +
+										(O:lastAnimValue, number) (&gt;O:secondLastAnimValue, number)
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</TRUE>
+							</Condition>
+						</False>
+						<True>
+							<Condition Check="USE_BOUNCE">
+								<False>
+									<ANIM_CODE>
+										#VALUE_CODE# sp0
+
+										#POWER_CODE# if{ 
+											l0 #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												l0 #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													l0 #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+					
+											#VARIABILITY_SINE# #VARIABILITY_SINE_MULTI# *
+											#VARIABILITY_RANDOM# #VARIABILITY_RANDOM_MULTI# *
+											+ 
+											+
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										(O:lastAnimValue, number) - #LowPassConstant# * (O:lastAnimValue, number) + 
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</False>
+								<True>
+									<ANIM_CODE>
+										#VALUE_CODE# sp0
+
+										#POWER_CODE# if{ 
+											l0 #MIN_VALUE# &lt; if{
+												#START_DEG# 100 #TOTAL_DEG# / * 
+											}
+											els{
+												l0 #MAX_VALUE# &gt; if{
+													#END_DEG# 100 #TOTAL_DEG# / * 
+												}
+												els{
+													l0 #MIN_VALUE# - #MAX_VALUE# #MIN_VALUE# - / #END_DEG# #START_DEG# - * #START_DEG# + 100 #TOTAL_DEG# / *
+												}
+											}
+					
+											#VARIABILITY_SINE# #VARIABILITY_SINE_MULTI# *
+											#VARIABILITY_RANDOM# #VARIABILITY_RANDOM_MULTI# *
+											+ 
+											+
+										}
+										els{
+											#POWER_OFF_DEGREES# 100 #TOTAL_DEG# / *
+										}
+
+										#ComplexConstantC# * (O:lastAnimValue, number) #ComplexConstantD# * + (O:secondLastAnimValue, number) #ComplexConstantE# * +
+										(O:lastAnimValue, number) (&gt;O:secondLastAnimValue, number)
+										(&gt;O:lastAnimValue, number)
+										(O:lastAnimValue, number)
+									</ANIM_CODE>
+								</True>
+							</Condition>
+						</True>
+					</Condition>
+					<ANIM_LAG>#ANIM_LAG#</ANIM_LAG>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+				</UseTemplate>
+			</Component>
+		</Template>
+
+
+
+		<Template Name="BKSQ_CARD_TEMP">
+			<Parameters Type="Default">
+				<POWER_CODE>1</POWER_CODE>
+			</Parameters>
+
+			<Component ID="CabinTooColdIndicator" NODE="CabinTooColdIndicator">
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>
+						#POWER_CODE# (L:#CABIN_TEMP_VAR#, number) 50 &lt; and 
+						if{
+							50 #ANNUNCIATOR_DIMMING_MACRO# *
+						}
+						els{
+ 							0
+						}
+					</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="CabinTooHotIndicator" NODE="CabinTooHotIndicator">
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>
+						#POWER_CODE# (L:#CABIN_TEMP_VAR#, number) 90 &gt; and
+						if{
+							50 #ANNUNCIATOR_DIMMING_MACRO# * 
+						}
+						els{
+							0
+						}
+					</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="CabinTemperatureScreen" NODE="CabinTemperatureScreen">
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>#SCREEN_EMISSIVE_CODE#</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#MODE_BUTTON_NODE#" Node="#MODE_BUTTON_NODE#">
+				<UseTemplate Name="ASOBO_GT_Push_Button">
+					<ANIM_NAME>#MODE_BUTTON_NODE#</ANIM_NAME>
+					<LEFT_SINGLE_CODE>
+						(L:var_CabinTempUnitMode, bool) ! (&gt;L:var_CabinTempUnitMode, bool)
+					</LEFT_SINGLE_CODE>
+					<WWISE_EVENT_1>#BUTTON_PRESS_SOUND#</WWISE_EVENT_1>
+					<NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+					<WWISE_EVENT_2>#BUTTON_RELEASE_SOUND#</WWISE_EVENT_2>
+					<NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+
+					<TOOLTIP_TITLE></TOOLTIP_TITLE>
+					<TOOLTIPID>Temperature Unit</TOOLTIPID>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#DegreesF" NODE="#DIGIT_PREFIX#DegreesF">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>#POWER_CODE# (L:var_CabinTempUnitMode, bool) 0 == and</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#DegreesC" NODE="#DIGIT_PREFIX#DegreesC">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>#POWER_CODE# (L:var_CabinTempUnitMode, bool) 1 == and</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#MINUS" NODE="#DIGIT_PREFIX#MINUS">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / 0 &lt;
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) 0 &lt;
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<!-- DIGIT 1 (Most Significant)-->
+
+			<Component ID="#DIGIT_PREFIX#Dig1_0" NODE="#DIGIT_PREFIX#Dig1_0">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						0
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_1" NODE="#DIGIT_PREFIX#Dig1_1">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 1 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 1 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_2" NODE="#DIGIT_PREFIX#Dig1_2">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 2 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 2 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_3" NODE="#DIGIT_PREFIX#Dig1_3">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 3 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 3 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_4" NODE="#DIGIT_PREFIX#Dig1_4">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 4 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 4 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_5" NODE="#DIGIT_PREFIX#Dig1_5">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 5 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 5 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_6" NODE="#DIGIT_PREFIX#Dig1_6">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 6 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 6 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_7" NODE="#DIGIT_PREFIX#Dig1_7">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 7 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 7 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_8" NODE="#DIGIT_PREFIX#Dig1_8">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 8 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 8 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_9" NODE="#DIGIT_PREFIX#Dig1_9">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 div 9 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 div 9 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+
+			<!-- DIGIT 2 -->
+
+			<Component ID="#DIGIT_PREFIX#Dig2_0" NODE="#DIGIT_PREFIX#Dig2_0">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs int 9 &gt;
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 0 ==
+								and
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs int 9 &gt;
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 0 ==
+								and
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_1" NODE="#DIGIT_PREFIX#Dig2_1">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 1 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 1 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_2" NODE="#DIGIT_PREFIX#Dig2_2">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 2 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 2 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_3" NODE="#DIGIT_PREFIX#Dig2_3">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 3 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 3 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_4" NODE="#DIGIT_PREFIX#Dig2_4">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 4 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 4 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_5" NODE="#DIGIT_PREFIX#Dig2_5">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 5 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 5 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_6" NODE="#DIGIT_PREFIX#Dig2_6">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 6 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 6 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_7" NODE="#DIGIT_PREFIX#Dig2_7">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 7 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 7 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_8" NODE="#DIGIT_PREFIX#Dig2_8">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 8 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 8 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_9" NODE="#DIGIT_PREFIX#Dig2_9">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 100 % 10 div 9 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 100 % 10 div 9 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+
+			<!-- DIGIT 3 -->
+
+			<Component ID="#DIGIT_PREFIX#Dig3_0" NODE="#DIGIT_PREFIX#Dig3_0">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 0 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 0 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_1" NODE="#DIGIT_PREFIX#Dig3_1">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 1 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 1 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_2" NODE="#DIGIT_PREFIX#Dig3_2">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 2 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 2 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_3" NODE="#DIGIT_PREFIX#Dig3_3">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 3 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 3 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_4" NODE="#DIGIT_PREFIX#Dig3_4">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 4 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 4 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_5" NODE="#DIGIT_PREFIX#Dig3_5">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 5 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 5 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_6" NODE="#DIGIT_PREFIX#Dig3_6">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 6 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 6 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_7" NODE="#DIGIT_PREFIX#Dig3_7">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 7 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 7 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_8" NODE="#DIGIT_PREFIX#Dig3_8">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 8 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 8 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_9" NODE="#DIGIT_PREFIX#Dig3_9">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# if{
+							(L:var_CabinTempUnitMode, bool) if{
+								(L:#CABIN_TEMP_VAR#, number) 32 - 1.8 / -99 max abs 10 % int 9 ==
+							}
+							els{
+								(L:#CABIN_TEMP_VAR#, number) -99 max abs 10 % int 9 ==
+							}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+		</Template>
+
+
+
+		<!-- REQUIRES:
+			POWER_CODE: Code for when chrono indicates.
+			MODE_VAR_NAME:
+			TIMER_VAR_NAME:
+			MODE_BUTTON_NODE: Mode switching.
+			RESET_BUTTON_NODE:
+			DATE_BUTTON_NODE:
+			BUTTON_PRESS_SOUND: 
+			BUTTON_RELEASE_SOUND: 
+			DIGIT_PREFIX: Characters added to front of standard digit card name.
+			DIGIT_SUFFIX: Characters added to end of standard digit card name.
+			MASTER_HIDE_CODE: If the clock is on a yoke or something, overriding visibility will no longer allow visbility to change with parent node.  Code is now required to do the same job.
+		-->
+
+
+		<Template Name="BKSQ_LC2_CARD_CHRONO">
+			<Parameters Type="Default">
+				<POWER_CODE>1</POWER_CODE>
+			</Parameters>
+
+			<UseTemplate Name="ASOBO_GT_Update">
+				<FREQUENCY>1</FREQUENCY>
+				<UPDATE_CODE>
+					#POWER_CODE# if{
+
+						(L:#TIMER_VAR_NAME#, number) 1 == if{
+							(L:#TIMER_VAR_NAME#_SECONDS, number) 1 + (&gt;L:#TIMER_VAR_NAME#_SECONDS, number)
+						}
+
+						(L:#MODE_VAR_NAME#, number) 2 == if{
+							(L:var_ChronoDateTimer, number) 2 &lt; if{
+								(L:var_ChronoDateTimer, number) 1 + (&gt;L:var_ChronoDateTimer, number)
+							}
+							els{
+								0 (&gt;L:#MODE_VAR_NAME#, number)
+							}
+						}
+
+						(L:var_ChronoColon, number) 1 + 10 % (&gt;L:var_ChronoColon, number)
+
+					}
+					els{
+						0 (&gt;L:#MODE_VAR_NAME#, number)
+						0 (&gt;L:#TIMER_VAR_NAME#, number)
+					}
+				</UPDATE_CODE>
+			</UseTemplate>
+
+			<Component ID="#MODE_BUTTON_NODE#" Node="#MODE_BUTTON_NODE#">
+				<UseTemplate Name="ASOBO_GT_Push_Button">
+					<ANIM_NAME>#MODE_BUTTON_NODE#</ANIM_NAME>
+					<LEFT_SINGLE_CODE>
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							1 (&gt;L:#MODE_VAR_NAME#, number)
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								0 (&gt;L:#MODE_VAR_NAME#, number)
+							}
+						}
+					</LEFT_SINGLE_CODE>
+					<WWISE_EVENT_1>#BUTTON_PRESS_SOUND#</WWISE_EVENT_1>
+					<NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+					<WWISE_EVENT_2>#BUTTON_RELEASE_SOUND#</WWISE_EVENT_2>
+					<NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+
+					<TOOLTIP_TITLE></TOOLTIP_TITLE>
+					<TOOLTIPID>Chrono Mode</TOOLTIPID>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#RESET_BUTTON_NODE#" Node="#RESET_BUTTON_NODE#">
+				<UseTemplate Name="ASOBO_GT_Push_Button">
+					<ANIM_NAME>#RESET_BUTTON_NODE#</ANIM_NAME>
+					<LEFT_SINGLE_CODE>
+						0 (&gt;L:#TIMER_VAR_NAME#, number)
+						0 (&gt;L:#TIMER_VAR_NAME#_SECONDS, number)
+					</LEFT_SINGLE_CODE>
+					<WWISE_EVENT_1>#BUTTON_PRESS_SOUND#</WWISE_EVENT_1>
+					<NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+					<WWISE_EVENT_2>#BUTTON_RELEASE_SOUND#</WWISE_EVENT_2>
+					<NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+
+					<TOOLTIP_TITLE></TOOLTIP_TITLE>
+					<TOOLTIPID>Reset Chrono</TOOLTIPID>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DATE_BUTTON_NODE#" Node="#DATE_BUTTON_NODE#">
+				<UseTemplate Name="ASOBO_GT_Push_Button">
+					<ANIM_NAME>#DATE_BUTTON_NODE#</ANIM_NAME>
+					<LEFT_SINGLE_CODE>
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							2 (&gt;L:#MODE_VAR_NAME#, number)
+							0 (&gt;L:var_ChronoDateTimer, number)
+						}
+						els{
+
+							(L:#TIMER_VAR_NAME#, number) 0 == if{
+								1 (&gt;L:#TIMER_VAR_NAME#, number)
+							}
+							els{
+								(L:#TIMER_VAR_NAME#, number) 1 == if{
+									0 (&gt;L:#TIMER_VAR_NAME#, number)
+								}
+							}
+
+						}
+					</LEFT_SINGLE_CODE>
+					<WWISE_EVENT_1>#BUTTON_PRESS_SOUND#</WWISE_EVENT_1>
+					<NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+					<WWISE_EVENT_2>#BUTTON_RELEASE_SOUND#</WWISE_EVENT_2>
+					<NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+
+					<TOOLTIP_TITLE></TOOLTIP_TITLE>
+					<TOOLTIPID>Chrono Date</TOOLTIPID>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#Timer_Arrow#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Timer_Arrow#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>#POWER_CODE# (L:#MODE_VAR_NAME#, number) 1 == and #MASTER_HIDE_CODE# and</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#Clock_Arrow#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Clock_Arrow#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>#POWER_CODE# (L:#MODE_VAR_NAME#, number) 0 == and #MASTER_HIDE_CODE# and</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<Component ID="#DIGIT_PREFIX#Colon#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Colon#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>#POWER_CODE# (L:var_ChronoColon, number) 0 != and #MASTER_HIDE_CODE# and</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+			<!-- DIGIT 1 (Most Significant)-->
+
+			<Component ID="#DIGIT_PREFIX#Dig1_0#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_0#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 0 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 0 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_1#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_1#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 1 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 1 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 &gt;=						
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_2#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_2#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 2 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 2 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_3#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_3#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 3 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 3 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_4#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_4#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 4 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 4 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_5#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_5#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 5 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 5 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_6#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_6#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 6 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 6 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_7#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_7#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 7 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 7 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_8#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_8#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 8 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 8 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig1_9#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig1_9#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 div 9 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 div 9 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+
+			<!-- DIGIT 2 -->
+
+			<Component ID="#DIGIT_PREFIX#Dig2_0#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_0#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 0 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 0 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 0 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_1#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_1#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 1 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 1 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 1 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_2#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_2#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 2 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 2 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 2 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_3#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_3#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 3 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 3 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 3 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_4#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_4#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 4 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 4 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 4 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_5#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_5#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 5 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 5 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 5 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_6#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_6#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 6 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 6 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 6 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_7#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_7#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 7 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 7 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 7 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_8#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_8#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 8 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 8 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 8 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig2_9#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig2_9#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, hours) 10 % flr 9 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 div 10 % 9 ==
+							}
+							els{
+								(E:LOCAL MONTH OF YEAR, number) 10 % flr 9 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+
+			<!-- DIGIT 3 -->
+
+			<Component ID="#DIGIT_PREFIX#Dig3_0#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_0#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 0 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 0 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_1#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_1#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 1 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 1 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 div 1 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_2#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_2#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 2 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 2 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 div 2 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_3#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_3#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 3 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 3 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 div 3 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_4#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_4#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 4 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 4 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_5#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_5#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 5 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 5 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_6#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_6#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 6 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 6 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number)0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_7#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_7#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 7 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 7 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_8#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_8#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 8 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 8 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig3_9#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig3_9#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 60 % 10 div 10 % 9 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 60 % 10 div 9 ==
+							}
+							els{
+								0
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+
+
+			<!-- DIGIT 4 (Least Significant) -->
+
+			<Component ID="#DIGIT_PREFIX#Dig4_0#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_0#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 0 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 0 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 0 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_1#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_1#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 1 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 1 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 1 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_2#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_2#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 2 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 2 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 2 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_3#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_3#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 3 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 3 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 3 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_4#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_4#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 4 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 4 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 4 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_5#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_5#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 5 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 5 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 5 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_6#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_6#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 6 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 6 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 6 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_7#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_7#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 7 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 7 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 7 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_8#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_8#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 8 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 8 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 8 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+			<Component ID="#DIGIT_PREFIX#Dig4_9#DIGIT_SUFFIX#" NODE="#DIGIT_PREFIX#Dig4_9#DIGIT_SUFFIX#">
+				<UseTemplate Name="ASOBO_GT_Visibility_Code">
+					<VISIBILITY_CODE>
+						#POWER_CODE# #MASTER_HIDE_CODE# and if{
+						(L:#MODE_VAR_NAME#, number) 0 == if{
+							(E:ZULU TIME, minutes) 10 % flr 9 ==
+						}
+						els{
+							(L:#MODE_VAR_NAME#, number) 1 == if{
+								(L:#TIMER_VAR_NAME#_SECONDS, number) 10 % 9 ==
+							}
+							els{
+								(E:LOCAL DAY OF MONTH, number) 10 % flr 9 ==								
+							}
+						}
+						}
+					</VISIBILITY_CODE>
+				</UseTemplate>
+			</Component>
+
+		</Template>
+
+
+
+		<!-- REQUIRES:
+			NUM_DRUMS: Number of Indicating Drums (1-8).
+			POWER_CODE: Code for when drums indicates.
+			ANIM_NAME_#: Drum animation from least significant to most.
+			ANIM_CODE_#: Drum value code from least significant to most. (usually an integer division, like "div 1000", unless you want sub-integer values displayed, such as on the last digit of a hobbs meter.)
+				If no ANIM_CODE_#'s are included, the number will be displayed starting from the decimal point.
+			VALUE_CODE: Singular value from which the drum actuates.
+			DRUM_POSITIONS: Number of "sides" or numbers on the drum (usually 10 (0-9))
+			ANIM_LAG_SIGNIFICANT: Lag of the more significant digits.
+			ANIM_LAG_INSIGNIFICANT: Lag of the less significant digits (will otherwise default to the larger digits).
+			EMISSIVE_CODE_ALL: Emissive material code applied to each drum.  ***IF NO EMISSIVE_CODE_ALL SUPPLIED, NO EMISSIVE MATERIAL PROPERTY IS ADDED***
+			EMISSIVE_CODE_#: Emissive material code multiplied with EMISSIVE_CODE_ALL.  If none are supplied, the default is to truncate leading zeros assuming the number starts after the decimal place.
+			TRUNCATE_LEADING_ZEROS: If behaving with the defaults, this will "turn off" leading zero digits.
+		-->
+		<Template Name="BKSQ_DRUM_INDICATOR">
+			<Parameters Type="Default">
+				<ANIM_LENGTH>10</ANIM_LENGTH>
+				<POWER_CODE>1</POWER_CODE>
+				<NUM_DRUMS>1</NUM_DRUMS>
+				<ANIM_WRAP>True</ANIM_WRAP>
+				<DRUM_POSITIONS>10</DRUM_POSITIONS>
+				<ANIM_LAG_SIGNIFICANT>50</ANIM_LAG_SIGNIFICANT>
+				<ANIM_LAG_INSIGNIFICANT>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG_INSIGNIFICANT>
+				<Condition Check="ANIM_CODE_1">
+					<False>
+						<ANIM_CODE_1>flr</ANIM_CODE_1>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_2">
+					<False>
+						<ANIM_CODE_2>10 div</ANIM_CODE_2>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_3">
+					<False>
+						<ANIM_CODE_3>100 div</ANIM_CODE_3>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_4">
+					<False>
+						<ANIM_CODE_4>1000 div</ANIM_CODE_4>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_5">
+					<False>
+						<ANIM_CODE_5>10000 div</ANIM_CODE_5>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_6">
+					<False>
+						<ANIM_CODE_6>100000 div</ANIM_CODE_6>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_7">
+					<False>
+						<ANIM_CODE_7>1000000 div</ANIM_CODE_7>
+					</False>
+				</Condition>
+				<Condition Check="ANIM_CODE_8">
+					<False>
+						<ANIM_CODE_8>10000000 div</ANIM_CODE_8>
+					</False>
+				</Condition>
+
+				<Condition Check="EMISSIVE_CODE_1">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_1>#VALUE_CODE# 1 &gt;=</EMISSIVE_CODE_1>
+							</True>
+							<False>
+								<EMISSIVE_CODE_1>1</EMISSIVE_CODE_1>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_2">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_2>#VALUE_CODE# 10 &gt;=</EMISSIVE_CODE_2>
+							</True>
+							<False>
+								<EMISSIVE_CODE_2>1</EMISSIVE_CODE_2>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_3">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_3>#VALUE_CODE# 100 &gt;=</EMISSIVE_CODE_3>
+							</True>
+							<False>
+								<EMISSIVE_CODE_3>1</EMISSIVE_CODE_3>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_4">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_4>#VALUE_CODE# 1000 &gt;=</EMISSIVE_CODE_4>
+							</True>
+							<False>
+								<EMISSIVE_CODE_4>1</EMISSIVE_CODE_4>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_5">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_5>#VALUE_CODE# 10000 &gt;=</EMISSIVE_CODE_5>
+							</True>
+							<False>
+								<EMISSIVE_CODE_5>1</EMISSIVE_CODE_5>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_6">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_6>#VALUE_CODE# 100000 &gt;=</EMISSIVE_CODE_6>
+							</True>
+							<False>
+								<EMISSIVE_CODE_6>1</EMISSIVE_CODE_6>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_7">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_7>#VALUE_CODE# 1000000 &gt;=</EMISSIVE_CODE_7>
+							</True>
+							<False>
+								<EMISSIVE_CODE_7>1</EMISSIVE_CODE_7>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+				<Condition Check="EMISSIVE_CODE_8">
+					<False>
+						<Condition Check="TRUNCATE_LEADING_ZEROS">
+							<True>
+								<EMISSIVE_CODE_8>#VALUE_CODE# 10000000 &gt;=</EMISSIVE_CODE_8>
+							</True>
+							<False>
+								<EMISSIVE_CODE_8>1</EMISSIVE_CODE_8>
+							</False>
+						</Condition>
+					</False>
+				</Condition>
+
+			</Parameters>
+
+			<Component ID="#ANIM_NAME_1#" NODE="#ANIM_NAME_1#">
+				<UseTemplate Name="ASOBO_GT_Anim_Code">
+					<ANIM_CODE>
+						#POWER_CODE# if{ 
+							#VALUE_CODE# #ANIM_CODE_1# #DRUM_POSITIONS# %
+						}
+						els{
+							0
+						}
+					</ANIM_CODE>
+					<ANIM_LAG>#ANIM_LAG_INSIGNIFICANT#</ANIM_LAG>
+					<ANIM_NAME>#ANIM_NAME_1#</ANIM_NAME>
+				</UseTemplate>
+				<Condition Check="EMISSIVE_CODE_ALL">
+					<True>
+						<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+							<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_1# *</EMISSIVE_CODE>
+						</UseTemplate>
+					</True>
+				</Condition>
+			</Component>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>1</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_2#" NODE="#ANIM_NAME_2#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_2# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_2#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_2# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>2</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_3#" NODE="#ANIM_NAME_3#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_3# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_3#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_3# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>3</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_4#" NODE="#ANIM_NAME_4#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_4# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_4#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_4# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>4</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_5#" NODE="#ANIM_NAME_5#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_5# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_5#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_5# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>5</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_6#" NODE="#ANIM_NAME_6#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_6# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_6#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_6# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>6</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_7#" NODE="#ANIM_NAME_7#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_7# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_7#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_7# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+			<Condition>
+				<Test>
+					<Greater>
+						<Value>NUM_DRUMS</Value>
+						<Number>7</Number>
+					</Greater>
+				</Test>
+				<True>
+					<Component ID="#ANIM_NAME_8#" NODE="#ANIM_NAME_8#">
+						<UseTemplate Name="ASOBO_GT_Anim_Code">
+							<ANIM_CODE>
+								#POWER_CODE# if{ 
+									#VALUE_CODE# #ANIM_CODE_8# #DRUM_POSITIONS# %
+								}
+								els{
+									0
+								}
+							</ANIM_CODE>
+							<ANIM_LAG>#ANIM_LAG_SIGNIFICANT#</ANIM_LAG>
+							<ANIM_NAME>#ANIM_NAME_8#</ANIM_NAME>
+						</UseTemplate>
+						<Condition Check="EMISSIVE_CODE_ALL">
+							<True>
+								<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+									<EMISSIVE_CODE>#EMISSIVE_CODE_ALL# #EMISSIVE_CODE_8# *</EMISSIVE_CODE>
+								</UseTemplate>
+							</True>
+						</Condition>
+					</Component>
+				</True>
+			</Condition>
+
+		</Template>
+
+
+		<!-- REQUIRES:
+			BRIGHT_FACTOR: A constant to control the brightness of the screen.
+			POTENTIOMETER: The AMBIENT BOUNCE POTENTIOMETER for the aircraft, by default 10.  This is used to brighten the screen when there is lots of bounce lighting in the cockpit.
+			POTENTIOMETER_FACTOR: Multiplier on how much the bounce potentiometer effects the brightness.
+			POWER_CODE: Code for when screen is on.
+		-->
+		<Template Name="BKSQ_PHOTOCELL_SCREEN_DIMMER">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<Parameters Type="Default">
+    				<BRIGHT_FACTOR>1</BRIGHT_FACTOR>
+    				<POTENTIOMETER>10</POTENTIOMETER>
+    				<POTENTIOMETER_FACTOR>1.0</POTENTIOMETER_FACTOR>
+    				<POWER_CODE>1</POWER_CODE>
+    				<DAY_FACTOR>1.00</DAY_FACTOR>
+    				<DUSK_FACTOR>0.35</DUSK_FACTOR>
+    				<NIGHT_FACTOR>0.10</NIGHT_FACTOR>
+    			</Parameters>
+	
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>
+						(E:TIME OF DAY, enum) 1 ==
+						if{
+							#DAY_FACTOR# 0.95 * 0.05 +
+						}
+						els{
+							(E:TIME OF DAY, enum) 3 ==
+							if{
+								#NIGHT_FACTOR# 0.95 * 0.05 +
+							}
+							els{
+								#DUSK_FACTOR# 0.95 * 0.05 +
+							}
+						}
+
+						#BRIGHT_FACTOR# * (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) 117 / #POTENTIOMETER_FACTOR# * + #POWER_CODE# *
+					</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+		</Template>
+
+		<!-- REQUIRES:
+			ON_CONDITION_CODE: When the annunciator should be on.
+			ANNUNCIATOR_TEST_VAR: A boolean variable name for a test button.
+			BRIGHTNESS_FACTOR: A constant to control the brightness of the light.
+			CIRCUIT: Self Explanatory.
+			VOLTAGE_BUS: Electrical Bus Number.
+			SYSTEM_VOLTAGE: Maximum Battery Voltage from System.cfg.
+			LATCHING_MASTER_ANNUNCIATOR_VAR: If the annunciator triggers a latching master warning, this variable will be set to 1 when the annunciator first lights.
+		-->
+		<Template Name="BKSQ_DIMMABLE_ANNUNCIATOR">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<Parameters Type="Default">
+					<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+					<BRIGHTNESS_FACTOR>1.0</BRIGHTNESS_FACTOR>
+					<Condition Check="ANNUNCIATOR_TEST_VAR">
+						<False>
+							<TEST_CODE>0</TEST_CODE>
+						</False>
+						<True>
+							<TEST_CODE>(L:#ANNUNCIATOR_TEST_VAR#, bool)</TEST_CODE>
+						</True>
+					</Condition>
+					<Condition Check="VOLTAGE_BUS">
+						<False>
+							<VOLTAGE_DIMMING_CODE>1</VOLTAGE_DIMMING_CODE>
+						</False>
+						<True>
+							<VOLTAGE_DIMMING_CODE>(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_BUS#, Volts) #SYSTEM_VOLTAGE# /</VOLTAGE_DIMMING_CODE>
+						</True>
+					</Condition>
+					<Condition Check="CIRCUIT">
+						<False>
+							<CIRCUIT_POWER_CODE>(A:ELECTRICAL BATTERY BUS VOLTAGE:1, volt) #SYSTEM_VOLTAGE# 2 / &gt;</CIRCUIT_POWER_CODE>
+						</False>
+						<True>
+							<CIRCUIT_POWER_CODE>(A:CIRCUIT ON:#CIRCUIT#, bool)</CIRCUIT_POWER_CODE>
+						</True>
+					</Condition>
+    			</Parameters>
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>
+						#ON_CONDITION_CODE#
+						#TEST_CODE#
+						or
+						#BRIGHTNESS_FACTOR# *
+						#VOLTAGE_DIMMING_CODE# *
+
+						#CIRCUIT_POWER_CODE# *
+					</EMISSIVE_CODE>
+				</UseTemplate>
+				<Condition Check="LATCHING_MASTER_ANNUNCIATOR_VAR">
+					<True>
+						<UseTemplate Name="ASOBO_GT_Update">
+							<FREQUENCY>1</FREQUENCY>
+							<UPDATE_CODE>
+								#ON_CONDITION_CODE#
+								#TEST_CODE#
+								or 
+								#CIRCUIT_POWER_CODE#
+								and
+								if{
+									(O:thisAnnunLatched, bool) ! if{
+										1 (&gt;L:#LATCHING_MASTER_ANNUNCIATOR_VAR#, number)
+										1 (&gt;O:thisAnnunLatched, bool)
+									}
+								}
+								els{
+									0 (&gt;O:thisAnnunLatched, bool)
+								}
+							</UPDATE_CODE>
+						</UseTemplate>
+					</True>
+				</Condition>
+			</Component>
+		</Template>
+
+		<!-- Does not support LATCHING_MASTER_ANNUNCIATOR_VAR -->
+
+		<Template Name="BKSQ_DIMMABLE_ANNUNCIATOR_2CIRCUITS">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<Parameters Type="Default">
+					<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+					<BRIGHTNESS_FACTOR>1.0</BRIGHTNESS_FACTOR>
+					<Condition Check="ANNUNCIATOR_TEST_VAR_1">
+						<False>
+							<TEST_CODE_1>0</TEST_CODE_1>
+						</False>
+						<True>
+							<TEST_CODE_1>(L:#ANNUNCIATOR_TEST_VAR_1#, bool)</TEST_CODE_1>
+						</True>
+					</Condition>
+					<Condition Check="ANNUNCIATOR_TEST_VAR_2">
+						<False>
+							<TEST_CODE_2>0</TEST_CODE_2>
+						</False>
+						<True>
+							<TEST_CODE_2>(L:#ANNUNCIATOR_TEST_VAR_2#, bool)</TEST_CODE_2>
+						</True>
+					</Condition>
+					<Condition Check="VOLTAGE_BUS">
+						<False>
+							<VOLTAGE_DIMMING_CODE>1</VOLTAGE_DIMMING_CODE>
+						</False>
+						<True>
+							<VOLTAGE_DIMMING_CODE>(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_BUS#, Volts) #SYSTEM_VOLTAGE# /</VOLTAGE_DIMMING_CODE>
+						</True>
+					</Condition>
+					<Condition Check="CIRCUIT_1">
+						<False>
+							<CIRCUIT_POWER_CODE_1>(A:ELECTRICAL BATTERY BUS VOLTAGE:1, volt) #SYSTEM_VOLTAGE# 2 / &gt;</CIRCUIT_POWER_CODE_1>
+						</False>
+						<True>
+							<CIRCUIT_POWER_CODE_1>(A:CIRCUIT ON:#CIRCUIT_1#, bool)</CIRCUIT_POWER_CODE_1>
+						</True>
+					</Condition>
+					<Condition Check="CIRCUIT_2">
+						<False>
+							<CIRCUIT_POWER_CODE_2>(A:ELECTRICAL BATTERY BUS VOLTAGE:1, volt) #SYSTEM_VOLTAGE# 2 / &gt;</CIRCUIT_POWER_CODE_2>
+						</False>
+						<True>
+							<CIRCUIT_POWER_CODE_2>(A:CIRCUIT ON:#CIRCUIT_2#, bool)</CIRCUIT_POWER_CODE_2>
+						</True>
+					</Condition>
+    			</Parameters>
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<EMISSIVE_CODE>
+						#ON_CONDITION_CODE#
+						#CIRCUIT_POWER_CODE_1# #CIRCUIT_POWER_CODE_2# or and
+						#TEST_CODE_1# #CIRCUIT_POWER_CODE_1# and
+						#TEST_CODE_2# #CIRCUIT_POWER_CODE_2# and
+						or or
+
+						#BRIGHTNESS_FACTOR# *
+						#VOLTAGE_DIMMING_CODE# *
+
+					</EMISSIVE_CODE>
+				</UseTemplate>
+				<Condition Check="LATCHING_MASTER_ANNUNCIATOR_VAR">
+					<True>
+						<UseTemplate Name="ASOBO_GT_Update">
+							<FREQUENCY>1</FREQUENCY>
+							<UPDATE_CODE>
+								#ON_CONDITION_CODE#
+								#CIRCUIT_POWER_CODE_1# #CIRCUIT_POWER_CODE_2# or and
+								#TEST_CODE_1# #CIRCUIT_POWER_CODE_1# and
+								#TEST_CODE_2# #CIRCUIT_POWER_CODE_2# and
+								or or
+								
+								if{
+									(O:thisAnnunLatched, bool) ! if{
+										1 (&gt;L:#LATCHING_MASTER_ANNUNCIATOR_VAR#, number)
+										1 (&gt;O:thisAnnunLatched, bool)
+									}
+								}
+								els{
+									0 (&gt;O:thisAnnunLatched, bool)
+								}
+							</UPDATE_CODE>
+						</UseTemplate>
+					</True>
+				</Condition>
+			</Component>
+		</Template>
+
+		<!-- REQUIRES:
+			CIRCUIT: Self Explanatory.
+			LIGHT_CODE: Code describing the behavior of the backlight.
+			OTHER_POWER_CODE: Secondary code describing the behavior of the backlight (not currently used anywhere)
+			BRIGHTNESS_FACTOR: A constant to control the brightness of the light.
+			VOLTAGE_BUS: Electrical Bus Number.
+			SYSTEM_VOLTAGE: Maximum Battery Voltage from System.cfg.
+		-->
+		<Template Name="BKSQ_PANEL_BACKLIGHTING">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<Parameters Type="Default">
+    				<CIRCUIT>1</CIRCUIT>
+    				<OTHER_POWER_CODE>1</OTHER_POWER_CODE>
+    				<LIGHT_CODE>1</LIGHT_CODE>
+    				<BRIGHTNESS_FACTOR>1.0</BRIGHTNESS_FACTOR>
+					<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+
+					<Condition Check="VOLTAGE_BUS">
+						<False>
+							<VOLTAGE_DIMMING_CODE>1</VOLTAGE_DIMMING_CODE>
+						</False>
+						<True>
+							<VOLTAGE_DIMMING_CODE>(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_BUS#, Volts) #SYSTEM_VOLTAGE# /</VOLTAGE_DIMMING_CODE>
+						</True>
+					</Condition>
+    			</Parameters>
+				<UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
+					<OVERRIDE_BASE_EMISSIVE>TRUE</OVERRIDE_BASE_EMISSIVE>
+					<EMISSIVE_CODE>
+						(A:CIRCUIT ON:#CIRCUIT#, bool) #OTHER_POWER_CODE# and if{
+							#LIGHT_CODE# #BRIGHTNESS_FACTOR# * #VOLTAGE_DIMMING_CODE# *
+						}
+						els{
+							0
+						}
+					</EMISSIVE_CODE>
+				</UseTemplate>
+			</Component>
+		</Template>
+
+
+
+
+		<!-- This is unimplemented as of yet, but it's designed to dim the lighting when the bus voltage is low. -->
+		<!-- REQUIRES:
+			CIRCUIT: Self Explanatory.
+			LIGHT_CODE: Code describing the behavior of the backlight.
+			POTENTIOMETER: Light potentiometer number from System.cfg.
+			VOLTAGE_BUS: Electrical Bus Number.
+			SYSTEM_VOLTAGE: Maximum Battery Voltage from System.cfg.
+		-->
+		<Template Name="BKSQ_LIGHTING_KNOB_FINITE">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<Parameters Type="Default">
+					<CIRCUIT>1</CIRCUIT>
+					<SYSTEM_VOLTAGE>28</SYSTEM_VOLTAGE>
+					<POTENTIOMETER>1</POTENTIOMETER>
+					<Condition Check="VOLTAGE_BUS">
+						<False>
+							<VOLTAGE_DIMMING_CODE>1</VOLTAGE_DIMMING_CODE>
+						</False>
+						<True>
+							<VOLTAGE_DIMMING_CODE>(A:ELECTRICAL MAIN BUS VOLTAGE:#VOLTAGE_BUS#, Volts) #SYSTEM_VOLTAGE# /</VOLTAGE_DIMMING_CODE>
+						</True>
+					</Condition>
+					<TOOLTIPID>Lighting Knob</TOOLTIPID>
+				</Parameters>
+				<UseTemplate Name="ASOBO_GT_Knob_Finite_Code">
+					<NODE_ID>#NODE_ID#</NODE_ID>
+					<WRAP>False</WRAP>
+					<PART_ID>#NODE_ID#</PART_ID>
+					<ANIM_CODE>(L:var_LIGHTING_VAR_#NODE_ID#, number)</ANIM_CODE>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIMCURSOR_DIR>-1.0</ANIMCURSOR_DIR>
+					<ANTICLOCKWISE_CODE>
+						(L:var_LIGHTING_VAR_#NODE_ID#, number) 0 &gt; if{ (L:var_LIGHTING_VAR_#NODE_ID#, number) 1 - (&gt;L:var_LIGHTING_VAR_#NODE_ID#, number) }
+						(L:var_LIGHTING_VAR_#NODE_ID#, number) #VOLTAGE_DIMMING_CODE# (A:CIRCUIT ON:#CIRCUIT#, bool) * * #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+					</ANTICLOCKWISE_CODE>
+					<CLOCKWISE_CODE>
+						(L:var_LIGHTING_VAR_#NODE_ID#, number) 100 &lt; if{ (L:var_LIGHTING_VAR_#NODE_ID#, number) 1 + (&gt;L:var_LIGHTING_VAR_#NODE_ID#, number) }
+						(L:var_LIGHTING_VAR_#NODE_ID#, number) #VOLTAGE_DIMMING_CODE# (A:CIRCUIT ON:#CIRCUIT#, bool) * * #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+					</CLOCKWISE_CODE>
+					<WWISE_EVENT>lighting_knob_generic</WWISE_EVENT>
+					<COUNT>100</COUNT>
+
+					<TOOLTIP_TITLE></TOOLTIP_TITLE>
+				</UseTemplate>
+
+				<Update Frequency="20">
+					(L:var_LIGHTING_VAR_#NODE_ID#, number) #VOLTAGE_DIMMING_CODE# (A:CIRCUIT ON:#CIRCUIT#, bool) * * (&gt;O:_LightIntensity)
+					(O:_LightIntensity) (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent) != if{
+						(O:_LightIntensity) #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+					}
+				</Update>
+			</Component>
+		</Template>
+
+
+
+
+		<Template Name="BKSQ_SWITCH_COVER_TEMPLATE">
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+	    			<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+	    			<NODE_ID>#NODE_ID#</NODE_ID>
+	    			<LEFT_SINGLE_CODE>
+	    				(L:var_#NODE_ID#, bool) ! (&gt;L:var_#NODE_ID#, bool)
+	    			</LEFT_SINGLE_CODE>
+	    			<ANIM_CODE>(L:var_#NODE_ID#, bool) 100 *</ANIM_CODE>
+	    			<ANIM_LENGTH>100</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>
+		</Template>
+
+
+
+
+    	<Template Name="BKSQ_SWITCH_BUS_TEMPLATE">
+    		<Parameters Type="Default">
+    			<SOURCE_BUS>1</SOURCE_BUS>
+				<DESTINATION_BUS>1</DESTINATION_BUS>
+				<ANIM_LENGTH>20</ANIM_LENGTH>
+				<INVERT_ANIM>TRUE</INVERT_ANIM>
+    		</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_CODE> #SOURCE_BUS# (&gt;A:BUS LOOKUP INDEX, Number) (A:BUS CONNECTION ON:#DESTINATION_BUS#, Bool) 100 *</ANIM_CODE>
+					<LEFT_SINGLE_CODE>
+						#DESTINATION_BUS# #SOURCE_BUS# (&gt;K:2:ELECTRICAL_BUS_TO_BUS_CONNECTION_TOGGLE)
+					</LEFT_SINGLE_CODE>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+		<Template Name="BKSQ_SWITCH_BUS_TEMPLATE_2">
+    		<Parameters Type="Default">
+    			<SOURCE_BUS>1</SOURCE_BUS>
+				<DESTINATION_BUS_1>1</DESTINATION_BUS_1>
+				<DESTINATION_BUS_2>1</DESTINATION_BUS_2>
+				<ANIM_LENGTH>20</ANIM_LENGTH>
+				<INVERT_ANIM>TRUE</INVERT_ANIM>
+    		</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_CODE> #SOURCE_BUS# (&gt;A:BUS LOOKUP INDEX, Number) (A:BUS CONNECTION ON:#DESTINATION_BUS_1#, Bool) 100 *</ANIM_CODE>
+					<LEFT_SINGLE_CODE>
+						#DESTINATION_BUS_1# #SOURCE_BUS# (&gt;K:2:ELECTRICAL_BUS_TO_BUS_CONNECTION_TOGGLE)
+						#DESTINATION_BUS_2# #SOURCE_BUS# (&gt;K:2:ELECTRICAL_BUS_TO_BUS_CONNECTION_TOGGLE)
+					</LEFT_SINGLE_CODE>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+
+
+					
+		<Template Name="BKSQ_SWITCH_BREAKER_TEMPLATE">
+			<Parameters Type="Default">
+				<CIRCUIT_ID>1</CIRCUIT_ID>
+				<BUS_ID>1</BUS_ID>
+				<ANIM_LENGTH>20</ANIM_LENGTH>
+				<INVERT_ANIM>TRUE</INVERT_ANIM>
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_CODE> #BUS_ID# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID#, Bool) 100 *</ANIM_CODE>
+					<LEFT_SINGLE_CODE>
+						#CIRCUIT_ID# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+					</LEFT_SINGLE_CODE>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+		<Template Name="BKSQ_SWITCH_BREAKER_TEMPLATE_2">
+			<Parameters Type="Default">
+				<CIRCUIT_ID_1>1</CIRCUIT_ID_1>
+				<CIRCUIT_ID_2>2</CIRCUIT_ID_2>
+				<BUS_ID>1</BUS_ID>
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<INVERT_ANIM>TRUE</INVERT_ANIM>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_LENGTH>20</ANIM_LENGTH>
+					<ANIM_CODE> #BUS_ID# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 100 *</ANIM_CODE>
+					<LEFT_SINGLE_CODE>
+						#CIRCUIT_ID_1# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+						#CIRCUIT_ID_2# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+					</LEFT_SINGLE_CODE>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+		<Template Name="BKSQ_SWITCH_BREAKER_TEMPLATE_3">
+			<Parameters Type="Default">
+				<CIRCUIT_ID_1>1</CIRCUIT_ID_1>
+				<CIRCUIT_ID_2>2</CIRCUIT_ID_2>
+				<CIRCUIT_ID_3>3</CIRCUIT_ID_3>
+				<BUS_ID>1</BUS_ID>
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<INVERT_ANIM>TRUE</INVERT_ANIM>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_LENGTH>20</ANIM_LENGTH>
+					<ANIM_CODE> #BUS_ID# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 100 *</ANIM_CODE>
+					<LEFT_SINGLE_CODE>
+						#CIRCUIT_ID_1# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+						#CIRCUIT_ID_2# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+						#CIRCUIT_ID_3# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+					</LEFT_SINGLE_CODE>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+
+		<!-- 
+			Supports up to six bus-circuit pair connections per template, minimum one.
+			MUST supply BUS_ID_1, but if no others are supplied, all circuits are presumed connected to BUS_ID_1, even if BUS_ID_2, BUS_ID_3, etc... are supplied.  They will be ignored.
+			Different buses for each circuit can be supplied with pairs of values, like, <CIRCUIT_ID_5>75</CIRCUIT_ID_5>, <BUS_ID_5>8</BUS_ID_5>
+		 -->
+
+		<Template Name="BKSQ_SWITCH_BREAKER_TEMPLATE_MULTI_6">
+			<Parameters Type="Default">				
+				<CIRCUIT_ID_1>1</CIRCUIT_ID_1>
+				<BUS_ID_1>1</BUS_ID_1>
+
+				<Condition Check="CIRCUIT_ID_2">
+					<True>
+						<Condition Check="CIRCUIT_ID_3">
+							<True>
+								<Condition Check="CIRCUIT_ID_4">
+									<True>
+										<Condition Check="CIRCUIT_ID_5">
+											<True>
+												<Condition Check="CIRCUIT_ID_6">
+													<True>
+														<Condition Check="BUS_ID_6">
+															<False>
+																<BUS_ID_2>#BUS_ID_1#</BUS_ID_2>
+																<BUS_ID_3>#BUS_ID_1#</BUS_ID_3>
+																<BUS_ID_4>#BUS_ID_1#</BUS_ID_4>
+																<BUS_ID_5>#BUS_ID_1#</BUS_ID_5>
+																<BUS_ID_6>#BUS_ID_1#</BUS_ID_6>
+															</False>
+														</Condition>
+														<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 
+																	#BUS_ID_2# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_2#, Bool) 
+																	#BUS_ID_3# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_3#, Bool) 
+																	#BUS_ID_4# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_4#, Bool) 
+																	#BUS_ID_5# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_5#, Bool) 
+																	#BUS_ID_6# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_6#, Bool) or or or or or 100 * </ANIM_CODE>
+														<LEFT_SINGLE_CODE> 	#CIRCUIT_ID_1# #BUS_ID_1# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_2# #BUS_ID_2# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_3# #BUS_ID_3# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_4# #BUS_ID_4# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_5# #BUS_ID_5# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_6# #BUS_ID_6# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+													</True>
+													<False>
+														<Condition Check="BUS_ID_5">
+															<False>
+																<BUS_ID_2>#BUS_ID_1#</BUS_ID_2>
+																<BUS_ID_3>#BUS_ID_1#</BUS_ID_3>
+																<BUS_ID_4>#BUS_ID_1#</BUS_ID_4>
+																<BUS_ID_5>#BUS_ID_1#</BUS_ID_5>
+															</False>
+														</Condition>
+														<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 
+																	#BUS_ID_2# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_2#, Bool) 
+																	#BUS_ID_3# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_3#, Bool) 
+																	#BUS_ID_4# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_4#, Bool) 
+																	#BUS_ID_5# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_5#, Bool) or or or or 100 * </ANIM_CODE>
+														<LEFT_SINGLE_CODE> 	#CIRCUIT_ID_1# #BUS_ID_1# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_2# #BUS_ID_2# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_3# #BUS_ID_3# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_4# #BUS_ID_4# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																			#CIRCUIT_ID_5# #BUS_ID_5# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+													</False>
+												</Condition>
+											</True>
+											<False>
+												<Condition Check="BUS_ID_4">
+													<False>
+														<BUS_ID_2>#BUS_ID_1#</BUS_ID_2>
+														<BUS_ID_3>#BUS_ID_1#</BUS_ID_3>
+														<BUS_ID_4>#BUS_ID_1#</BUS_ID_4>
+													</False>
+												</Condition>
+												<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 
+															#BUS_ID_2# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_2#, Bool) 
+															#BUS_ID_3# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_3#, Bool) 
+															#BUS_ID_4# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_4#, Bool) or or or 100 * </ANIM_CODE>
+												<LEFT_SINGLE_CODE> 	#CIRCUIT_ID_1# #BUS_ID_1# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																	#CIRCUIT_ID_2# #BUS_ID_2# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																	#CIRCUIT_ID_3# #BUS_ID_3# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+																	#CIRCUIT_ID_4# #BUS_ID_4# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+											</False>
+										</Condition>
+									</True>
+									<False>
+										<Condition Check="BUS_ID_3">
+											<False>
+												<BUS_ID_2>#BUS_ID_1#</BUS_ID_2>
+												<BUS_ID_3>#BUS_ID_1#</BUS_ID_3>
+											</False>
+										</Condition>
+										<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 
+													#BUS_ID_2# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_2#, Bool) 
+													#BUS_ID_3# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_3#, Bool) or or 100 * </ANIM_CODE>
+										<LEFT_SINGLE_CODE> 	#CIRCUIT_ID_1# #BUS_ID_1# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+															#CIRCUIT_ID_2# #BUS_ID_2# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+															#CIRCUIT_ID_3# #BUS_ID_3# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+									</False>
+								</Condition>
+							</True>
+							<False>
+								<Condition Check="BUS_ID_2">
+									<False>
+										<BUS_ID_2>#BUS_ID_1#</BUS_ID_2>
+									</False>
+								</Condition>
+								<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 
+											#BUS_ID_2# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_2#, Bool) or 100 * </ANIM_CODE>
+								<LEFT_SINGLE_CODE> 	#CIRCUIT_ID_1# #BUS_ID_1# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+													#CIRCUIT_ID_2# #BUS_ID_2# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+							</False>
+						</Condition>
+					</True>
+					<False>
+						<ANIM_CODE> #BUS_ID_1# (&gt;A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#CIRCUIT_ID_1#, Bool) 100 * </ANIM_CODE>
+						<LEFT_SINGLE_CODE> #CIRCUIT_ID_1# #BUS_ID# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) </LEFT_SINGLE_CODE>
+					</False>
+				</Condition>
+
+			</Parameters>
+			<Component ID="#NODE_ID#" Node="#NODE_ID#">
+				<UseTemplate Name="ASOBO_GT_Switch_Code">
+					<INVERT_ANIM>TRUE</INVERT_ANIM>
+					<ANIM_NAME>#NODE_ID#</ANIM_NAME>
+					<ANIM_LENGTH>20</ANIM_LENGTH>
+				</UseTemplate>
+			</Component>	
+		</Template>
+
+		<!-- Because the BUS  LOOKUP INDEX A:VAR is write protected from outside the core simulator environment, this creates a data bus that can be used from JS or any simconnect application to forward a list of events to this RPN code to execute within the core simulator environment. -->
+		<!-- Here, the data stored will take the form of an eight digit integer [Failure Type, On/Off, Index 2 (usually the circuit), Index 1 (usually the bus)].  The failure 0 = Circuit to Bus, and failure 1 = Bus to Bus. -->
+		<Template Name="BKSQ_FAILURE_DATABUS">
+			<Component ID="FAILURE_DATABUS">
+				<!-- This just intantiates our databus with the sentinel value of -1, and a service bit with 0. -->
+				<UseTemplate Name="ASOBO_GT_Update">
+					<UPDATE_ONCE>TRUE</UPDATE_ONCE>
+					<UPDATE_CODE>
+						0  (&gt;L:FailureDataBus_ServiceBit, bool)
+						-1 (&gt;L:FailureDataBus_000, number)
+						-1 (&gt;L:FailureDataBus_001, number)
+						-1 (&gt;L:FailureDataBus_002, number)
+						-1 (&gt;L:FailureDataBus_003, number)
+						-1 (&gt;L:FailureDataBus_004, number)
+						-1 (&gt;L:FailureDataBus_005, number)
+						-1 (&gt;L:FailureDataBus_006, number)
+						-1 (&gt;L:FailureDataBus_007, number)
+						-1 (&gt;L:FailureDataBus_008, number)
+						-1 (&gt;L:FailureDataBus_009, number)
+						-1 (&gt;L:FailureDataBus_010, number)
+						-1 (&gt;L:FailureDataBus_011, number)
+						-1 (&gt;L:FailureDataBus_012, number)
+						-1 (&gt;L:FailureDataBus_013, number)
+						-1 (&gt;L:FailureDataBus_014, number)
+						-1 (&gt;L:FailureDataBus_015, number)
+						-1 (&gt;L:FailureDataBus_016, number)
+						-1 (&gt;L:FailureDataBus_017, number)
+						-1 (&gt;L:FailureDataBus_018, number)
+						-1 (&gt;L:FailureDataBus_019, number)
+						-1 (&gt;L:FailureDataBus_020, number)
+						-1 (&gt;L:FailureDataBus_021, number)
+						-1 (&gt;L:FailureDataBus_022, number)
+						-1 (&gt;L:FailureDataBus_023, number)
+						-1 (&gt;L:FailureDataBus_024, number)
+						-1 (&gt;L:FailureDataBus_025, number)
+						-1 (&gt;L:FailureDataBus_026, number)
+						-1 (&gt;L:FailureDataBus_027, number)
+						-1 (&gt;L:FailureDataBus_028, number)
+						-1 (&gt;L:FailureDataBus_029, number)
+						-1 (&gt;L:FailureDataBus_030, number)
+						-1 (&gt;L:FailureDataBus_031, number)
+						-1 (&gt;L:FailureDataBus_032, number)
+						-1 (&gt;L:FailureDataBus_033, number)
+						-1 (&gt;L:FailureDataBus_034, number)
+						-1 (&gt;L:FailureDataBus_035, number)
+						-1 (&gt;L:FailureDataBus_036, number)
+						-1 (&gt;L:FailureDataBus_037, number)
+						-1 (&gt;L:FailureDataBus_038, number)
+						-1 (&gt;L:FailureDataBus_039, number)
+						-1 (&gt;L:FailureDataBus_040, number)
+						-1 (&gt;L:FailureDataBus_041, number)
+						-1 (&gt;L:FailureDataBus_042, number)
+						-1 (&gt;L:FailureDataBus_043, number)
+						-1 (&gt;L:FailureDataBus_044, number)
+						-1 (&gt;L:FailureDataBus_045, number)
+						-1 (&gt;L:FailureDataBus_046, number)
+						-1 (&gt;L:FailureDataBus_047, number)
+						-1 (&gt;L:FailureDataBus_048, number)
+						-1 (&gt;L:FailureDataBus_049, number)
+						-1 (&gt;L:FailureDataBus_050, number)
+						-1 (&gt;L:FailureDataBus_051, number)
+						-1 (&gt;L:FailureDataBus_052, number)
+						-1 (&gt;L:FailureDataBus_053, number)
+						-1 (&gt;L:FailureDataBus_054, number)
+						-1 (&gt;L:FailureDataBus_055, number)
+						-1 (&gt;L:FailureDataBus_056, number)
+						-1 (&gt;L:FailureDataBus_057, number)
+						-1 (&gt;L:FailureDataBus_058, number)
+						-1 (&gt;L:FailureDataBus_059, number)
+						-1 (&gt;L:FailureDataBus_060, number)
+						-1 (&gt;L:FailureDataBus_061, number)
+						-1 (&gt;L:FailureDataBus_062, number)
+						-1 (&gt;L:FailureDataBus_063, number)
+						-1 (&gt;L:FailureDataBus_064, number)
+						-1 (&gt;L:FailureDataBus_065, number)
+						-1 (&gt;L:FailureDataBus_066, number)
+						-1 (&gt;L:FailureDataBus_067, number)
+						-1 (&gt;L:FailureDataBus_068, number)
+						-1 (&gt;L:FailureDataBus_069, number)
+						-1 (&gt;L:FailureDataBus_070, number)
+						-1 (&gt;L:FailureDataBus_071, number)
+						-1 (&gt;L:FailureDataBus_072, number)
+						-1 (&gt;L:FailureDataBus_073, number)
+						-1 (&gt;L:FailureDataBus_074, number)
+						-1 (&gt;L:FailureDataBus_075, number)
+						-1 (&gt;L:FailureDataBus_076, number)
+						-1 (&gt;L:FailureDataBus_077, number)
+						-1 (&gt;L:FailureDataBus_078, number)
+						-1 (&gt;L:FailureDataBus_079, number)
+						-1 (&gt;L:FailureDataBus_080, number)
+						-1 (&gt;L:FailureDataBus_081, number)
+						-1 (&gt;L:FailureDataBus_082, number)
+						-1 (&gt;L:FailureDataBus_083, number)
+						-1 (&gt;L:FailureDataBus_084, number)
+						-1 (&gt;L:FailureDataBus_085, number)
+						-1 (&gt;L:FailureDataBus_086, number)
+						-1 (&gt;L:FailureDataBus_087, number)
+						-1 (&gt;L:FailureDataBus_088, number)
+						-1 (&gt;L:FailureDataBus_089, number)
+						-1 (&gt;L:FailureDataBus_090, number)
+						-1 (&gt;L:FailureDataBus_091, number)
+						-1 (&gt;L:FailureDataBus_092, number)
+						-1 (&gt;L:FailureDataBus_093, number)
+						-1 (&gt;L:FailureDataBus_094, number)
+						-1 (&gt;L:FailureDataBus_095, number)
+						-1 (&gt;L:FailureDataBus_096, number)
+						-1 (&gt;L:FailureDataBus_097, number)
+						-1 (&gt;L:FailureDataBus_098, number)
+						-1 (&gt;L:FailureDataBus_099, number)
+					</UPDATE_CODE>
+				</UseTemplate>
+
+				<UseTemplate Name="ASOBO_GT_Update">
+					<FREQUENCY>1</FREQUENCY>
+					<UPDATE_CODE>
+						(L:FailureDataBus_ServiceBit, bool) if{
+
+							100 0
+							--
+							:1
+							++
+							d d
+							100 div
+							48 + chr
+							r
+							d
+							10 div 10 %
+							48 + chr
+							r
+							10 %
+							48 + chr
+							scat scat
+							'FailureDataBus_' r scat
+							(F:VarL)
+
+							d 0 &lt; if{ g2 }
+
+								d
+								1000 %
+								r
+								d
+								1000 div
+								1000 %
+								r
+								d
+								1000000 div
+								10 %
+								r
+								10000000 div
+								sp0 sp1 sp2 sp3
+								sp9 sp8
+
+
+									l3 (&gt;A:BUS LOOKUP INDEX, Number)  								
+									 												
+									l2
+									d
+									100 div
+									48 + chr
+									r
+									d
+									10 div 10 %
+									48 + chr
+									r
+									10 %
+									48 + chr
+									scat scat d
+
+									l0 ! if{ 'CIRCUIT CONNECTION ON:' } els{ 'BUS CONNECTION ON:' }
+									r
+									scat
+									(F:VarA)
+
+									l1 == if{ 															 
+										l0 ! if{
+											'CIRCUIT ON:' r scat (F:VarA) l1 ! or if{
+												l2 l3 (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+											}
+										}
+										els{
+											'ELECTRICAL MAIN BUS VOLTAGE:' r scat (F:VarA) 4 &gt; l1 ! or if{
+												l2 l3 (&gt;K:2:ELECTRICAL_BUS_TO_BUS_CONNECTION_TOGGLE)
+											}
+										}
+									}
+
+
+							l8 l9
+							&gt;
+							if{ l8 l9 g1 }
+							:2
+							0 (&gt;L:FailureDataBus_ServiceBit, bool)
+						}
+					</UPDATE_CODE>
+				</UseTemplate>
+			</Component>
+
+<!-- 
+							200 0							200 158
+							--								200 157
+							:1								
+							++								200 158
+							d d 							200 158 158 158
+							100 div 						200 158 158 1
+							48 + chr 						200 158 158 '1'
+							r 								200 158 '1' 158
+							d 								200 158 '1' 158 158
+							10 div 10 % 					200 158 '1' 158 5
+							48 + chr 						200 158 '1' 158 '5'
+							r 								200 158 '1' '5' 158
+							10 % 							200 158 '1' '5' 8
+							48 + chr 						200 158 '1' '5' '8'
+							scat scat 						200 158 '158'
+							'FailureDataBus_' r scat 		200 158 'L:FailureDataBus_158'
+							(F:VarL) 						200 158 01012003
+
+							d 0 							200 158 01012003 01012003 0
+							&lt; if{g2} 					200 158 01012003
+
+								d 							200 158 01012003 01012003
+								1000 % 						200 158 01012003 003
+								r 							200 158 003 01012003
+								d 							200 158 003 01012003 01012003
+								1000 div 					200 158 003 01012003 01012
+								1000 % 						200 158 003 01012003 012
+								r 							200 158 003 012 01012003
+								d 							200 158 003 012 01012003 01012003
+								1000000 div 				200 158 003 012 01012003 01
+								10 %						200 158 003 012 01012003 1
+								r 							200 158 003 012 1 01012003
+								10000000 div 				200 158 003 012 1 0
+								sp0 sp1 sp2 sp3 			200 158
+								sp9 sp8
+
+
+									l3 (&gt;A:BUS LOOKUP INDEX, Number)  								
+									 												
+									l2 																	12
+									d 																	12 12
+									100 div 															12 0
+									48 + chr 															12 '0'
+									r 																	'0' 12
+									d 																	'0' 12 12
+									10 div 10 % 														'0' 12 1
+									48 + chr 															'0' 12 '1'
+									r 																	'0' '1' 12
+									10 % 																'0' '1' 2
+									48 + chr 															'0' '1' '2'
+									scat scat d															'012' '012'
+
+									l0 ! if{ 'CIRCUIT CONNECTION ON:' } els{ 'BUS CONNECTION ON:' }     '012' '012' 'CIRCUIT CONNECTION ON:'
+									r 																	'012' 'CIRCUIT CONNECTION ON:' '012'
+									scat 																'012' 'CIRCUIT CONNECTION ON:012'
+									(F:VarA) 															'012' true
+									
+									l1 == if{ 															'012' true true							 
+										l0 ! if{ 														'012' false
+											'CIRCUIT ON:' r scat (F:VarA) l0 ! or if{							'012'
+												l2 l3 (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)		'012'
+											}
+										}
+										els{
+											'ELECTRICAL MAIN BUS VOLTAGE:' r scat (F:VarA) 4 &gt; l0 ! or if{ 	'012'
+												l2 l3 (&gt;K:2:ELECTRICAL_BUS_TO_BUS_CONNECTION_TOGGLE)			'012'
+											}
+										}
+									}
+
+							l8 l9 							200 158
+							&gt; 							true
+							if{ l8 l9 g1 } 					200 158
+							:2
+							0 (&gt;L:FailureDataBus_ServiceBit, bool)
+ -->
+		</Template>
