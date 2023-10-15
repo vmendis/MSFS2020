@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<SimBase.Document Type="CheckpointLibrary" version="1,0">
+	<Checklist.CheckpointLibrary>
+		<Checkpoint Id="C172SP_AS1000_ALL_ELECTRICAL_EQUIPMENT_OFF">
+			<Clue name="TT:CLUE.ALL_ELECTRICAL_EQUIPMENT_OFF"/>
+			<CheckpointDesc SubjectTT="TT:GAME.CHECKLIST_ELECTRICAL_EQUIPMENT" ExpectationTT="TT:GAME.CHECKLIST_OFF"/>
+			<Sequence SeqType="Unordered">
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="LIGHT BEACON" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_BEACON_LIGHTS"/>
+					<Instrument Id="LIGHTING_Switch_Light_Beacon"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="LIGHT STROBE" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="STROBES_TOGGLE"/>
+					<Instrument Id="LIGHTING_Switch_Light_Strobe"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="LIGHT NAV" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_NAV_LIGHTS"/>
+					<Instrument Id="LIGHTING_Switch_Light_Navigation"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="LIGHT TAXI" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_TAXI_LIGHTS"/>
+					<Instrument Id="LIGHTING_Switch_Light_Taxi"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="LIGHT LANDING" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="LANDING_LIGHTS_TOGGLE"/>
+					<Instrument Id="LIGHTING_Switch_Light_Landing"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="PITOT HEAT" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="PITOT_HEAT_TOGGLE"/>
+					<Instrument Id="DEICE_Switch_PitotHeat"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="GENERAL ENG FUEL PUMP SWITCH:1" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_ELECT_FUEL_PUMP1"/>
+					<Instrument Id="FUEL_Switch_Pump"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val Code="(L:XMLVAR_ELECTRICAL_Switch_Power12V_ON)"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" Code="(L:XMLVAR_ELECTRICAL_Switch_Power12V_ON) ! (&gt;L:XMLVAR_ELECTRICAL_Switch_Power12V_ON)"/>
+					<Instrument Id="ELECTRICAL_Switch_Power12V"/>
+				</Test>
+			</Sequence>
+		</Checkpoint>
+		<Checkpoint Id="C172SP_AS1000_Master_Switch_Alt_And_Bat_On">
+			<Clue name="TT:CLUE.MASTER_SWITCH_ALT_AND_BAT_ON"/>
+			<CheckpointDesc SubjectTT="TT:GAME.CHECKLIST_MASTER_SWITCH_ALT_AND_BAT" ExpectationTT="TT:GAME.CHECKLIST_ON"/>
+			<Sequence SeqType="Unordered">
+				<Test>
+					<TestValue>
+						<Val SimVarName="ELECTRICAL MASTER BATTERY:1" Units="Boolean"/>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_MASTER_BATTERY" EventParam="1"/>
+					<Instrument Id="ELECTRICAL_Switch_Battery_Master"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Val SimVarName="GENERAL ENG MASTER ALTERNATOR:1" Units="Boolean"/>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_MASTER_ALTERNATOR" EventParam="1"/>
+					<Instrument Id="ELECTRICAL_Switch_Alternator"/>
+				</Test>
+			</Sequence>
+		</Checkpoint>
+		<Checkpoint Id="C172SP_AS1000_Master_Switch_Alt_And_Bat_Off">
+			<Clue name="TT:CLUE.MASTER_SWITCH_ALT_AND_BAT_OFF"/>
+			<CheckpointDesc SubjectTT="TT:GAME.CHECKLIST_MASTER_SWITCH_ALT_AND_BAT" ExpectationTT="TT:GAME.CHECKLIST_OFF"/>
+			<Sequence SeqType="Unordered">
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="ELECTRICAL MASTER BATTERY:1" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_MASTER_BATTERY" EventParam="1"/>
+					<Instrument Id="ELECTRICAL_Switch_Battery_Master"/>
+				</Test>
+				<Test>
+					<TestValue>
+						<Operator OpType="NOT">
+							<Val SimVarName="GENERAL ENG MASTER ALTERNATOR:1" Units="Boolean"/>
+						</Operator>
+					</TestValue>
+					<Action Copilot="True" Condition="TestValueFalse" Once="true" EventID="TOGGLE_MASTER_ALTERNATOR" EventParam="1"/>
+					<Instrument Id="ELECTRICAL_Switch_Alternator"/>
+				</Test>
+			</Sequence>
+		</Checkpoint>
+    
+		<Checkpoint Id="C172SP_AS1000_Primary_Flight_Display_Check_On">
+			<Clue name="TT:CLUE.C172SP_AS1000_PFD_CHECK_ON"/>
+			<CheckpointDesc SubjectTT="TT:GAME.CHECKLIST_PRIMARY_FLIGHT_DISPLAY_PFD" ExpectationTT="TT:GAME.CHECKLIST_CHECK_ON"/>
+			<Test>
+				<TestValue>
+					<Operator OpType="OR">
+						<Val SimVarName="CIRCUIT ON:26" Units="Boolean"/>
+						<Operator OpType="AND">
+							<Val SimVarName="ELECTRICAL MASTER BATTERY:2" Units="Boolean"/>
+							<Operator OpType="GREATER">
+								<Val SimVarName="ELECTRICAL BATTERY VOLTAGE:2" Units="volts"/>
+								<Val Value="17.0"/>
+							</Operator>
+						</Operator>
+					</Operator>
+				</TestValue>
+				<Action Copilot="True" Condition="TestValueFalse" Once="true" SpecialAction="WaitForUserToDoIt"/>
+				<Instrument Id="AS1000_PFD_Panel"/>
+			</Test>
+		</Checkpoint>
+    
+		<Checkpoint Id="C172SP_AS1000_Annunciator_Panel_Clear">
+			<Clue name="TT:CLUE.ANNUNCIATOR_WINDOW_CLEAR"/>
+			<CheckpointDesc SubjectTT="TT:GAME.CHECKLIST_ANNUNCIATORS" ExpectationTT="TT:GAME.CHECKLIST_CHECK_NONE_DISPLAYED"/>
+      <Sequence SeqType="Unordered">
+        <Test>
+        <TestValue>
+          <Operator OpType="GREATER">
+            <Val SimVarName="SUCTION PRESSURE" Units="inch of mercury"/>
+            <Val Value="3.5"/>
+          </Operator>
+        </TestValue>
+        <Action Copilot="True" Condition="TestValueFalse" SpecialAction="WaitUntilTestValueValidated"/>
+          <Instrument Id="HTML:AS1000_PFD:Annunciations"/>
+        </Test>
+      <Test>
+        <TestValue>
+          <Operator OpType="GREATER">
+            <Val SimVarName="ENG OIL PRESSURE:1" Units="psi"/>
+            <Val Value="50"/>
+          </Operator>
+        </TestValue>
+        <Action Copilot="True" Condition="TestValueFalse" SpecialAction="WaitUntilTestValueValidated"/>
+      </Test>
+      <Test>
+        <TestValue>
+          <Operator OpType="GREATER">
+            <Val SimVarName="ELECTRICAL MAIN BUS VOLTAGE" Units="volts"/>
+            <Val Value="24.5" />
+          </Operator>
+        </TestValue>
+        <Action Copilot="True" Condition="TestValueFalse" SpecialAction="WaitUntilTestValueValidated"/>
+      </Test>
+      <Test>
+        <TestValue>
+          <Operator OpType="GREATER">
+            <Val SimVarName="FUEL RIGHT QUANTITY" Units="gallons"/>
+            <Val Value="8"/>
+          </Operator>
+        </TestValue>
+        <Action Copilot="True" Condition="TestValueFalse" SpecialAction="WaitUntilTestValueValidated"/>
+      </Test>
+      <Test>
+        <TestValue>
+          <Operator OpType="GREATER">
+            <Val SimVarName="FUEL LEFT QUANTITY" Units="gallons"/>
+            <Val Value="8"/>
+          </Operator>
+        </TestValue>
+        <Action Copilot="True" Condition="TestValueFalse" SpecialAction="WaitUntilTestValueValidated"/>
+      </Test>
+      </Sequence>
+		</Checkpoint>
+    
+    
+    
+    
+	</Checklist.CheckpointLibrary>
+</SimBase.Document>
